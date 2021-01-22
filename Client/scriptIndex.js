@@ -18,10 +18,10 @@ async function submitLogin() {
     else {
         let responseText = await response.text();
         let statusCode = Number.parseInt(responseText);
-        if (statusCode == 4 /* BadWrongPassword */) {
+        if (statusCode == StatusCodes.BadWrongPassword) {
             responseField.innerText = "Das Passwort ist falsch!";
         }
-        else if (statusCode == 1 /* Good */) {
+        else if (statusCode == StatusCodes.Good) {
             responseField.innerText = "Du wirst eingeloggt!";
         }
     }

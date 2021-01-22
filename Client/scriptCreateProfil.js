@@ -19,16 +19,16 @@ async function submitRegister(_event) {
         let responseText = await response.text();
         let statusCode = Number.parseInt(responseText);
         //Rückmeldung Submit
-        if (statusCode == 3 /* BadEmailExists */) {
+        if (statusCode == StatusCodes.BadEmailExists) {
             responseField.innerText = "E-Mail ist schon vorhanden!";
         }
         // else if (statusCode == StatusCodes.BadNameExists){
         //     responseField.innerText = "Dieser Name existiert bereits!";
         // }
-        else if (statusCode == 1 /* Good */) {
+        else if (statusCode == StatusCodes.Good) {
             responseField.innerText = "Du bist Registiert!";
         }
-        else if (statusCode == 2 /* BadDatabaseProblem */) {
+        else if (statusCode == StatusCodes.BadDatabaseProblem) {
             responseField.innerText = "Datenbank Problem";
         }
     }
