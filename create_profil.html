@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrieren</title>
+    
+    <link rel="stylesheet" type="text/css" href="stylesheet.css">
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+    <script src="scriptClient.js" defer></script>
+    <script src="scriptCreateProfil.js" defer></script>
+
+</head>
+<body>  
+<!--Main-->
+
+<div class="col-4" id="register-bereich">
+            
+    <h2 id="data"> Gib deine Daten ein um dich zu registrieren </h2>
+
+        <form id="register-form">
+            <label for="vorname"> Vorname </label>
+            <input class="input-form" type="text" name="name" >
+            <label for="studiengang"> Studiengang </label>
+            <input class="input-form" type="text" name="studiengang">
+            <label for="semesterangabe"> Semesterangabe </label>
+            <input class="input-form" type="text" name="semesterangabe">
+            <label for="email"> Email </label>
+            <input class="input-form" type="text" name="email">
+            <label for="passwort"> Passwort </label>
+            <input class="input-form" type="password" name="passwort">
+            
+            <button id="registerButton" name="Absenden" type="button">Registrieren</button>
+            <button id="resetButton" name="Reset" type="reset">Löschen</button>
+        </form> 
+        <p class="small">Du hast doch schon ein Profil? Dann klicke <a href="index.html">Hier</a> um dich einzuloggen !</p>
+        
+        <div id="serverresult">
+        </div>
+</div>
+</body>
+</html>
