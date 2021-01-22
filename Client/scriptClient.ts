@@ -25,7 +25,7 @@ const enum StatusCodes {
     BadDatabaseProblem = 2,
     BadEmailExists = 3,
     BadWrongPassword = 4,
-    BadNameExists = 5;
+    BadNameExists = 5
 }
 
 
