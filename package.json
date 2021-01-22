@@ -1,25 +1,25 @@
 {
-    "name": "saskiahfu",
-    "version": "1.0.0",
-    "description": "SaskiaHFU",
-    "main": "index.js",
-    "dependencies": {
-      "@types/mongodb": "^3.6.3",
-      "mongodb": "^3.6.3"
-    },
-    "devDependencies": {},
-    "scripts": {
-      "start": "node Abgabe/scriptServer.js",
-      "db": "..\\MongoDB\\Server\\4.4\\bin\\mongod.exe --dbpath ./Abgabe/db"
-    },
-    "repository": {
-      "type": "git",
-      "url": "git+https://github.com/SaskiaHFU/SaskiaHFU.git"
-    },
-    "author": "Saskia",
-    "license": "ISC",
-    "bugs": {
-      "url": "https://github.com/SaskiaHFU/SaskiaHFU/issues"
-    },
-    "homepage": "https://github.com/SaskiaHFU/SaskiaHFU#readme"
-  }
+  "name": "saskiahfupruefung",
+  "version": "1.0.0",
+  "description": "SaskiaHFUPruefung",
+  "main": "index.js",
+  "dependencies": {
+    "@types/mongodb": "^3.6.3",
+    "mongodb": "^3.6.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node Server/scriptServer.js",
+    "db": "..\\MongoDB\\Server\\4.4\\bin\\mongod.exe --dbpath ./Server/db"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SaskiaHFU/SaskiaHFUPruefung.git"
+  },
+  "author": "Saskia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SaskiaHFU/SaskiaHFU/Pruefungissues"
+  },
+  "homepage": "https://github.com/SaskiaHFU/SaskiaHFUPruefung#readme"
+}
