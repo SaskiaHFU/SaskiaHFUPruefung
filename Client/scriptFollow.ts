@@ -15,9 +15,10 @@ async function getUsers(): Promise <void> {
 
         let userDiv: HTMLDivElement = document.createElement("div");
 
-        userDiv.innerText = `Vorname: ${user.vorname}  
-                             Nachname: ${user.nachname} 
-                             Email: ${user.email} 
+        userDiv.innerText = `Name: ${user.Name}  
+                             Studiengang: ${user.Studiengang} 
+                             Semester: ${user.Semester} 
+                             Email: ${user.Email} 
                              
                              `;
         

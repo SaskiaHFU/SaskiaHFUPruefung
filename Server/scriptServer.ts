@@ -103,7 +103,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
             "Email": queryParameters.email as string
 
         };
-        //Passwort extra weil es nicht im Datenbank Profil stehen soll
+        
         user.passwort = queryParameters.passwort as string;
 
         let registerResult: StatusCodes = await registerUser(user);
