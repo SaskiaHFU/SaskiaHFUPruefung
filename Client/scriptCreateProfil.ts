@@ -1,3 +1,4 @@
+
 //Register
 let registerForm1: HTMLFormElement = <HTMLFormElement>document.getElementById("register-form");
 
