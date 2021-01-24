@@ -32,12 +32,7 @@ const enum StatusCodes {
 
 //Funktionen
 
-let clearButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("resetButton");
-clearButton.addEventListener("click", clear);
 
-function clear (_e: Event): void {
-    registerForm.reset();
-}
 
 
 

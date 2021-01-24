@@ -5,6 +5,13 @@ let registerForm: HTMLFormElement = <HTMLFormElement>document.getElementById("re
 let registerButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("registerButton");
 registerButton.addEventListener("click", submitRegister);
 
+let clearButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("resetButton");
+clearButton.addEventListener("click", clear);
+
+function clear (_e: Event): void {
+    registerForm.reset();
+}
+
 async function submitRegister(_event: Event): Promise<void> {
 
     let formData: FormData = new FormData(document.forms[0]);
