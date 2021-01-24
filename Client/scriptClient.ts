@@ -1,7 +1,7 @@
 //Shared TS
 
 
-let mainURL: string = "https://saskiagis2020-pruefung.herokuapp.com/";
+let url: string = "https://saskiagis2020-pruefung.herokuapp.com/";
 //"http://localhost:8100/"
 
 let changeLoginResult: HTMLParagraphElement;

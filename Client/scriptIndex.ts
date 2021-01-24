@@ -11,7 +11,7 @@ async function submitLogin(): Promise<void> {
     let query: URLSearchParams = new URLSearchParams(<any>formData);
     console.log(query);
 
-    let queryUrl: string = mainURL + "index" + "?" + query.toString();
+    let queryUrl: string = URL + "index" + "?" + query.toString();
     console.log(queryUrl);
 
     let response: Response = await fetch(queryUrl);

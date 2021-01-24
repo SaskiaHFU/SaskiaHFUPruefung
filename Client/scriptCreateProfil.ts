@@ -1,9 +1,9 @@
 
 //Register
-let registerForm1: HTMLFormElement = <HTMLFormElement>document.getElementById("register-form");
+let registerForm: HTMLFormElement = <HTMLFormElement>document.getElementById("register-form");
 
-let registerButton1: HTMLButtonElement = <HTMLButtonElement>document.getElementById("registerButton");
-registerButton1.addEventListener("click", submitRegister);
+let registerButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("registerButton");
+registerButton.addEventListener("click", submitRegister);
 
 async function submitRegister(_event: Event): Promise<void> {
 
@@ -11,7 +11,7 @@ async function submitRegister(_event: Event): Promise<void> {
     let query: URLSearchParams = new URLSearchParams(<any>formData);
 
 
-    let queryUrl: string = mainURL + "create_profil" + "?" + query.toString();
+    let queryUrl: string = URL + "create_profil" + "?" + query.toString();
     console.log(queryUrl);
 
     let response: Response = await fetch(queryUrl);

@@ -169,7 +169,7 @@ async function registerUser(_user: User): Promise<StatusCodes> {
 
     // connectToDatabase(databaseUrl, "User");
 
-    let countDocumentsEmail: number = await user.countDocuments({ "email": _user.email });
+    let countDocumentsEmail: number = await user.countDocuments({ "email": _user.Email });
     // let countDocumentsName: number = await user.countDocuments({ "name": _user.name });
 
     if (countDocumentsEmail > 0) {
