@@ -48,7 +48,6 @@ async function handleRequest(_request, _response) {
             "Semester": queryParameters.semester,
             "Email": queryParameters.email
         };
-        //Passwort extra weil es nicht im Datenbank Profil stehen soll
         user.passwort = queryParameters.passwort;
         let registerResult = await registerUser(user);
         _response.write(String(registerResult));

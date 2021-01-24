@@ -7,9 +7,10 @@ async function getUsers() {
     let userCount = 0;
     for (let user of users) {
         let userDiv = document.createElement("div");
-        userDiv.innerText = `Vorname: ${user.vorname}  
-                             Nachname: ${user.nachname} 
-                             Email: ${user.email} 
+        userDiv.innerText = `Name: ${user.Name}  
+                             Studiengang: ${user.Studiengang} 
+                             Semester: ${user.Semester} 
+                             Email: ${user.Email} 
                              
                              `;
         console.log(user);
