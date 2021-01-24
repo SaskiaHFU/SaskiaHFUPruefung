@@ -83,7 +83,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
         _response.setHeader("content-type", "text/html; charset=utf-8");
         let queryParameters: Query = <Query>q.query;
 
-        let loginResult: StatusCodes = await loginUser(queryParameters.email as string, queryParameters.passwort as string);
+        let loginResult: StatusCodes = await loginUser(queryParameters.Email as string, queryParameters.Passwort as string);
 
         _response.write(String(loginResult));
         console.log("einloggen Seite");
@@ -97,14 +97,14 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         let user: User = {
 
-            "Name": queryParameters.name as string,
-            "Studiengang": queryParameters.studiengang as string,
-            "Semester": queryParameters.semester as string,
-            "Email": queryParameters.email as string
+            "Name": queryParameters.Name as string,
+            "Studiengang": queryParameters.Studiengang as string,
+            "Semester": queryParameters.Semester as string,
+            "Email": queryParameters.Email as string
 
         };
         
-        user.passwort = queryParameters.passwort as string;
+        user.Passwort = queryParameters.Passwort as string;
 
         let registerResult: StatusCodes = await registerUser(user);
 
@@ -169,7 +169,7 @@ async function registerUser(_user: User): Promise<StatusCodes> {
 
     // connectToDatabase(databaseUrl, "User");
 
-    let countDocumentsEmail: number = await user.countDocuments({ "email": _user.Email });
+    let countDocumentsEmail: number = await user.countDocuments({ "Email": _user.Email });
     // let countDocumentsName: number = await user.countDocuments({ "name": _user.name });
 
     if (countDocumentsEmail > 0) {
@@ -201,7 +201,7 @@ async function loginUser(_email: string, _passwort: string): Promise<StatusCodes
 
     // connectToDatabase(url, "User");
 
-    let countDocuments: number = await user.countDocuments({ "email": _email, "passwort": _passwort });
+    let countDocuments: number = await user.countDocuments({ "Email": _email, "Passwort": _passwort });
 
 
     //Rückmeldung dass es funktioniert hat
