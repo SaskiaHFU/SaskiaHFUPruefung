@@ -54,8 +54,8 @@ async function handleRequest(_request, _response) {
         console.log("Registrieren Seite");
     }
     else if (q.pathname == "/hauptseite") {
-        //Beiträge anzeigen
         _response.setHeader("content-type", "application/json; charset=utf-8");
+        //Beiträge anzeigen
         let comments = await getComments();
         _response.write(JSON.stringify(comments));
         console.log("Liste Seite");
@@ -149,15 +149,15 @@ async function getComments() {
     console.log("Beiträge");
     let commentDocuments = await comment.find().toArray();
     return commentDocuments;
-    async function saveComment(_comment) {
-        let result = await comment.insertOne(_comment);
-        //Rückmeldung dass es funktioniert hat
-        if (result.insertedCount == 1) {
-            return 1 /* Good */;
-        }
-        else {
-            return 2 /* BadDatabaseProblem */;
-        }
+}
+async function saveComment(_comment) {
+    let result = await comment.insertOne(_comment);
+    //Rückmeldung dass es funktioniert hat
+    if (result.insertedCount == 1) {
+        return 1 /* Good */;
+    }
+    else {
+        return 2 /* BadDatabaseProblem */;
     }
 }
 //Profil

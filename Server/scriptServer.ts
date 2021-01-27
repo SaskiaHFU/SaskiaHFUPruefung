@@ -119,11 +119,11 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
     }
     else if (q.pathname == "/hauptseite") {
 
+        _response.setHeader("content-type", "application/json; charset=utf-8");
 
 
 
         //Beiträge anzeigen
-        _response.setHeader("content-type", "application/json; charset=utf-8");
 
         let comments: Comment[] = await getComments();
 
@@ -278,25 +278,26 @@ async function getComments(): Promise<Comment[]> {
     let commentDocuments: Comment[] = await comment.find().toArray();
 
     return commentDocuments;
+}
 
 
-    async function saveComment(_comment: Comment): Promise<StatusCodes> {
+async function saveComment(_comment: Comment): Promise<StatusCodes> {
 
 
-            let result: Mongo.InsertOneWriteOpResult<any> = await comment.insertOne(_comment);
+    let result: Mongo.InsertOneWriteOpResult<any> = await comment.insertOne(_comment);
 
-            //Rückmeldung dass es funktioniert hat
-            if (result.insertedCount == 1) {
+    //Rückmeldung dass es funktioniert hat
+    if (result.insertedCount == 1) {
 
-                return StatusCodes.Good;
-            }
-            else {
-
-                return StatusCodes.BadDatabaseProblem;
-            }
-        }
-
+        return StatusCodes.Good;
     }
+    else {
+
+        return StatusCodes.BadDatabaseProblem;
+    }
+}
+
+}
 
 
 //Profil
