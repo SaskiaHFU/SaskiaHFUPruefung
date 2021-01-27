@@ -16,6 +16,7 @@ interface User {
 
 interface Comment {
 
+    userEmail: string;
     Text: string;
 }
 
