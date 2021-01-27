@@ -5,6 +5,7 @@ const Url = require("url");
 const Mongo = require("mongodb");
 let databaseUrl = "mongodb+srv://Saskia:12345@clustersaskia.vxxmf.mongodb.net/Charlan?retryWrites=true&w=majority";
 let user;
+let post;
 connectToDatabase(databaseUrl);
 //Port und Server erstellen
 // let port: number = Number (process.env.PORT); //String zu Int umwandeln

@@ -248,6 +248,36 @@ display: block;
 
 }
 
+/*---FOLLOW-SEITE*/
+
+#heart-button {
+
+        border: 0 none;
+        color: white;
+        background-color: ;
+        font-size: .875rem;
+        height: auto;
+        padding: 8px;
+        width: auto;
+        cursor: pointer;
+    
+}
+
+#userIcon {
+    
+    width: 5rem;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    text-align: center;
+    font-size: 2rem;
+}
+
+.userDiv {
+
+    text-align: center;
+}
 
 /*---HAUPTSEITE-BODY*/
 
@@ -402,6 +432,8 @@ button {
     width: 100%;
     font-family: inherit;
 }
+
+
 
 
 p.small {

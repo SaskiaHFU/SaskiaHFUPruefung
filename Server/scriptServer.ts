@@ -17,6 +17,7 @@ interface User {
 
 let databaseUrl: string = "mongodb+srv://Saskia:12345@clustersaskia.vxxmf.mongodb.net/Charlan?retryWrites=true&w=majority";
 let user: Mongo.Collection;
+let post: Mongo.Collection;
 
 connectToDatabase(databaseUrl);
 
