@@ -14,7 +14,6 @@ if (port == undefined) { // || isNaN(port)
 }
 // Funktionen aufrufen
 startServer(port);
-connectToDatabase(databaseUrl);
 function startServer(_port) {
     //Server erstellen
     let server = Http.createServer();
@@ -30,8 +29,7 @@ function handleListen() {
 async function handleRequest(_request, _response) {
     console.log("I hear voices!");
     _response.setHeader("Access-Control-Allow-Origin", "*");
-    // let q: Url.UrlWithParsedQuery = Url.parse(_request.url, true);
-    let q = new Url.URL(_request.url, "https://example.com");
+    let q = new Url.URL(_request.url, "https://example.com"); //Zweite Parameter weil Base gefordert
     console.log(q.pathname);
     if (q.pathname == "/index") {
         _response.setHeader("content-type", "text/html; charset=utf-8");
@@ -79,7 +77,7 @@ async function handleRequest(_request, _response) {
 }
 async function connectToDatabase(_url) {
     console.log("Connected to Database");
-    //_collection: string
+    // , _collection: string
     //Create Mongo Client
     let options = { useNewUrlParser: true, useUnifiedTopology: true };
     let mongoClient = new Mongo.MongoClient(databaseUrl, options);
@@ -91,15 +89,14 @@ async function connectToDatabase(_url) {
 async function registerUser(_user) {
     console.log("Registrieren");
     // connectToDatabase(databaseUrl, "User");
-    let countDocumentsEmail = await user.countDocuments({ "Email": _user.Email });
-    // let countDocumentsName: number = await user.countDocuments({ "name": _user.name });
+    let countDocumentsEmail = await user.countDocuments({ Email: _user.Email });
+    let countDocumentsName = await user.countDocuments({ Name: _user.Name });
     if (countDocumentsEmail > 0) {
-        // User existiert weil Dokument gefunden also > 0 Dokumente
         return 3 /* BadEmailExists */;
     }
-    // else if (countDocumentsName > 0) {
-    //     return StatusCodes.BadNameExists;
-    // } 
+    else if (countDocumentsName > 0) {
+        return 5 /* BadNameExists */;
+    }
     else {
         let result = await user.insertOne(_user);
         //Rückmeldung dass es funktioniert hat
@@ -114,7 +111,7 @@ async function registerUser(_user) {
 async function loginUser(_email, _passwort) {
     console.log("Login");
     // connectToDatabase(url, "User");
-    let countDocuments = await user.countDocuments({ "Email": _email, "passwort": _passwort });
+    let countDocuments = await user.countDocuments({ Email: _email, passwort: _passwort });
     console.log(_email, _passwort);
     //Rückmeldung dass es funktioniert hat
     if (countDocuments > 0) {

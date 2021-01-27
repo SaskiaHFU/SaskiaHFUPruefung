@@ -45,7 +45,6 @@ if (port == undefined) { // || isNaN(port)
 
 
 startServer(port);
-connectToDatabase(databaseUrl);
 
 
 
@@ -71,8 +70,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
     _response.setHeader("Access-Control-Allow-Origin", "*");
 
-    // let q: Url.UrlWithParsedQuery = Url.parse(_request.url, true);
-    let q: Url.URL = new Url.URL (_request.url, "https://example.com");
+    let q: Url.URL = new Url.URL (_request.url, "https://example.com"); //Zweite Parameter weil Base gefordert
 
 
     console.log(q.pathname);
@@ -104,8 +102,6 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         };
         
-        
-        
 
         let registerResult: StatusCodes = await registerUser(user);
 
@@ -136,7 +132,6 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
     else {
         if (_request.url) {
 
-
         for (let key in q.searchParams) {
             _response.write(key + ":" + q.searchParams.get(key) + "<br/>");
         }
@@ -153,8 +148,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
 async function connectToDatabase(_url: string): Promise<void> {
     console.log("Connected to Database");
-//_collection: string
-
+// , _collection: string
     //Create Mongo Client
     let options: Mongo.MongoClientOptions = { useNewUrlParser: true, useUnifiedTopology: true };
     let mongoClient: Mongo.MongoClient = new Mongo.MongoClient(databaseUrl, options);
@@ -171,16 +165,17 @@ async function registerUser(_user: User): Promise<StatusCodes> {
 
     // connectToDatabase(databaseUrl, "User");
 
-    let countDocumentsEmail: number = await user.countDocuments({ "Email": _user.Email });
-    // let countDocumentsName: number = await user.countDocuments({ "name": _user.name });
+    let countDocumentsEmail: number = await user.countDocuments({ Email: _user.Email });
+    let countDocumentsName: number = await user.countDocuments({ Name: _user.Name });
 
     if (countDocumentsEmail > 0) {
-        // User existiert weil Dokument gefunden also > 0 Dokumente
+        
         return StatusCodes.BadEmailExists;
     }
-    // else if (countDocumentsName > 0) {
-    //     return StatusCodes.BadNameExists;
-    // } 
+    else if (countDocumentsName > 0) {
+
+        return StatusCodes.BadNameExists;
+    } 
     else {
 
         let result: Mongo.InsertOneWriteOpResult<any> = await user.insertOne(_user);
@@ -203,7 +198,7 @@ async function loginUser(_email: string, _passwort: string): Promise<StatusCodes
 
     // connectToDatabase(url, "User");
 
-    let countDocuments: number = await user.countDocuments({ "Email": _email, "passwort": _passwort });
+    let countDocuments: number = await user.countDocuments({ Email: _email, passwort: _passwort });
 
     console.log(_email, _passwort);
 
@@ -223,6 +218,7 @@ async function getUsers(): Promise<User[]> {
 
     console.log("Liste");
 
+    
     let userDocuments: User[] = await user.find().toArray();
 
     return userDocuments;

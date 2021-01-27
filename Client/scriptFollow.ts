@@ -1,18 +1,16 @@
-getUsers();
+window.addEventListener("load", getUsers);
 
-async function getUsers(): Promise <void> {
+async function getUsers(): Promise<void> {
 
-    let response: Response = await fetch(URL + "user");
+    let response: Response = await fetch(url + "user");
     let users: User[] = await response.json();
 
     let usersDiv: HTMLElement = document.getElementById("users");
 
-    let userCount: number = 0;
-
-
 
     for (let user of users) {
 
+        let userCount: number = 0;
         let userDiv: HTMLDivElement = document.createElement("div");
 
         userDiv.innerText = `Name: ${user.Name}  
@@ -21,12 +19,13 @@ async function getUsers(): Promise <void> {
                              Email: ${user.Email} 
                              
                              `;
-        
+
         console.log(user);
 
-        usersDiv.appendChild(userDiv); 
+        usersDiv.appendChild(userDiv);
+
         userCount++;
     }
-    
-    
+
+
 }

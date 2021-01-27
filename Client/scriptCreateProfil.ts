@@ -44,9 +44,10 @@ async function submitRegister(_event: Event): Promise<void> {
         if (statusCode == StatusCodes.BadEmailExists) {
             responseField.innerText = "E-Mail ist schon vorhanden!";
         }
-        // else if (statusCode == StatusCodes.BadNameExists){
-        //     responseField.innerText = "Dieser Name existiert bereits!";
-        // }
+        
+        else if (statusCode == StatusCodes.BadNameExists){
+            responseField.innerText = "Dieser Name existiert bereits!";
+        }
 
         else if (statusCode == StatusCodes.Good) {
             responseField.innerText = "Du bist Registiert!";

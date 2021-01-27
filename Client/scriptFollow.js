@@ -1,11 +1,11 @@
 "use strict";
-getUsers();
+window.addEventListener("load", getUsers);
 async function getUsers() {
-    let response = await fetch(URL + "user");
+    let response = await fetch(url + "user");
     let users = await response.json();
     let usersDiv = document.getElementById("users");
-    let userCount = 0;
     for (let user of users) {
+        let userCount = 0;
         let userDiv = document.createElement("div");
         userDiv.innerText = `Name: ${user.Name}  
                              Studiengang: ${user.Studiengang} 
