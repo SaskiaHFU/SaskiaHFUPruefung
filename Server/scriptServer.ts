@@ -121,8 +121,11 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         _response.setHeader("content-type", "application/json; charset=utf-8");
 
+        
+        let messageResult: StatusCodes = await saveComment();
 
 
+        _response.write(String(messageResult));
         //Beiträge anzeigen
 
         let comments: Comment[] = await getComments();

@@ -55,6 +55,8 @@ async function handleRequest(_request, _response) {
     }
     else if (q.pathname == "/hauptseite") {
         _response.setHeader("content-type", "application/json; charset=utf-8");
+        let messageResult = await saveComment();
+        _response.write(String(messageResult));
         //Beiträge anzeigen
         let comments = await getComments();
         _response.write(JSON.stringify(comments));
