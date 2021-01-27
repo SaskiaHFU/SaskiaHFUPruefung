@@ -78,11 +78,11 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
     _response.setHeader("Access-Control-Allow-Origin", "*");
 
-    let q: Url.URL = new Url.URL (_request.url, "https://example.com"); //Zweite Parameter weil Base gefordert
+    let q: Url.URL = new Url.URL(_request.url, "https://example.com"); //Zweite Parameter weil Base gefordert
 
 
     console.log(q.pathname);
-    
+
     if (q.pathname == "/index") {
 
         _response.setHeader("content-type", "text/html; charset=utf-8");
@@ -94,7 +94,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
         console.log("einloggen Seite");
 
     }
-    else if (q.pathname  == "/create_profil") {
+    else if (q.pathname == "/create_profil") {
 
         _response.setHeader("content-type", "text/html; charset=utf-8");
 
@@ -109,7 +109,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
             passwort: queryParameters.get("passwort")
 
         };
-        
+
 
         let registerResult: StatusCodes = await registerUser(user);
 
@@ -134,7 +134,26 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
     }
     else if (q.pathname == "/profil") {
 
-        //
+        _response.setHeader("content-type", "text/html; charset=utf-8");
+
+        let queryParameters: Url.URLSearchParams = q.searchParams;
+
+        let user: User = {
+
+            Name: queryParameters.get("name"),
+            Studiengang: queryParameters.get("studiengang"),
+            Semester: queryParameters.get("semester"),
+            Email: queryParameters.get("email"),
+            passwort: queryParameters.get("passwort")
+
+        };
+
+
+        let registerResult: StatusCodes = await registerNewUser(user);
+
+        _response.write(String(registerResult));
+
+
     }
 
     else if (q.pathname == "/follower") {
@@ -151,14 +170,14 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
     else {
         if (_request.url) {
 
-        for (let key in q.searchParams) {
-            _response.write(key + ":" + q.searchParams.get(key) + "<br/>");
+            for (let key in q.searchParams) {
+                _response.write(key + ":" + q.searchParams.get(key) + "<br/>");
+            }
+
+            let stringJSON: string = JSON.stringify(q.searchParams);
+            _response.write(stringJSON);
+
         }
-
-        let stringJSON: string = JSON.stringify(q.searchParams);
-        _response.write(stringJSON);
-
-    }
     }
 
     _response.end();
@@ -167,7 +186,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
 async function connectToDatabase(_url: string): Promise<void> {
     console.log("Connected to Database");
-// , _collection: string
+    // , _collection: string
     //Create Mongo Client
     let options: Mongo.MongoClientOptions = { useNewUrlParser: true, useUnifiedTopology: true };
     let mongoClient: Mongo.MongoClient = new Mongo.MongoClient(databaseUrl, options);
@@ -191,13 +210,13 @@ async function registerUser(_user: User): Promise<StatusCodes> {
     let countDocumentsName: number = await user.countDocuments({ Name: _user.Name });
 
     if (countDocumentsEmail > 0) {
-        
+
         return StatusCodes.BadEmailExists;
     }
     else if (countDocumentsName > 0) {
 
         return StatusCodes.BadNameExists;
-    } 
+    }
     else {
 
         let result: Mongo.InsertOneWriteOpResult<any> = await user.insertOne(_user);
@@ -211,7 +230,7 @@ async function registerUser(_user: User): Promise<StatusCodes> {
 
             return StatusCodes.BadDatabaseProblem;
         }
-    }   
+    }
 }
 
 
@@ -242,7 +261,7 @@ async function getUsers(): Promise<User[]> {
 
     console.log("Liste");
 
-    
+
     let userDocuments: User[] = await user.find().toArray();
 
     return userDocuments;
@@ -255,14 +274,65 @@ async function getComments(): Promise<Comment[]> {
 
     console.log("Beiträge");
 
-    
+
     let commentDocuments: Comment[] = await comment.find().toArray();
 
     return commentDocuments;
 
+
+    async function saveComment(_comment: Comment): Promise<StatusCodes> {
+
+
+            let result: Mongo.InsertOneWriteOpResult<any> = await comment.insertOne(_comment);
+
+            //Rückmeldung dass es funktioniert hat
+            if (result.insertedCount == 1) {
+
+                return StatusCodes.Good;
+            }
+            else {
+
+                return StatusCodes.BadDatabaseProblem;
+            }
+        }
+
+    }
+
+
+//Profil
+
+async function registerNewUser(_user: User): Promise<StatusCodes> {
+
+
+    // Methode von Github Mongo Seite
+    let result: Mongo.UpdateWriteOpResult = await user.updateOne(
+
+        { "Email": _user.Email },
+        {
+            $set: {
+                "Name": _user.Name,
+                "Studiengang": _user.Studiengang,
+                "Semesterangabe": _user.Semester,
+                "Passwort": _user.passwort
+            }
+        });
+
+
+    //Rückmeldung dass es funktioniert hat
+    if (result.result.ok) {
+
+        return StatusCodes.Good;
+    }
+    else {
+
+        return StatusCodes.BadDatabaseProblem;
+    }
+
+
 }
-    
-    
+
+
+
 
 
 

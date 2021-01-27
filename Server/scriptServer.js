@@ -61,7 +61,17 @@ async function handleRequest(_request, _response) {
         console.log("Liste Seite");
     }
     else if (q.pathname == "/profil") {
-        //
+        _response.setHeader("content-type", "text/html; charset=utf-8");
+        let queryParameters = q.searchParams;
+        let user = {
+            Name: queryParameters.get("name"),
+            Studiengang: queryParameters.get("studiengang"),
+            Semester: queryParameters.get("semester"),
+            Email: queryParameters.get("email"),
+            passwort: queryParameters.get("passwort")
+        };
+        let registerResult = await registerNewUser(user);
+        _response.write(String(registerResult));
     }
     else if (q.pathname == "/follower") {
         _response.setHeader("content-type", "application/json; charset=utf-8");
@@ -139,5 +149,34 @@ async function getComments() {
     console.log("Beiträge");
     let commentDocuments = await comment.find().toArray();
     return commentDocuments;
+    async function saveComment(_comment) {
+        let result = await comment.insertOne(_comment);
+        //Rückmeldung dass es funktioniert hat
+        if (result.insertedCount == 1) {
+            return 1 /* Good */;
+        }
+        else {
+            return 2 /* BadDatabaseProblem */;
+        }
+    }
+}
+//Profil
+async function registerNewUser(_user) {
+    // Methode von Github Mongo Seite
+    let result = await user.updateOne({ "Email": _user.Email }, {
+        $set: {
+            "Name": _user.Name,
+            "Studiengang": _user.Studiengang,
+            "Semesterangabe": _user.Semester,
+            "Passwort": _user.passwort
+        }
+    });
+    //Rückmeldung dass es funktioniert hat
+    if (result.result.ok) {
+        return 1 /* Good */;
+    }
+    else {
+        return 2 /* BadDatabaseProblem */;
+    }
 }
 //# sourceMappingURL=scriptServer.js.map

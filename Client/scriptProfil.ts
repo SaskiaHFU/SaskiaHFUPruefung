@@ -1,3 +1,67 @@
+
+let changeButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("changeButton");
+changeButton.addEventListener("click", changeProfil);
+
+
+async function changeProfil(_e: MouseEvent): Promise <void> {
+
+    let nameInput: HTMLInputElement = <HTMLInputElement> document.getElementById("name");
+    let studiengangInput: HTMLInputElement = <HTMLInputElement> document.getElementById("studiengang");
+    let semesterInput: HTMLInputElement = <HTMLInputElement> document.getElementById("semesterangabe");
+    let emailInput: HTMLInputElement = <HTMLInputElement> document.getElementById("email");    
+    let passwortInput: HTMLInputElement = <HTMLInputElement> document.getElementById("passwort");
+
+
+    let query: URLSearchParams = new URLSearchParams();
+    query.append("Name", nameInput.value);
+    query.append("Studiengang", studiengangInput.value);
+    query.append("Semester", semesterInput.value);
+    query.append("Email", emailInput.value);
+    query.append("passwort", passwortInput.value);
+
+
+    let queryUrl: string = url + "scriptProfil" + "?" + query.toString();
+
+    let response: Response = await fetch(queryUrl);
+
+    let responseField: HTMLParagraphElement = document.createElement("p");
+
+    //Fehler auffangen
+    if (response.status != 200) {
+        responseField.innerText = "Fehler!";
+
+    } 
+
+    else {
+
+        let responseText: string = await response.text();
+        let statusCode: StatusCodes = Number.parseInt(responseText) as StatusCodes;
+        
+        if (statusCode == StatusCodes.BadDatabaseProblem) {
+            responseField.innerText = "Fehler!";
+        }
+        
+        else if (statusCode == StatusCodes.Good) {
+            responseField.innerText = "Deine Daten wurden geändert!";
+
+           
+        }
+    }
+
+    //Antwort anzeigen
+   
+    let serverResult: HTMLElement = document.getElementById("serverresult");
+    if (changeLoginResult != undefined) {
+        serverResult.replaceChild(responseField, changeLoginResult);
+    }
+    else {
+        serverResult.appendChild(responseField);         
+    }
+    changeLoginResult = responseField;
+
+}
+
+
 //Clear Local Storage
 
 let ausloggenButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("ausloggenButton");
@@ -6,5 +70,7 @@ ausloggenButton.addEventListener("click", logout);
 function logout (_e: MouseEvent): void {
 
     window.localStorage.clear();
+
+    alert("Du bist ausgeloggt!");
 
 }

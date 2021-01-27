@@ -20,15 +20,19 @@
 
         <form id="register-form">
             <label for="vorname"> Vorname </label>
-            <input class="input-form" type="text" name="name" >
+            <input class="input-form" id="name" type="text" name="name" >
+
             <label for="studiengang"> Studiengang </label>
-            <input class="input-form" type="text" name="studiengang">
+            <input class="input-form" id="studiengang" type="text" name="studiengang">
+
             <label for="semesterangabe"> Semesterangabe </label>
-            <input class="input-form" type="number" name="semesterangabe" min="1" max="7" value="1">
+            <input class="input-form" id="semesterangabe" type="number" name="semesterangabe" min="1" max="7" value="1">
+            
             <label for="email"> Email </label>
-            <input class="input-form" type="email" name="email">
+            <input class="input-form" id="email" type="email" name="email">
+            
             <label for="passwort"> Passwort </label>
-            <input class="input-form" type="password" name="passwort" maxlength="10">
+            <input class="input-form" id="passwort" type="password" name="passwort" maxlength="10">
             
             <button id="registerButton" name="Absenden" type="button">Registrieren</button>
             <button id="resetButton" name="Reset" type="reset">Löschen</button>
