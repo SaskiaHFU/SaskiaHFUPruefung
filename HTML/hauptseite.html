@@ -71,15 +71,22 @@
     <div class="row">
         <div class="col-1">
             <div class="new-comment">
-             <p>Erstelle einen neuen Beitrag</p>
-             <input class="create-text" type="text" placeholder="Beitrag">
-             <button id="postButton" name="Post" type="button">POST</button>
+             
+            <p>Erstelle einen neuen Beitrag</p>
+            <form id="writeComment">
+            <textarea type="text" class="create-text" name="Comment" rows="15" cols="20" maxlength="70" ></textarea>
+            
+             <button id="postButton" name="postButton" type="button">Post Comment</button>
+            </form>
              </div>
         </div>
+
         <div class="col-2">
             <div class="comments">
             <p>Das sind die neuesten Beiträge</p>
-            
+            <div id="showComments">
+
+            </div>
             </div>
        </div>
     </div>

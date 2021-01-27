@@ -305,12 +305,13 @@ display: block;
 }
 
 .create-text {
-    color: inherit;
+    color: black;
     text-align: center;
     text-transform: uppercase;
     font-size: inherit;
     font-family: inherit;
     letter-spacing: inherit;
+    height: 100px;
 
 
 }
@@ -323,6 +324,17 @@ display: block;
 
     text-transform: uppercase;
     text-align: center;
+}
+
+textarea {
+    margin: 0px; 
+    width: 266px; 
+    height: 116px;
+    resize: none;
+}
+
+#writeComment {
+    
 }
 
 .add, #topping-choice-juice, #topping-choice-muesli {

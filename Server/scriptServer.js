@@ -5,7 +5,7 @@ const Url = require("url");
 const Mongo = require("mongodb");
 let databaseUrl = "mongodb+srv://Saskia:12345@clustersaskia.vxxmf.mongodb.net/Charlan?retryWrites=true&w=majority";
 let user;
-let post;
+let comment;
 connectToDatabase(databaseUrl);
 //Port und Server erstellen
 // let port: number = Number (process.env.PORT); //String zu Int umwandeln
@@ -54,7 +54,11 @@ async function handleRequest(_request, _response) {
         console.log("Registrieren Seite");
     }
     else if (q.pathname == "/hauptseite") {
-        //
+        //Beiträge anzeigen
+        _response.setHeader("content-type", "application/json; charset=utf-8");
+        let comments = await getComments();
+        _response.write(JSON.stringify(comments));
+        console.log("Liste Seite");
     }
     else if (q.pathname == "/profil") {
         //
@@ -85,8 +89,10 @@ async function connectToDatabase(_url) {
     await mongoClient.connect();
     console.log("Connected to Client");
     user = mongoClient.db("Charlan").collection("User");
+    comment = mongoClient.db("Charlan").collection("Beitrage");
     console.log("Database connection", user != undefined);
 }
+//Einloggen+Erstellen
 async function registerUser(_user) {
     console.log("Registrieren");
     // connectToDatabase(databaseUrl, "User");
@@ -122,9 +128,16 @@ async function loginUser(_email, _passwort) {
         return 4 /* BadWrongPassword */;
     }
 }
+//Follower
 async function getUsers() {
     console.log("Liste");
     let userDocuments = await user.find().toArray();
     return userDocuments;
+}
+//Hauptseite
+async function getComments() {
+    console.log("Beiträge");
+    let commentDocuments = await comment.find().toArray();
+    return commentDocuments;
 }
 //# sourceMappingURL=scriptServer.js.map

@@ -19,13 +19,20 @@ interface User {
 
 }
 
+interface Comment {
+
+    Text: string;
+}
+
 //Statuscodes
+
 const enum StatusCodes {
     Good = 1,
     BadDatabaseProblem = 2,
     BadEmailExists = 3,
     BadWrongPassword = 4,
-    BadNameExists = 5
+    BadNameExists = 5,
+    BadWrongName = 6
 }
 
 

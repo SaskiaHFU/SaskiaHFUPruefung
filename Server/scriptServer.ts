@@ -14,10 +14,15 @@ interface User {
 
 }
 
+interface Comment {
+
+    Text: string;
+}
+
 
 let databaseUrl: string = "mongodb+srv://Saskia:12345@clustersaskia.vxxmf.mongodb.net/Charlan?retryWrites=true&w=majority";
 let user: Mongo.Collection;
-let post: Mongo.Collection;
+let comment: Mongo.Collection;
 
 connectToDatabase(databaseUrl);
 
@@ -28,7 +33,8 @@ const enum StatusCodes {
     BadDatabaseProblem = 2,
     BadEmailExists = 3,
     BadWrongPassword = 4,
-    BadNameExists = 5
+    BadNameExists = 5,
+    BadWrongName = 6
 }
 
 
@@ -112,7 +118,18 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
     }
     else if (q.pathname == "/hauptseite") {
 
-        //
+
+
+
+        //Beiträge anzeigen
+        _response.setHeader("content-type", "application/json; charset=utf-8");
+
+        let comments: Comment[] = await getComments();
+
+        _response.write(JSON.stringify(comments));
+
+        console.log("Liste Seite");
+
     }
     else if (q.pathname == "/profil") {
 
@@ -157,9 +174,12 @@ async function connectToDatabase(_url: string): Promise<void> {
     console.log("Connected to Client");
 
     user = mongoClient.db("Charlan").collection("User");
+    comment = mongoClient.db("Charlan").collection("Beitrage");
+
     console.log("Database connection", user != undefined);
 }
 
+//Einloggen+Erstellen
 async function registerUser(_user: User): Promise<StatusCodes> {
 
     console.log("Registrieren");
@@ -193,6 +213,7 @@ async function registerUser(_user: User): Promise<StatusCodes> {
     }   
 }
 
+
 async function loginUser(_email: string, _passwort: string): Promise<StatusCodes> {
 
     console.log("Login");
@@ -214,6 +235,7 @@ async function loginUser(_email: string, _passwort: string): Promise<StatusCodes
 
 }
 
+//Follower
 
 async function getUsers(): Promise<User[]> {
 
@@ -223,6 +245,19 @@ async function getUsers(): Promise<User[]> {
     let userDocuments: User[] = await user.find().toArray();
 
     return userDocuments;
+
+}
+
+
+//Hauptseite
+async function getComments(): Promise<Comment[]> {
+
+    console.log("Beiträge");
+
+    
+    let commentDocuments: Comment[] = await comment.find().toArray();
+
+    return commentDocuments;
 
 }
     

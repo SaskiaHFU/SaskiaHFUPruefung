@@ -5,14 +5,17 @@ let loginForm1: HTMLFormElement = <HTMLFormElement>document.getElementById("logi
 let loginButton1: HTMLButtonElement = <HTMLButtonElement>document.getElementById("loginButton");
 loginButton1.addEventListener("click", submitLogin);
 
+//Funktionen
+
 async function submitLogin(): Promise<void> {
 
     let formData: FormData = new FormData(document.forms[0]);
     let query: URLSearchParams = new URLSearchParams(<any>formData);
-    console.log(query);
+    
+    let currentUser: string = query.get("email");
+    let currentPassword: string = query.get("passwort");
 
     let queryUrl: string = url + "index" + "?" + query.toString();
-    console.log(queryUrl);
 
     let response: Response = await fetch(queryUrl);
 
@@ -32,8 +35,18 @@ async function submitLogin(): Promise<void> {
         if (statusCode == StatusCodes.BadWrongPassword) {
             responseField.innerText = "Das Passwort ist falsch!";
         }
+        // else if (statusCode == StatusCodes.BadWrongName) {
+        //     responseField.innerText = "Der Name ist falsch!";
+        // }
         else if (statusCode == StatusCodes.Good) {
             responseField.innerText = "Du wirst eingeloggt!";
+
+            localStorage.setItem("currentUser", currentUser);
+            localStorage.setItem("currentPassword", currentPassword);
+
+
+            window.location.href = "../SaskiaHFUPruefung/HTML/hauptseite.html";
+            window.location.href = "file:///C:/Users/User/Documents/Studium/2%20Semester/GIS/SaskiaHFUPruefung/HTML/hauptseite.html";
         }
     }
 
