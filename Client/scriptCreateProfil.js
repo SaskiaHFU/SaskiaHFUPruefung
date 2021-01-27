@@ -11,7 +11,7 @@ function clear(_e) {
 async function submitRegister(_event) {
     let formData = new FormData(document.forms[0]);
     let query = new URLSearchParams(formData);
-    let queryUrl = URL + "create_profil" + "?" + query.toString();
+    let queryUrl = url + "create_profil" + "?" + query.toString();
     console.log(queryUrl);
     let response = await fetch(queryUrl);
     let responseField = document.createElement("p");

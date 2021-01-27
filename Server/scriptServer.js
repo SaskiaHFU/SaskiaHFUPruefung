@@ -31,7 +31,7 @@ async function handleRequest(_request, _response) {
     console.log("I hear voices!");
     _response.setHeader("Access-Control-Allow-Origin", "*");
     // let q: Url.UrlWithParsedQuery = Url.parse(_request.url, true);
-    let q = new Url.URL(_request.url);
+    let q = new Url.URL(_request.url, "https://example.com");
     console.log(q.pathname);
     if (q.pathname == "/index") {
         _response.setHeader("content-type", "text/html; charset=utf-8");
@@ -44,12 +44,12 @@ async function handleRequest(_request, _response) {
         _response.setHeader("content-type", "text/html; charset=utf-8");
         let queryParameters = q.searchParams;
         let user = {
-            "Name": queryParameters.get("name"),
-            "Studiengang": queryParameters.get("studiengang"),
-            "Semester": queryParameters.get("semester"),
-            "Email": queryParameters.get("email")
+            Name: queryParameters.get("name"),
+            Studiengang: queryParameters.get("studiengang"),
+            Semester: queryParameters.get("semester"),
+            Email: queryParameters.get("email"),
+            passwort: queryParameters.get("passwort")
         };
-        user.passwort = queryParameters.get("passwort");
         let registerResult = await registerUser(user);
         _response.write(String(registerResult));
         console.log("Registrieren Seite");
@@ -114,7 +114,8 @@ async function registerUser(_user) {
 async function loginUser(_email, _passwort) {
     console.log("Login");
     // connectToDatabase(url, "User");
-    let countDocuments = await user.countDocuments({ "Email": _email, "Passwort": _passwort });
+    let countDocuments = await user.countDocuments({ "Email": _email, "passwort": _passwort });
+    console.log(_email, _passwort);
     //Rückmeldung dass es funktioniert hat
     if (countDocuments > 0) {
         return 1 /* Good */;

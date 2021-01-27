@@ -6,17 +6,14 @@ import * as Mongo from "mongodb";
 
 interface User {
 
-    "Name": string;
-    "Studiengang": string;
-    "Semester": string;
-    "Email": string;
-    [passwort: string]: string;
+    Name: string;
+    Studiengang: string;
+    Semester: string;
+    Email: string;
+    passwort: string;
 
 }
 
-interface Query {
-    [type: string]: string;
-}
 
 let databaseUrl: string = "mongodb+srv://Saskia:12345@clustersaskia.vxxmf.mongodb.net/Charlan?retryWrites=true&w=majority";
 let user: Mongo.Collection;
@@ -75,7 +72,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
     _response.setHeader("Access-Control-Allow-Origin", "*");
 
     // let q: Url.UrlWithParsedQuery = Url.parse(_request.url, true);
-    let q: Url.URL = new Url.URL (_request.url);
+    let q: Url.URL = new Url.URL (_request.url, "https://example.com");
 
 
     console.log(q.pathname);
@@ -99,14 +96,15 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         let user: User = {
 
-            "Name": queryParameters.get("name"),
-            "Studiengang": queryParameters.get("studiengang"),
-            "Semester": queryParameters.get("semester"),
-            "Email": queryParameters.get("email")
+            Name: queryParameters.get("name"),
+            Studiengang: queryParameters.get("studiengang"),
+            Semester: queryParameters.get("semester"),
+            Email: queryParameters.get("email"),
+            passwort: queryParameters.get("passwort")
 
         };
         
-        user.passwort = queryParameters.get("passwort");
+        
         
 
         let registerResult: StatusCodes = await registerUser(user);
@@ -205,8 +203,9 @@ async function loginUser(_email: string, _passwort: string): Promise<StatusCodes
 
     // connectToDatabase(url, "User");
 
-    let countDocuments: number = await user.countDocuments({ "Email": _email, "Passwort": _passwort });
+    let countDocuments: number = await user.countDocuments({ "Email": _email, "passwort": _passwort });
 
+    console.log(_email, _passwort);
 
     //Rückmeldung dass es funktioniert hat
     if (countDocuments > 0) {

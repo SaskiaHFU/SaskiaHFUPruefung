@@ -18,7 +18,7 @@ async function submitRegister(_event: Event): Promise<void> {
     let query: URLSearchParams = new URLSearchParams(<any>formData);
 
 
-    let queryUrl: string = URL + "create_profil" + "?" + query.toString();
+    let queryUrl: string = url + "create_profil" + "?" + query.toString();
     console.log(queryUrl);
 
     let response: Response = await fetch(queryUrl);

@@ -1,7 +1,7 @@
 "use strict";
 //Shared TS
-let url = "https://saskiagis2020-pruefung.herokuapp.com/";
-//"http://localhost:8100/"
+let url = "http://localhost:8100/";
+//"https://saskiagis2020-pruefung.herokuapp.com/"
 let changeLoginResult;
 //Funktionen
 //# sourceMappingURL=scriptClient.js.map

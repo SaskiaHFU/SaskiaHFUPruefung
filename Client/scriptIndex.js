@@ -7,7 +7,7 @@ async function submitLogin() {
     let formData = new FormData(document.forms[0]);
     let query = new URLSearchParams(formData);
     console.log(query);
-    let queryUrl = URL + "index" + "?" + query.toString();
+    let queryUrl = url + "index" + "?" + query.toString();
     console.log(queryUrl);
     let response = await fetch(queryUrl);
     let responseField = document.createElement("p");

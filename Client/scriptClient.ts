@@ -1,8 +1,8 @@
 //Shared TS
 
 
-let url: string = "https://saskiagis2020-pruefung.herokuapp.com/";
-//"http://localhost:8100/"
+let url: string = "http://localhost:8100/";
+//"https://saskiagis2020-pruefung.herokuapp.com/"
 
 let changeLoginResult: HTMLParagraphElement;
 
@@ -11,11 +11,11 @@ let changeLoginResult: HTMLParagraphElement;
 
 interface User {
 
-    "Name": string;
-    "Studiengang": string;
-    "Semester": string;
-    "Email": string;
-    [passwort: string]: string;
+    Name: string;
+    Studiengang: string;
+    Semester: string;
+    Email: string;
+    passwort: string;
 
 }
 
