@@ -74,16 +74,18 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
     _response.setHeader("Access-Control-Allow-Origin", "*");
 
-    let q: Url.UrlWithParsedQuery = Url.parse(_request.url, true);
+    // let q: Url.UrlWithParsedQuery = Url.parse(_request.url, true);
+    let q: Url.URL = new Url.URL (_request.url);
+
 
     console.log(q.pathname);
     
     if (q.pathname == "/index") {
 
         _response.setHeader("content-type", "text/html; charset=utf-8");
-        let queryParameters: Query = <Query>q.query;
+        let queryParameters: Url.URLSearchParams = q.searchParams;
 
-        let loginResult: StatusCodes = await loginUser(queryParameters.Email as string, queryParameters.Passwort as string);
+        let loginResult: StatusCodes = await loginUser(queryParameters.get("email"), queryParameters.get("passwort"));
 
         _response.write(String(loginResult));
         console.log("einloggen Seite");
@@ -93,18 +95,19 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         _response.setHeader("content-type", "text/html; charset=utf-8");
 
-        let queryParameters: Query = <Query> q.query;
+        let queryParameters: Url.URLSearchParams = q.searchParams;
 
         let user: User = {
 
-            "Name": queryParameters.Name as string,
-            "Studiengang": queryParameters.Studiengang as string,
-            "Semester": queryParameters.Semester as string,
-            "Email": queryParameters.Email as string
+            "Name": queryParameters.get("name"),
+            "Studiengang": queryParameters.get("studiengang"),
+            "Semester": queryParameters.get("semester"),
+            "Email": queryParameters.get("email")
 
         };
         
-        user.Passwort = queryParameters.Passwort as string;
+        user.passwort = queryParameters.get("passwort");
+        
 
         let registerResult: StatusCodes = await registerUser(user);
 
@@ -112,7 +115,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         console.log("Registrieren Seite");
     }
-    else if (q.pathname == "hauptseite") {
+    else if (q.pathname == "/hauptseite") {
 
         //
     }
@@ -136,11 +139,11 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
         if (_request.url) {
 
 
-        for (let key in q.query) {
-            _response.write(key + ":" + q.query[key] + "<br/>");
+        for (let key in q.searchParams) {
+            _response.write(key + ":" + q.searchParams.get(key) + "<br/>");
         }
 
-        let stringJSON: string = JSON.stringify(q.query);
+        let stringJSON: string = JSON.stringify(q.searchParams);
         _response.write(stringJSON);
 
     }
@@ -153,6 +156,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 async function connectToDatabase(_url: string): Promise<void> {
     console.log("Connected to Database");
 //_collection: string
+
     //Create Mongo Client
     let options: Mongo.MongoClientOptions = { useNewUrlParser: true, useUnifiedTopology: true };
     let mongoClient: Mongo.MongoClient = new Mongo.MongoClient(databaseUrl, options);

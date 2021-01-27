@@ -1,7 +1,7 @@
 "use strict";
 getUsers();
 async function getUsers() {
-    let response = await fetch(mainURL + "user");
+    let response = await fetch(URL + "user");
     let users = await response.json();
     let usersDiv = document.getElementById("users");
     let userCount = 0;

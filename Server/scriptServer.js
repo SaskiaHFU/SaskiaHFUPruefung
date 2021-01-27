@@ -30,30 +30,31 @@ function handleListen() {
 async function handleRequest(_request, _response) {
     console.log("I hear voices!");
     _response.setHeader("Access-Control-Allow-Origin", "*");
-    let q = Url.parse(_request.url, true);
+    // let q: Url.UrlWithParsedQuery = Url.parse(_request.url, true);
+    let q = new Url.URL(_request.url);
     console.log(q.pathname);
     if (q.pathname == "/index") {
         _response.setHeader("content-type", "text/html; charset=utf-8");
-        let queryParameters = q.query;
-        let loginResult = await loginUser(queryParameters.email, queryParameters.passwort);
+        let queryParameters = q.searchParams;
+        let loginResult = await loginUser(queryParameters.get("email"), queryParameters.get("passwort"));
         _response.write(String(loginResult));
         console.log("einloggen Seite");
     }
     else if (q.pathname == "/create_profil") {
         _response.setHeader("content-type", "text/html; charset=utf-8");
-        let queryParameters = q.query;
+        let queryParameters = q.searchParams;
         let user = {
-            "Name": queryParameters.name,
-            "Studiengang": queryParameters.studiengang,
-            "Semester": queryParameters.semester,
-            "Email": queryParameters.email
+            "Name": queryParameters.get("name"),
+            "Studiengang": queryParameters.get("studiengang"),
+            "Semester": queryParameters.get("semester"),
+            "Email": queryParameters.get("email")
         };
-        user.passwort = queryParameters.passwort;
+        user.passwort = queryParameters.get("passwort");
         let registerResult = await registerUser(user);
         _response.write(String(registerResult));
         console.log("Registrieren Seite");
     }
-    else if (q.pathname == "hauptseite") {
+    else if (q.pathname == "/hauptseite") {
         //
     }
     else if (q.pathname == "/profil") {
@@ -67,10 +68,10 @@ async function handleRequest(_request, _response) {
     }
     else {
         if (_request.url) {
-            for (let key in q.query) {
-                _response.write(key + ":" + q.query[key] + "<br/>");
+            for (let key in q.searchParams) {
+                _response.write(key + ":" + q.searchParams.get(key) + "<br/>");
             }
-            let stringJSON = JSON.stringify(q.query);
+            let stringJSON = JSON.stringify(q.searchParams);
             _response.write(stringJSON);
         }
     }
@@ -90,7 +91,7 @@ async function connectToDatabase(_url) {
 async function registerUser(_user) {
     console.log("Registrieren");
     // connectToDatabase(databaseUrl, "User");
-    let countDocumentsEmail = await user.countDocuments({ "email": _user.email });
+    let countDocumentsEmail = await user.countDocuments({ "Email": _user.Email });
     // let countDocumentsName: number = await user.countDocuments({ "name": _user.name });
     if (countDocumentsEmail > 0) {
         // User existiert weil Dokument gefunden also > 0 Dokumente
@@ -113,7 +114,7 @@ async function registerUser(_user) {
 async function loginUser(_email, _passwort) {
     console.log("Login");
     // connectToDatabase(url, "User");
-    let countDocuments = await user.countDocuments({ "email": _email, "passwort": _passwort });
+    let countDocuments = await user.countDocuments({ "Email": _email, "Passwort": _passwort });
     //Rückmeldung dass es funktioniert hat
     if (countDocuments > 0) {
         return 1 /* Good */;
