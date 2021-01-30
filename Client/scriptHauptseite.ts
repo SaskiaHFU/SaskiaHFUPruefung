@@ -2,10 +2,12 @@
 let postForm: HTMLFormElement = <HTMLFormElement>document.getElementById("post-form");
 
 let currentUser: string = localStorage.getItem("currentUser");
-let queryUser: URLSearchParams = new URLSearchParams();
 
 let clearButton1: HTMLButtonElement = <HTMLButtonElement>document.getElementById("resetButton");
 clearButton1.addEventListener("click", clearComment);
+
+let postButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("postButton");
+postButton.addEventListener("click", sendComment);
 
 function clearComment(_e: Event): void {
     postForm.reset();
@@ -17,6 +19,8 @@ async function sendComment(): Promise<void> {
     let textArea: HTMLTextAreaElement = <HTMLTextAreaElement>document.getElementById("writeComment");
 
     // Append eingeloggter User für Parameter userEmail und Comment weil nicht automatisch weil textarea statt input
+
+    let queryUser: URLSearchParams = new URLSearchParams();
 
     queryUser.append("email", currentUser);
     queryUser.append("writeComment", textArea.value);
@@ -80,21 +84,24 @@ async function sendComment(): Promise<void> {
 
 async function getComments(): Promise<void> {
 
-
-    let postButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("postButton");
-    postButton.addEventListener("click", sendComment);
-
+    let queryUser: URLSearchParams = new URLSearchParams();
     queryUser.append("email", currentUser);
 
-    let queryUrl: string = url + "hauptseite" + "?" + queryUser.toString();
+    let queryUrl: string = url + "getcomments" + "?" + queryUser.toString();
 
     //Fetch Data vom Server und wandle Data zu JSON
     let response: Response = await fetch(queryUrl);
     let comments: Comment[] = await response.json();
 
+    // console.log(queryUrl);
+
+    // console.log(await JSON.stringify(response));
+
+
     let commentsDiv: HTMLElement = document.getElementById("showComments");
 
     let commentCount: number = 0;
+  
 
     //
     while (commentsDiv.hasChildNodes()) {
@@ -119,7 +126,7 @@ async function getComments(): Promise<void> {
 
         commentsDiv.appendChild(commentDiv);
 
-        commentCount++;
+        // commentCount++;
     }
 
 }

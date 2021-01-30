@@ -30,6 +30,7 @@ async function handleRequest(_request, _response) {
     console.log("I hear voices!");
     _response.setHeader("Access-Control-Allow-Origin", "*");
     let q = new Url.URL(_request.url, "http://localhost:8100"); //Zweite Parameter weil Base gefordert
+    // let q: Url.UrlWithParsedQuery = Url.parse(_request.url, true);
     console.log(q.pathname);
     if (q.pathname == "/index") {
         _response.setHeader("content-type", "text/html; charset=utf-8");
@@ -52,20 +53,19 @@ async function handleRequest(_request, _response) {
         _response.write(String(registerResult));
         console.log("Registrieren Seite");
     }
-    else if (q.pathname == "/hauptseite") {
+    else if (q.pathname == "/getcomments") {
         _response.setHeader("content-type", "application/json; charset=utf-8");
         let queryParameters = q.searchParams;
         //Beiträge anzeigen
         let comments = await getComments();
         _response.write(JSON.stringify(comments));
-        console.log(JSON.stringify(comment));
         console.log(queryParameters);
     }
     else if (q.pathname == "/hauptseite") {
         _response.setHeader("content-type", "text/html; charset=utf-8");
         let queryParameters = q.searchParams;
         let comment = {
-            userEmail: queryParameters.get("currentUser"),
+            userEmail: queryParameters.get("email"),
             Text: queryParameters.get("writeComment"),
             Date: new Date()
         };

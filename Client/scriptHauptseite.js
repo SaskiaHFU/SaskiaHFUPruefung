@@ -1,15 +1,17 @@
 "use strict";
 let postForm = document.getElementById("post-form");
 let currentUser = localStorage.getItem("currentUser");
-let queryUser = new URLSearchParams();
 let clearButton1 = document.getElementById("resetButton");
 clearButton1.addEventListener("click", clearComment);
+let postButton = document.getElementById("postButton");
+postButton.addEventListener("click", sendComment);
 function clearComment(_e) {
     postForm.reset();
 }
 async function sendComment() {
     let textArea = document.getElementById("writeComment");
     // Append eingeloggter User für Parameter userEmail und Comment weil nicht automatisch weil textarea statt input
+    let queryUser = new URLSearchParams();
     queryUser.append("email", currentUser);
     queryUser.append("writeComment", textArea.value);
     let queryUrl = url + "hauptseite" + "?" + queryUser.toString();
@@ -50,13 +52,14 @@ async function sendComment() {
     getComments();
 }
 async function getComments() {
-    let postButton = document.getElementById("postButton");
-    postButton.addEventListener("click", sendComment);
+    let queryUser = new URLSearchParams();
     queryUser.append("email", currentUser);
-    let queryUrl = url + "hauptseite" + "?" + queryUser.toString();
+    let queryUrl = url + "getcomments" + "?" + queryUser.toString();
     //Fetch Data vom Server und wandle Data zu JSON
     let response = await fetch(queryUrl);
     let comments = await response.json();
+    // console.log(queryUrl);
+    // console.log(await JSON.stringify(response));
     let commentsDiv = document.getElementById("showComments");
     let commentCount = 0;
     //
@@ -74,7 +77,7 @@ async function getComments() {
                                  `;
         console.log(comment);
         commentsDiv.appendChild(commentDiv);
-        commentCount++;
+        // commentCount++;
     }
 }
 window.addEventListener("load", getComments);

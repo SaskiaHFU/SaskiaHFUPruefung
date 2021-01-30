@@ -84,6 +84,9 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
     let q: Url.URL = new Url.URL(_request.url, "http://localhost:8100"); //Zweite Parameter weil Base gefordert
 
+    // let q: Url.UrlWithParsedQuery = Url.parse(_request.url, true);
+
+
 
     console.log(q.pathname);
 
@@ -123,7 +126,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         console.log("Registrieren Seite");
     }
-    else if (q.pathname == "/hauptseite") {
+    else if (q.pathname == "/getcomments") {
 
         _response.setHeader("content-type", "application/json; charset=utf-8");
         let queryParameters: Url.URLSearchParams = q.searchParams;
@@ -135,7 +138,6 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         _response.write(JSON.stringify(comments));
 
-        console.log(JSON.stringify(comment));
         console.log(queryParameters);
 
     }
@@ -149,7 +151,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         let comment: Comment = {
 
-            userEmail: queryParameters.get("currentUser"),
+            userEmail: queryParameters.get("email"),
             Text: queryParameters.get("writeComment"),
             Date: new Date()
 
