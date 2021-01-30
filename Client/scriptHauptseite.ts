@@ -23,7 +23,7 @@ async function sendComment(): Promise<void> {
 
 
 
-    let queryUrl: string = url + "writeComment" + "?" + queryUser.toString();
+    let queryUrl: string = url + "hauptseite" + "?" + queryUser.toString();
     console.log(queryUrl);
 
 
@@ -86,7 +86,7 @@ async function getComments(): Promise<void> {
 
     queryUser.append("email", currentUser);
 
-    let queryUrl: string = url + "showComments" + "?" + queryUser.toString();
+    let queryUrl: string = url + "hauptseite" + "?" + queryUser.toString();
 
     //Fetch Data vom Server und wandle Data zu JSON
     let response: Response = await fetch(queryUrl);

@@ -12,7 +12,7 @@ async function sendComment() {
     // Append eingeloggter User für Parameter userEmail und Comment weil nicht automatisch weil textarea statt input
     queryUser.append("email", currentUser);
     queryUser.append("writeComment", textArea.value);
-    let queryUrl = url + "writeComment" + "?" + queryUser.toString();
+    let queryUrl = url + "hauptseite" + "?" + queryUser.toString();
     console.log(queryUrl);
     let response = await fetch(queryUrl);
     let responseField = document.createElement("p");
@@ -53,7 +53,7 @@ async function getComments() {
     let postButton = document.getElementById("postButton");
     postButton.addEventListener("click", sendComment);
     queryUser.append("email", currentUser);
-    let queryUrl = url + "showComments" + "?" + queryUser.toString();
+    let queryUrl = url + "hauptseite" + "?" + queryUser.toString();
     //Fetch Data vom Server und wandle Data zu JSON
     let response = await fetch(queryUrl);
     let comments = await response.json();
