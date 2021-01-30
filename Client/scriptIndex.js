@@ -29,7 +29,7 @@ async function submitLogin() {
             responseField.innerText = "Du wirst eingeloggt!";
             localStorage.setItem("currentUser", currentUser);
             localStorage.setItem("currentPassword", currentPassword);
-            window.location.href = "../HTML/hauptseite.html";
+            window.location.href = "hauptseite.html";
             // window.location.href = "file:///C:/Users/User/Documents/Studium/2%20Semester/GIS/SaskiaHFUPruefung/HTML/hauptseite.html";
         }
     }
