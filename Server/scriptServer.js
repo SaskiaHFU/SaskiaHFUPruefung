@@ -52,7 +52,7 @@ async function handleRequest(_request, _response) {
         _response.write(String(registerResult));
         console.log("Registrieren Seite");
     }
-    else if (q.pathname == "/comment") {
+    else if (q.pathname == "/hauptseite") {
         _response.setHeader("content-type", "application/json; charset=utf-8");
         let queryParameters = q.searchParams;
         //Beiträge anzeigen

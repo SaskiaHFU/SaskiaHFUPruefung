@@ -123,7 +123,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         console.log("Registrieren Seite");
     }
-    else if (q.pathname == "/comment") {
+    else if (q.pathname == "/hauptseite") {
 
         _response.setHeader("content-type", "application/json; charset=utf-8");
         let queryParameters: Url.URLSearchParams = q.searchParams;
