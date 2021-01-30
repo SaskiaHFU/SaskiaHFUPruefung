@@ -18,12 +18,14 @@ interface Comment {
 
     userEmail: string;
     Text: string;
+    Date: Date;
 }
 
 
 let databaseUrl: string = "mongodb+srv://Saskia:12345@clustersaskia.vxxmf.mongodb.net/Charlan?retryWrites=true&w=majority";
 let user: Mongo.Collection;
 let comment: Mongo.Collection;
+
 
 connectToDatabase(databaseUrl);
 
@@ -35,17 +37,18 @@ const enum StatusCodes {
     BadEmailExists = 3,
     BadWrongPassword = 4,
     BadNameExists = 5,
-    BadWrongName = 6
+    BadWrongName = 6,
+    EmptyFields = 7
 }
 
 
 //Port und Server erstellen
 
-// let port: number = Number (process.env.PORT); //String zu Int umwandeln
+
 let port: number | string = process.env.PORT;
 
 
-if (port == undefined) { // || isNaN(port)
+if (port == undefined) {
     port = 8100;
 }
 
@@ -55,6 +58,7 @@ if (port == undefined) { // || isNaN(port)
 startServer(port);
 
 
+// Funktionen
 
 function startServer(_port: number | string): void {
     //Server erstellen
@@ -67,7 +71,7 @@ function startServer(_port: number | string): void {
     server.addListener("listening", handleListen);
 }
 
-// Funktionen
+
 
 function handleListen(): void {
     console.log("Listening");
@@ -78,7 +82,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
     _response.setHeader("Access-Control-Allow-Origin", "*");
 
-    let q: Url.URL = new Url.URL(_request.url, "https://example.com"); //Zweite Parameter weil Base gefordert
+    let q: Url.URL = new Url.URL(_request.url, "http://localhost:8100"); //Zweite Parameter weil Base gefordert
 
 
     console.log(q.pathname);
@@ -98,6 +102,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         _response.setHeader("content-type", "text/html; charset=utf-8");
 
+
         let queryParameters: Url.URLSearchParams = q.searchParams;
 
         let user: User = {
@@ -111,28 +116,52 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
         };
 
 
+
         let registerResult: StatusCodes = await registerUser(user);
 
         _response.write(String(registerResult));
 
         console.log("Registrieren Seite");
     }
-    else if (q.pathname == "/hauptseite") {
+    else if (q.pathname == "/comment") {
 
         _response.setHeader("content-type", "application/json; charset=utf-8");
-
-        
-        let messageResult: StatusCodes = await saveComment();
+        let queryParameters: Url.URLSearchParams = q.searchParams;
 
 
-        _response.write(String(messageResult));
         //Beiträge anzeigen
 
         let comments: Comment[] = await getComments();
 
         _response.write(JSON.stringify(comments));
 
-        console.log("Liste Seite");
+        console.log(JSON.stringify(comment));
+        console.log(queryParameters);
+
+    }
+
+    else if (q.pathname == "/hauptseite") {
+
+        _response.setHeader("content-type", "text/html; charset=utf-8");
+
+        let queryParameters: Url.URLSearchParams = q.searchParams;
+
+
+        let comment: Comment = {
+
+            userEmail: queryParameters.get("currentUser"),
+            Text: queryParameters.get("writeComment"),
+            Date: new Date()
+
+        };
+
+
+        let messageResult: StatusCodes = await saveComment(comment);
+
+        _response.write(String(messageResult));
+
+        console.log("Hauptseite");
+
 
     }
     else if (q.pathname == "/profil") {
@@ -207,8 +236,6 @@ async function registerUser(_user: User): Promise<StatusCodes> {
 
     console.log("Registrieren");
 
-    // connectToDatabase(databaseUrl, "User");
-
     let countDocumentsEmail: number = await user.countDocuments({ Email: _user.Email });
     let countDocumentsName: number = await user.countDocuments({ Name: _user.Name });
 
@@ -224,10 +251,14 @@ async function registerUser(_user: User): Promise<StatusCodes> {
 
         let result: Mongo.InsertOneWriteOpResult<any> = await user.insertOne(_user);
 
+
         //Rückmeldung dass es funktioniert hat
         if (result.insertedCount == 1) {
 
             return StatusCodes.Good;
+        }
+        else if (_user == undefined) {
+            return StatusCodes.EmptyFields;
         }
         else {
 
@@ -275,10 +306,11 @@ async function getUsers(): Promise<User[]> {
 //Hauptseite
 async function getComments(): Promise<Comment[]> {
 
-    console.log("Beiträge");
-
 
     let commentDocuments: Comment[] = await comment.find().toArray();
+    console.log("Beiträge");
+    console.log(commentDocuments);
+
 
     return commentDocuments;
 }
@@ -288,7 +320,8 @@ async function saveComment(_comment: Comment): Promise<StatusCodes> {
 
 
     let result: Mongo.InsertOneWriteOpResult<any> = await comment.insertOne(_comment);
-
+    console.log("Save Comment");
+    
     //Rückmeldung dass es funktioniert hat
     if (result.insertedCount == 1) {
 
@@ -298,9 +331,12 @@ async function saveComment(_comment: Comment): Promise<StatusCodes> {
 
         return StatusCodes.BadDatabaseProblem;
     }
-}
+
+    
 
 }
+
+
 
 
 //Profil

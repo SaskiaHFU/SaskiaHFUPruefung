@@ -13,7 +13,6 @@ async function getUsers(): Promise<void> {
 
         let userDiv: HTMLDivElement = document.createElement("div");
 
-        
 
         //User erzeugen
         

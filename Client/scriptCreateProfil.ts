@@ -21,6 +21,7 @@ async function submitRegister(_event: Event): Promise<void> {
     let queryUrl: string = url + "create_profil" + "?" + query.toString();
     console.log(queryUrl);
 
+
     let response: Response = await fetch(queryUrl);
 
     let responseField: HTMLParagraphElement = document.createElement("p");
@@ -45,7 +46,7 @@ async function submitRegister(_event: Event): Promise<void> {
             responseField.innerText = "E-Mail ist schon vorhanden!";
         }
         
-        else if (statusCode == StatusCodes.BadNameExists){
+        else if (statusCode == StatusCodes.BadNameExists) {
             responseField.innerText = "Dieser Name existiert bereits!";
         }
 

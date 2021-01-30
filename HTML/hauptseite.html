@@ -73,11 +73,14 @@
             <div class="new-comment">
              
             <p>Erstelle einen neuen Beitrag</p>
-            <form >
-            <textarea id="writeComment" type="text" class="create-text" name="Comment" rows="15" cols="20" maxlength="70" ></textarea>
+            <form id="post-form">
+            <textarea id="writeComment" type="text" class="create-text" name="comment" rows="15" cols="20" maxlength="70" ></textarea>
+            
             
              <button id="postButton" name="postButton" type="button">Post Comment</button>
+             <button id="resetButton" name="resetButton" type="reset">Löschen</button>
             </form>
+
             <div id="serverresult">
 
             </div>
@@ -85,12 +88,12 @@
         </div>
 
         <div class="col-2">
-            <div class="comments">
+            <!-- <div class="comments"> -->
             <p>Das sind die neuesten Beiträge</p>
             <div id="showComments">
 
             </div>
-            </div>
+            <!-- </div> -->
        </div>
     </div>
 </div>            

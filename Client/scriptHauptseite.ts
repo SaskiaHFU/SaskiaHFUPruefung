@@ -1,36 +1,49 @@
 
+let postForm: HTMLFormElement = <HTMLFormElement>document.getElementById("post-form");
 
-let dataButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("postButton");
-dataButton.addEventListener("click", sendComment);
+let currentUser: string = localStorage.getItem("currentUser");
+let queryUser: URLSearchParams = new URLSearchParams();
 
-async function sendComment(): Promise <void> {
-    
-    let formData: FormData = new FormData(document.forms[0]);
-    let query: URLSearchParams = new URLSearchParams(<any>formData);
+let clearButton1: HTMLButtonElement = <HTMLButtonElement>document.getElementById("resetButton");
+clearButton1.addEventListener("click", clearComment);
 
-    let textArea: HTMLTextAreaElement = <HTMLTextAreaElement> document.getElementById("writeComment");
+function clearComment(_e: Event): void {
+    postForm.reset();
+}
+
+async function sendComment(): Promise<void> {
+
+
+    let textArea: HTMLTextAreaElement = <HTMLTextAreaElement>document.getElementById("writeComment");
+
+    // Append eingeloggter User für Parameter userEmail und Comment weil nicht automatisch weil textarea statt input
+
+    queryUser.append("email", currentUser);
+    queryUser.append("writeComment", textArea.value);
 
 
 
-    let queryUrl: string = url + "scriptHauptseite" + "?" + query.toString();
+    let queryUrl: string = url + "writeComment" + "?" + queryUser.toString();
     console.log(queryUrl);
+
 
     let response: Response = await fetch(queryUrl);
 
+
     let responseField: HTMLParagraphElement = document.createElement("p");
-    
 
+    console.log(response);
 
-    //Fehler auffangen
+    // //Fehler auffangen
     if (response.status != 200) {
         responseField.innerText = "Fehler!";
-        
-    } 
+
+    }
     else {
 
         let responseText: string = await response.text();
         let statusCode: StatusCodes = Number.parseInt(responseText) as StatusCodes;
-        
+
         //Rückmeldung Submit
 
         if (statusCode == StatusCodes.BadDatabaseProblem) {
@@ -38,48 +51,77 @@ async function sendComment(): Promise <void> {
         }
 
         else if (statusCode == StatusCodes.Good) {
+            textArea.value = ""; //Textarea clearen
             responseField.innerText = "Dein Beitrag wird gepostet!";
 
         }
 
-    }
 
+    }
     //Antwort anzeigen
-    let serverResult: HTMLElement = document.getElementById("serverresult");
-    if (changeLoginResult != undefined) {
-        serverResult.replaceChild(responseField, changeLoginResult);
+    // let serverResult: HTMLElement = document.getElementById("serverresult");
+    // if (changeLoginResult != undefined) {
+    //     serverResult.replaceChild(responseField, changeLoginResult);
+    // }
+    // else {
+    //     serverResult.appendChild(responseField);
+    // }
+    // changeLoginResult = responseField;
+
+    let serverResult: HTMLDivElement = <HTMLDivElement>document.getElementById("serverresult");
+    while (serverResult.hasChildNodes()) {
+        serverResult.removeChild(serverResult.firstChild);
     }
-    else {
-        serverResult.appendChild(responseField);         
-    }
-    changeLoginResult = responseField;
- }
+    serverResult.appendChild(responseField);
 
-
-async function getComments (): Promise <void> {
-    
-
-        let response: Response = await fetch(url + "hauptseite");
-        let comments: Comment[] = await response.json();
-    
-        let commentsDiv: HTMLElement = document.getElementById("comments");
-    
-        let commentCount: number = 0;
-    
-        for (let comment of comments) {
-    
-            let commentDiv: HTMLDivElement = document.createElement("div");
-    
-            commentDiv.innerText = `Vorname: ${comment.Text}   
-                                 
-                                 `;
-            
-            console.log(comment);
-    
-            commentsDiv.appendChild(commentDiv); 
-            commentCount++;
-        }
-        
-        
-    
+    getComments();
 }
+
+
+async function getComments(): Promise<void> {
+
+
+    let postButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("postButton");
+    postButton.addEventListener("click", sendComment);
+
+    queryUser.append("email", currentUser);
+
+    let queryUrl: string = url + "showComments" + "?" + queryUser.toString();
+
+    //Fetch Data vom Server und wandle Data zu JSON
+    let response: Response = await fetch(queryUrl);
+    let comments: Comment[] = await response.json();
+
+    let commentsDiv: HTMLElement = document.getElementById("showComments");
+
+    let commentCount: number = 0;
+
+    //
+    while (commentsDiv.hasChildNodes()) {
+        commentsDiv.removeChild(commentsDiv.firstChild);
+    }
+    //
+
+    for (let comment of comments) {
+
+        let commentDiv: HTMLDivElement = document.createElement("div");
+
+        commentDiv.classList.add("commentDiv");
+        commentDiv.innerText = `userEmail: ${comment.userEmail},
+                                Text: ${comment.Text},
+                                Date: ${comment.Date}   
+
+                                 `;
+
+
+
+        console.log(comment);
+
+        commentsDiv.appendChild(commentDiv);
+
+        commentCount++;
+    }
+
+}
+
+window.addEventListener("load", getComments);

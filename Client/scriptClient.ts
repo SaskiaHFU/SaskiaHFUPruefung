@@ -23,6 +23,7 @@ interface Comment {
 
     userEmail: string;
     Text: string;
+    Date: Date;
 }
 
 //Statuscodes

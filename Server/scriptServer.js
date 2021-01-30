@@ -8,13 +8,13 @@ let user;
 let comment;
 connectToDatabase(databaseUrl);
 //Port und Server erstellen
-// let port: number = Number (process.env.PORT); //String zu Int umwandeln
 let port = process.env.PORT;
-if (port == undefined) { // || isNaN(port)
+if (port == undefined) {
     port = 8100;
 }
 // Funktionen aufrufen
 startServer(port);
+// Funktionen
 function startServer(_port) {
     //Server erstellen
     let server = Http.createServer();
@@ -23,14 +23,13 @@ function startServer(_port) {
     server.addListener("request", handleRequest);
     server.addListener("listening", handleListen);
 }
-// Funktionen
 function handleListen() {
     console.log("Listening");
 }
 async function handleRequest(_request, _response) {
     console.log("I hear voices!");
     _response.setHeader("Access-Control-Allow-Origin", "*");
-    let q = new Url.URL(_request.url, "https://example.com"); //Zweite Parameter weil Base gefordert
+    let q = new Url.URL(_request.url, "http://localhost:8100"); //Zweite Parameter weil Base gefordert
     console.log(q.pathname);
     if (q.pathname == "/index") {
         _response.setHeader("content-type", "text/html; charset=utf-8");
@@ -53,14 +52,26 @@ async function handleRequest(_request, _response) {
         _response.write(String(registerResult));
         console.log("Registrieren Seite");
     }
-    else if (q.pathname == "/hauptseite") {
+    else if (q.pathname == "/comment") {
         _response.setHeader("content-type", "application/json; charset=utf-8");
-        let messageResult = await saveComment();
-        _response.write(String(messageResult));
+        let queryParameters = q.searchParams;
         //Beiträge anzeigen
         let comments = await getComments();
         _response.write(JSON.stringify(comments));
-        console.log("Liste Seite");
+        console.log(JSON.stringify(comment));
+        console.log(queryParameters);
+    }
+    else if (q.pathname == "/hauptseite") {
+        _response.setHeader("content-type", "text/html; charset=utf-8");
+        let queryParameters = q.searchParams;
+        let comment = {
+            userEmail: queryParameters.get("currentUser"),
+            Text: queryParameters.get("writeComment"),
+            Date: new Date()
+        };
+        let messageResult = await saveComment(comment);
+        _response.write(String(messageResult));
+        console.log("Hauptseite");
     }
     else if (q.pathname == "/profil") {
         _response.setHeader("content-type", "text/html; charset=utf-8");
@@ -107,7 +118,6 @@ async function connectToDatabase(_url) {
 //Einloggen+Erstellen
 async function registerUser(_user) {
     console.log("Registrieren");
-    // connectToDatabase(databaseUrl, "User");
     let countDocumentsEmail = await user.countDocuments({ Email: _user.Email });
     let countDocumentsName = await user.countDocuments({ Name: _user.Name });
     if (countDocumentsEmail > 0) {
@@ -121,6 +131,9 @@ async function registerUser(_user) {
         //Rückmeldung dass es funktioniert hat
         if (result.insertedCount == 1) {
             return 1 /* Good */;
+        }
+        else if (_user == undefined) {
+            return 7 /* EmptyFields */;
         }
         else {
             return 2 /* BadDatabaseProblem */;
@@ -148,12 +161,14 @@ async function getUsers() {
 }
 //Hauptseite
 async function getComments() {
-    console.log("Beiträge");
     let commentDocuments = await comment.find().toArray();
+    console.log("Beiträge");
+    console.log(commentDocuments);
     return commentDocuments;
 }
 async function saveComment(_comment) {
     let result = await comment.insertOne(_comment);
+    console.log("Save Comment");
     //Rückmeldung dass es funktioniert hat
     if (result.insertedCount == 1) {
         return 1 /* Good */;
