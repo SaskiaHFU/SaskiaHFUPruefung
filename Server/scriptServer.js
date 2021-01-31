@@ -36,7 +36,6 @@ async function handleRequest(_request, _response) {
         let queryParameters = q.searchParams;
         let loginResult = await loginUser(queryParameters.get("email"), queryParameters.get("passwort"));
         _response.write(String(loginResult));
-        console.log("einloggen Seite");
     }
     else if (q.pathname == "/create_profil") {
         _response.setHeader("content-type", "text/html; charset=utf-8");
@@ -58,7 +57,6 @@ async function handleRequest(_request, _response) {
         //Beiträge anzeigen
         let comments = await getComments();
         _response.write(JSON.stringify(comments));
-        console.log(queryParameters);
     }
     else if (q.pathname == "/hauptseite") {
         _response.setHeader("content-type", "text/html; charset=utf-8");
@@ -106,7 +104,6 @@ async function handleRequest(_request, _response) {
 }
 async function connectToDatabase(_url) {
     console.log("Connected to Database");
-    // , _collection: string
     //Create Mongo Client
     let options = { useNewUrlParser: true, useUnifiedTopology: true };
     let mongoClient = new Mongo.MongoClient(databaseUrl, options);
@@ -118,7 +115,6 @@ async function connectToDatabase(_url) {
 }
 //Einloggen+Erstellen
 async function registerUser(_user) {
-    console.log("Registrieren");
     let countDocumentsEmail = await user.countDocuments({ Email: _user.Email });
     let countDocumentsName = await user.countDocuments({ Name: _user.Name });
     if (countDocumentsEmail > 0) {
@@ -142,10 +138,7 @@ async function registerUser(_user) {
     }
 }
 async function loginUser(_email, _passwort) {
-    console.log("Login");
-    // connectToDatabase(url, "User");
     let countDocuments = await user.countDocuments({ Email: _email, passwort: _passwort });
-    console.log(_email, _passwort);
     //Rückmeldung dass es funktioniert hat
     if (countDocuments > 0) {
         return 1 /* Good */;
@@ -166,36 +159,40 @@ async function getComments() {
     return commentDocuments;
 }
 async function saveComment(_comment) {
-    let result = await comment.insertOne(_comment);
-    //Rückmeldung dass es funktioniert hat
-    if (result.insertedCount == 1) {
-        return 1 /* Good */;
+    if (!_comment.userEmail || !_comment.Text) {
+        return 7 /* EmptyFields */;
     }
     else {
-        return 2 /* BadDatabaseProblem */;
-    }
-}
-//Profil
-async function registerNewUser(_user) {
-    // Methode von Github Mongo Seite
-    let result = await user.updateOne({ Email: _user.Email }, {
-        $set: {
-            Name: _user.Name,
-            Studiengang: _user.Studiengang,
-            Semesterangabe: _user.Semester,
-            Passwort: _user.passwort
+        let result = await comment.insertOne(_comment);
+        if (result.insertedCount == 1) {
+            return 1 /* Good */;
         }
-    });
-    //Rückmeldung dass es funktioniert hat
-    if (result.result.ok) {
-        return 1 /* Good */;
+        else {
+            return 2 /* BadDatabaseProblem */;
+        }
     }
-    else {
-        return 2 /* BadDatabaseProblem */;
+    //Profil
+    async function registerNewUser(_user) {
+        // Methode von Github Mongo Seite
+        let result = await user.updateOne({ Email: _user.Email }, {
+            $set: {
+                Name: _user.Name,
+                Studiengang: _user.Studiengang,
+                Semesterangabe: _user.Semester,
+                Passwort: _user.passwort
+            }
+        });
+        //Rückmeldung dass es funktioniert hat
+        if (result.result.ok) {
+            return 1 /* Good */;
+        }
+        else {
+            return 2 /* BadDatabaseProblem */;
+        }
     }
-}
-async function getUserData(_changeUser) {
-    let profilDocument = await user.findOne({ Email: _changeUser });
-    return;
+    async function getUserData(_changeUser) {
+        let profilDocument = await user.findOne({ Email: _changeUser });
+        return;
+    }
 }
 //# sourceMappingURL=scriptServer.js.map

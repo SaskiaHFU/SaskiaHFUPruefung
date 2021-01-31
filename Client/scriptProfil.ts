@@ -144,4 +144,7 @@ function logout(_e: MouseEvent): void {
 
     alert("Du bist ausgeloggt!");
 
+    // window.location.href = "https://saskiahfu.github.io/SaskiaHFUPruefung/HTML/index.html";
+    window.location.href = "file:///C:/Users/User/Documents/Studium/2%20Semester/GIS/SaskiaHFUPruefung/HTML/index.html";
+
 }

@@ -53,7 +53,10 @@ async function sendComment(): Promise<void> {
         if (statusCode == StatusCodes.BadDatabaseProblem) {
             responseField.innerText = "Fehler!";
         }
+        else if ( statusCode == StatusCodes.EmptyFields) {
+            responseField.innerText = "Es sind nicht alle Felder ausgefüllt!";
 
+        }
         else if (statusCode == StatusCodes.Good) {
             textArea.value = ""; //Textarea clearen
             // window.location.href = "https://saskiahfu.github.io/SaskiaHFUPruefung/HTML/hauptseite.html";
@@ -61,8 +64,17 @@ async function sendComment(): Promise<void> {
 
         }
 
-
     }
+
+    //Antwort anzeigen
+    let serverResult: HTMLElement = document.getElementById("serverresult");
+    if (changeLoginResult != undefined) {
+        serverResult.replaceChild(responseField, changeLoginResult);
+    }
+    else {
+        serverResult.appendChild(responseField);         
+    }
+    changeLoginResult = responseField;
     
 }
 

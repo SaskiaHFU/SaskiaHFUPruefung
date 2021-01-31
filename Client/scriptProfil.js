@@ -81,5 +81,7 @@ ausloggenButton.addEventListener("click", logout);
 function logout(_e) {
     window.localStorage.clear();
     alert("Du bist ausgeloggt!");
+    // window.location.href = "https://saskiahfu.github.io/SaskiaHFUPruefung/HTML/index.html";
+    window.location.href = "file:///C:/Users/User/Documents/Studium/2%20Semester/GIS/SaskiaHFUPruefung/HTML/index.html";
 }
 //# sourceMappingURL=scriptProfil.js.map

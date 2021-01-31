@@ -7,6 +7,7 @@ loginButton1.addEventListener("click", submitLogin);
 
 //Funktionen
 
+
 async function submitLogin(): Promise<void> {
 
     let formData: FormData = new FormData(document.forms[0]);

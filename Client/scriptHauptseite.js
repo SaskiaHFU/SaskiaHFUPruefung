@@ -29,12 +29,24 @@ async function sendComment() {
         if (statusCode == 2 /* BadDatabaseProblem */) {
             responseField.innerText = "Fehler!";
         }
+        else if (statusCode == 7 /* EmptyFields */) {
+            responseField.innerText = "Es sind nicht alle Felder ausgefüllt!";
+        }
         else if (statusCode == 1 /* Good */) {
             textArea.value = ""; //Textarea clearen
             // window.location.href = "https://saskiahfu.github.io/SaskiaHFUPruefung/HTML/hauptseite.html";
             window.location.href = "file:///C:/Users/User/Documents/Studium/2%20Semester/GIS/SaskiaHFUPruefung/HTML/hauptseite.html";
         }
     }
+    //Antwort anzeigen
+    let serverResult = document.getElementById("serverresult");
+    if (changeLoginResult != undefined) {
+        serverResult.replaceChild(responseField, changeLoginResult);
+    }
+    else {
+        serverResult.appendChild(responseField);
+    }
+    changeLoginResult = responseField;
 }
 async function getComments() {
     let queryUser = new URLSearchParams();

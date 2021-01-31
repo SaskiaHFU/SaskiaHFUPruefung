@@ -231,6 +231,8 @@ a:active {
     text-decoration: none;
 }
 
+
+
 /*--- GRID-SYSTEM ---*/
 
 .container-main {
@@ -276,7 +278,10 @@ display: block;
 
 .col-4 {
     width: 100%;
+}
 
+.row {
+    margin-bottom: 50px;
 }
 
 /*---FOLLOW-SEITE*/
@@ -312,11 +317,16 @@ display: block;
 
 /*---HAUPTSEITE-BODY*/
 
-#beitrag {
+.beitrag {
     letter-spacing: 0.7rem;
     font-size: 18px;
     border-bottom: 1px solid #e8cabc;
 
+}
+
+.beitrag2 {
+    letter-spacing: 0.35rem;
+    font-size: 14px;
 }
 
 .new-comment {
@@ -354,9 +364,11 @@ display: block;
 
 }
 
-#postButton {
-    
+#postButton, #resetButton, textarea {
+    margin: 3px;
 }
+
+
 
 .comments {
 
@@ -365,7 +377,7 @@ display: block;
 }
 
 textarea {
-    margin: 0px; 
+    
     width: 266px; 
     height: 116px;
     resize: none;
@@ -476,6 +488,11 @@ p.small {
     color: #e0aca0;
 }
 
+#register-form {
+    width: 60%;
+    display: inline-block;
+}
+
 /*---FOLLOWER-BODY---*/
 
 
@@ -526,7 +543,7 @@ p {
     width: 100%;
     height: auto;
     font-size: 1.2rem;
-    margin: 0 auto 30px;
+    margin: 0 auto 0px;
     padding: 1em 0 1.7em 0em;
     border-top: 4px solid #e8cec4;
     

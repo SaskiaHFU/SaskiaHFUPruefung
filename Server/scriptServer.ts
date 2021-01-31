@@ -104,7 +104,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
         let loginResult: StatusCodes = await loginUser(queryParameters.get("email"), queryParameters.get("passwort"));
 
         _response.write(String(loginResult));
-        console.log("einloggen Seite");
+
 
     }
     else if (q.pathname == "/create_profil") {
@@ -123,7 +123,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         };
 
-        
+
 
         let registerResult: StatusCodes = await registerUser(user);
 
@@ -143,7 +143,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         _response.write(JSON.stringify(comments));
 
-        console.log(queryParameters);
+
 
     }
 
@@ -164,7 +164,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         };
 
-        
+
 
         let messageResult: StatusCodes = await saveComment(newComment);
 
@@ -229,7 +229,6 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
 async function connectToDatabase(_url: string): Promise<void> {
     console.log("Connected to Database");
-    // , _collection: string
 
     //Create Mongo Client
     let options: Mongo.MongoClientOptions = { useNewUrlParser: true, useUnifiedTopology: true };
@@ -244,9 +243,9 @@ async function connectToDatabase(_url: string): Promise<void> {
 }
 
 //Einloggen+Erstellen
+
 async function registerUser(_user: User): Promise<StatusCodes> {
 
-    console.log("Registrieren");
 
     let countDocumentsEmail: number = await user.countDocuments({ Email: _user.Email });
     let countDocumentsName: number = await user.countDocuments({ Name: _user.Name });
@@ -285,13 +284,10 @@ async function registerUser(_user: User): Promise<StatusCodes> {
 
 async function loginUser(_email: string, _passwort: string): Promise<StatusCodes> {
 
-    console.log("Login");
 
-    // connectToDatabase(url, "User");
 
     let countDocuments: number = await user.countDocuments({ Email: _email, passwort: _passwort });
 
-    console.log(_email, _passwort);
 
     //Rückmeldung dass es funktioniert hat
     if (countDocuments > 0) {
@@ -310,7 +306,7 @@ async function getUsers(): Promise<User[]> {
 
     let userDocuments: User[] = await user.find().toArray();
 
-    
+
 
     return userDocuments;
 
@@ -323,7 +319,7 @@ async function getComments(): Promise<Comment[]> {
 
     let commentDocuments: Comment[] = await comment.find().toArray();
     commentDocuments.reverse();
-    
+
 
     return commentDocuments;
 }
@@ -332,70 +328,70 @@ async function getComments(): Promise<Comment[]> {
 async function saveComment(_comment: Comment): Promise<StatusCodes> {
 
 
-    let result: Mongo.InsertOneWriteOpResult<any> = await comment.insertOne(_comment);
-    
+    if (!_comment.userEmail || !_comment.Text) {
 
-    //Rückmeldung dass es funktioniert hat
-    if (result.insertedCount == 1) {
-
-        return StatusCodes.Good;
-    }
-    else {
-
-        return StatusCodes.BadDatabaseProblem;
-    }
-
-
-
-}
-
-
-
-
-//Profil
-
-async function registerNewUser(_user: User): Promise<StatusCodes> {
-
-
-    // Methode von Github Mongo Seite
-    let result: Mongo.UpdateWriteOpResult = await user.updateOne(
-
-        { Email: _user.Email },
-        {
-            $set: {
-                Name: _user.Name,
-                Studiengang: _user.Studiengang,
-                Semesterangabe: _user.Semester,
-                Passwort: _user.passwort
-            }
-        });
-
-
-    //Rückmeldung dass es funktioniert hat
-    if (result.result.ok) {
-
-        return StatusCodes.Good;
-    }
-    else {
-
-        return StatusCodes.BadDatabaseProblem;
-    }
-
-
-}
-
-async function getUserData(_changeUser: string): Promise <User> {
-
-    let profilDocument: User = await user.findOne({Email: _changeUser});
-    
-    
-
+        return StatusCodes.EmptyFields;
+    } else {
         
-    
+        let result: Mongo.InsertOneWriteOpResult<any> = await comment.insertOne(_comment);
+        if (result.insertedCount == 1) {
+            
+            return StatusCodes.Good;
+        }
+
+        else {
+
+            return StatusCodes.BadDatabaseProblem;
+        }
 
 
-    return ;
-}
+    }
+
+
+    //Profil
+
+    async function registerNewUser(_user: User): Promise<StatusCodes> {
+
+
+        // Methode von Github Mongo Seite
+        let result: Mongo.UpdateWriteOpResult = await user.updateOne(
+
+            { Email: _user.Email },
+            {
+                $set: {
+                    Name: _user.Name,
+                    Studiengang: _user.Studiengang,
+                    Semesterangabe: _user.Semester,
+                    Passwort: _user.passwort
+                }
+            });
+
+
+        //Rückmeldung dass es funktioniert hat
+        if (result.result.ok) {
+
+            return StatusCodes.Good;
+        }
+        else {
+
+            return StatusCodes.BadDatabaseProblem;
+        }
+
+
+    }
+
+    async function getUserData(_changeUser: string): Promise<User> {
+
+        let profilDocument: User = await user.findOne({ Email: _changeUser });
+
+
+
+
+
+
+
+        return;
+    }
 
 
 
