@@ -30,6 +30,9 @@ async function submitRegister(_event) {
         else if (statusCode == 5 /* BadNameExists */) {
             responseField.innerText = "Dieser Name existiert bereits!";
         }
+        else if (statusCode == 7 /* EmptyFields */) {
+            responseField.innerText = "Es sind nicht alle Felder ausgefüllt!";
+        }
         else if (statusCode == 1 /* Good */) {
             responseField.innerText = "Du bist Registiert!";
         }

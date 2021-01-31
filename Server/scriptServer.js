@@ -30,7 +30,6 @@ async function handleRequest(_request, _response) {
     console.log("I hear voices!");
     _response.setHeader("Access-Control-Allow-Origin", "*");
     let q = new Url.URL(_request.url, "http://localhost:8100"); //Zweite Parameter weil Base gefordert
-    // let q: Url.UrlWithParsedQuery = Url.parse(_request.url, true);
     console.log(q.pathname);
     if (q.pathname == "/index") {
         _response.setHeader("content-type", "text/html; charset=utf-8");
@@ -64,12 +63,13 @@ async function handleRequest(_request, _response) {
     else if (q.pathname == "/hauptseite") {
         _response.setHeader("content-type", "text/html; charset=utf-8");
         let queryParameters = q.searchParams;
-        let comment = {
+        let date = new Date();
+        let newComment = {
             userEmail: queryParameters.get("email"),
             Text: queryParameters.get("writeComment"),
-            Date: new Date()
+            Date: date.toUTCString()
         };
-        let messageResult = await saveComment(comment);
+        let messageResult = await saveComment(newComment);
         _response.write(String(messageResult));
         console.log("Hauptseite");
     }
@@ -93,13 +93,14 @@ async function handleRequest(_request, _response) {
         console.log("Liste Seite");
     }
     else {
-        if (_request.url) {
-            for (let key in q.searchParams) {
-                _response.write(key + ":" + q.searchParams.get(key) + "<br/>");
-            }
-            let stringJSON = JSON.stringify(q.searchParams);
-            _response.write(stringJSON);
-        }
+        // if (_request.url) {
+        //     for (let key in q.searchParams) {
+        //         _response.write(key + ":" + q.searchParams.get(key) + "<br/>");
+        //     }
+        //     let stringJSON: string = JSON.stringify(q.searchParams);
+        //     _response.write(stringJSON);
+        // }
+        alert("Fehler");
     }
     _response.end();
 }
@@ -126,14 +127,14 @@ async function registerUser(_user) {
     else if (countDocumentsName > 0) {
         return 5 /* BadNameExists */;
     }
+    else if (!_user.Email || !_user.Name || !_user.Studiengang || !_user.Semester || !_user.passwort) {
+        return 7 /* EmptyFields */;
+    }
     else {
         let result = await user.insertOne(_user);
         //Rückmeldung dass es funktioniert hat
         if (result.insertedCount == 1) {
             return 1 /* Good */;
-        }
-        else if (_user == undefined) {
-            return 7 /* EmptyFields */;
         }
         else {
             return 2 /* BadDatabaseProblem */;
@@ -155,15 +156,13 @@ async function loginUser(_email, _passwort) {
 }
 //Follower
 async function getUsers() {
-    console.log("Liste");
     let userDocuments = await user.find().toArray();
     return userDocuments;
 }
 //Hauptseite
 async function getComments() {
     let commentDocuments = await comment.find().toArray();
-    console.log("Beiträge");
-    console.log(commentDocuments);
+    commentDocuments.reverse();
     return commentDocuments;
 }
 async function saveComment(_comment) {

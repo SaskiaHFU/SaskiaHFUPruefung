@@ -48,6 +48,11 @@ async function submitRegister(_event: Event): Promise<void> {
         
         else if (statusCode == StatusCodes.BadNameExists) {
             responseField.innerText = "Dieser Name existiert bereits!";
+            
+            
+        } else if ( statusCode == StatusCodes.EmptyFields) {
+            responseField.innerText = "Es sind nicht alle Felder ausgefüllt!";
+
         }
 
         else if (statusCode == StatusCodes.Good) {

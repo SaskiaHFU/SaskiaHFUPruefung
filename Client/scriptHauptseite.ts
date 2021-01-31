@@ -93,9 +93,6 @@ async function getComments(): Promise<void> {
     let response: Response = await fetch(queryUrl);
     let comments: Comment[] = await response.json();
 
-    // console.log(queryUrl);
-
-    // console.log(await JSON.stringify(response));
 
 
     let commentsDiv: HTMLElement = document.getElementById("showComments");
@@ -114,9 +111,9 @@ async function getComments(): Promise<void> {
         let commentDiv: HTMLDivElement = document.createElement("div");
 
         commentDiv.classList.add("commentDiv");
-        commentDiv.innerText = `userEmail: ${comment.userEmail},
-                                Text: ${comment.Text},
-                                Date: ${comment.Date}   
+        commentDiv.innerText = `von ${comment.userEmail},
+                                Beitrag: ${comment.Text},
+                                um ${comment.Date}   
 
                                  `;
 
@@ -126,7 +123,7 @@ async function getComments(): Promise<void> {
 
         commentsDiv.appendChild(commentDiv);
 
-        // commentCount++;
+        commentCount++;
     }
 
 }

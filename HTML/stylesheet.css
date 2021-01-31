@@ -384,6 +384,12 @@ textarea {
 }
 /*---PROFIL-BODY / LOGIN-BODY / CREATE-BODY---*/
 
+
+#checkbox {
+    text-align: center;
+}
+
+
 input:required:invalid {
     border: thick solid#e0aca0;
 }
@@ -444,8 +450,6 @@ button {
     width: 100%;
     font-family: inherit;
 }
-
-
 
 
 p.small {

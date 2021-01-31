@@ -58,8 +58,6 @@ async function getComments() {
     //Fetch Data vom Server und wandle Data zu JSON
     let response = await fetch(queryUrl);
     let comments = await response.json();
-    // console.log(queryUrl);
-    // console.log(await JSON.stringify(response));
     let commentsDiv = document.getElementById("showComments");
     let commentCount = 0;
     //
@@ -70,14 +68,14 @@ async function getComments() {
     for (let comment of comments) {
         let commentDiv = document.createElement("div");
         commentDiv.classList.add("commentDiv");
-        commentDiv.innerText = `userEmail: ${comment.userEmail},
-                                Text: ${comment.Text},
-                                Date: ${comment.Date}   
+        commentDiv.innerText = `von ${comment.userEmail},
+                                Beitrag: ${comment.Text},
+                                um ${comment.Date}   
 
                                  `;
         console.log(comment);
         commentsDiv.appendChild(commentDiv);
-        // commentCount++;
+        commentCount++;
     }
 }
 window.addEventListener("load", getComments);
