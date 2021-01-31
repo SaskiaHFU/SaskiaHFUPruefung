@@ -17,6 +17,43 @@ let passwortInput: HTMLInputElement = <HTMLInputElement>document.getElementById(
 
 //Funktionen
 
+// async function showOldData(): Promise<void> {
+
+//     let oldData: HTMLDivElement = <HTMLDivElement>document.getElementById("oldData");
+
+//     let response: Response = await fetch(url + "follower");
+//     let users: User[] = await response.json();
+
+
+
+//     let userCount: number = 0;
+
+
+
+//     let userDiv: HTMLDivElement = document.createElement("div");
+
+
+//     //User erzeugen
+
+//     userDiv.classList.add("userDiv");
+//     userDiv.innerText = `Name: ${currentUser.Name}  
+//                              Studiengang: ${currentUser.Studiengang} 
+//                              Semester: ${currentUser.Semester} 
+//                              Email: ${currentUser.Email} 
+                             
+//                              `;
+
+//     console.log(currentUser);
+
+//     oldData.appendChild(userDiv);
+
+
+
+
+// }
+
+// window.addEventListener("load", showOldData);
+
 async function changeProfil(_e: MouseEvent): Promise<void> {
 
     let query: URLSearchParams = new URLSearchParams();
