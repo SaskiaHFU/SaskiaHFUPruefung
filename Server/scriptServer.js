@@ -167,7 +167,6 @@ async function getComments() {
 }
 async function saveComment(_comment) {
     let result = await comment.insertOne(_comment);
-    console.log("Save Comment");
     //Rückmeldung dass es funktioniert hat
     if (result.insertedCount == 1) {
         return 1 /* Good */;

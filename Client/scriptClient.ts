@@ -31,6 +31,13 @@ interface Comment {
     Date: string;
 }
 
+interface UserFollows {
+
+    User: string;
+    Follows: string;
+}
+
+
 //Statuscodes
 
 const enum StatusCodes {

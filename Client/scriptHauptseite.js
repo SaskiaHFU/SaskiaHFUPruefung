@@ -31,24 +31,10 @@ async function sendComment() {
         }
         else if (statusCode == 1 /* Good */) {
             textArea.value = ""; //Textarea clearen
-            responseField.innerText = "Dein Beitrag wird gepostet!";
+            // window.location.href = "https://saskiahfu.github.io/SaskiaHFUPruefung/HTML/hauptseite.html";
+            window.location.href = "file:///C:/Users/User/Documents/Studium/2%20Semester/GIS/SaskiaHFUPruefung/HTML/hauptseite.html";
         }
     }
-    //Antwort anzeigen
-    // let serverResult: HTMLElement = document.getElementById("serverresult");
-    // if (changeLoginResult != undefined) {
-    //     serverResult.replaceChild(responseField, changeLoginResult);
-    // }
-    // else {
-    //     serverResult.appendChild(responseField);
-    // }
-    // changeLoginResult = responseField;
-    let serverResult = document.getElementById("serverresult");
-    while (serverResult.hasChildNodes()) {
-        serverResult.removeChild(serverResult.firstChild);
-    }
-    serverResult.appendChild(responseField);
-    getComments();
 }
 async function getComments() {
     let queryUser = new URLSearchParams();
@@ -67,9 +53,9 @@ async function getComments() {
     for (let comment of comments) {
         let commentDiv = document.createElement("div");
         commentDiv.classList.add("commentDiv");
-        commentDiv.innerText = `von ${comment.userEmail},
-                                Beitrag: ${comment.Text},
-                                um ${comment.Date}   
+        commentDiv.innerText = `von ${comment.userEmail}:
+                                 ${comment.Text},
+                                am ${comment.Date}   
 
                                  `;
         console.log(comment);

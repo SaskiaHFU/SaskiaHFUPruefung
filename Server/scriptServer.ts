@@ -21,6 +21,12 @@ interface Comment {
     Date: string;
 }
 
+interface UserFollows {
+
+    User: string;
+    Follows: string;
+}
+
 
 let databaseUrl: string = "mongodb+srv://Saskia:12345@clustersaskia.vxxmf.mongodb.net/Charlan?retryWrites=true&w=majority";
 let user: Mongo.Collection;
@@ -318,8 +324,6 @@ async function getComments(): Promise<Comment[]> {
     let commentDocuments: Comment[] = await comment.find().toArray();
     commentDocuments.reverse();
     
-    
-
 
     return commentDocuments;
 }
@@ -329,7 +333,7 @@ async function saveComment(_comment: Comment): Promise<StatusCodes> {
 
 
     let result: Mongo.InsertOneWriteOpResult<any> = await comment.insertOne(_comment);
-    console.log("Save Comment");
+    
 
     //Rückmeldung dass es funktioniert hat
     if (result.insertedCount == 1) {
