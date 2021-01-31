@@ -179,12 +179,12 @@ async function saveComment(_comment) {
 //Profil
 async function registerNewUser(_user) {
     // Methode von Github Mongo Seite
-    let result = await user.updateOne({ "Email": _user.Email }, {
+    let result = await user.updateOne({ Email: _user.Email }, {
         $set: {
-            "Name": _user.Name,
-            "Studiengang": _user.Studiengang,
-            "Semesterangabe": _user.Semester,
-            "Passwort": _user.passwort
+            Name: _user.Name,
+            Studiengang: _user.Studiengang,
+            Semesterangabe: _user.Semester,
+            Passwort: _user.passwort
         }
     });
     //Rückmeldung dass es funktioniert hat
@@ -194,5 +194,9 @@ async function registerNewUser(_user) {
     else {
         return 2 /* BadDatabaseProblem */;
     }
+}
+async function getUserData(_changeUser) {
+    let profilDocument = await user.findOne({ Email: _changeUser });
+    return;
 }
 //# sourceMappingURL=scriptServer.js.map

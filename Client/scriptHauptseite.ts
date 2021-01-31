@@ -1,7 +1,7 @@
 
 let postForm: HTMLFormElement = <HTMLFormElement>document.getElementById("post-form");
 
-let currentUser: string = localStorage.getItem("currentUser");
+
 
 let clearButton1: HTMLButtonElement = <HTMLButtonElement>document.getElementById("resetButton");
 clearButton1.addEventListener("click", clearComment);

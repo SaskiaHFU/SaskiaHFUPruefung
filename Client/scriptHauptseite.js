@@ -1,6 +1,5 @@
 "use strict";
 let postForm = document.getElementById("post-form");
-let currentUser = localStorage.getItem("currentUser");
 let clearButton1 = document.getElementById("resetButton");
 clearButton1.addEventListener("click", clearComment);
 let postButton = document.getElementById("postButton");

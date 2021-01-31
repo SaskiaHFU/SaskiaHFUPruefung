@@ -1,12 +1,15 @@
 "use strict";
+//Eventlisteners
 let changeButton = document.getElementById("changeButton");
 changeButton.addEventListener("click", changeProfil);
+// Data Input
+let nameInput = document.getElementById("name");
+let studiengangInput = document.getElementById("studiengang");
+let semesterInput = document.getElementById("semesterangabe");
+let emailInput = document.getElementById("email");
+let passwortInput = document.getElementById("passwort");
+//Funktionen
 async function changeProfil(_e) {
-    let nameInput = document.getElementById("name");
-    let studiengangInput = document.getElementById("studiengang");
-    let semesterInput = document.getElementById("semesterangabe");
-    let emailInput = document.getElementById("email");
-    let passwortInput = document.getElementById("passwort");
     let query = new URLSearchParams();
     query.append("Name", nameInput.value);
     query.append("Studiengang", studiengangInput.value);
@@ -39,6 +42,21 @@ async function changeProfil(_e) {
         serverResult.appendChild(responseField);
     }
     changeLoginResult = responseField;
+    getUserData();
+}
+async function getUserData() {
+    let query = new URLSearchParams();
+    query.append("user", currentUser);
+    query.append("changeUser", currentUser);
+    let queryUrl = url + "scriptProfil" + "?" + query.toString();
+    let response = await fetch(queryUrl);
+    let newUser = await response.json();
+    //Data ändern
+    nameInput.value = newUser.Name;
+    studiengangInput.value = newUser.Studiengang;
+    semesterInput.value = newUser.Semester;
+    emailInput.value = newUser.Email;
+    passwortInput.value = newUser.passwort;
 }
 //Clear Local Storage
 let ausloggenButton = document.getElementById("ausloggenButton");

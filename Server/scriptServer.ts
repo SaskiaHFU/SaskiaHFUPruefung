@@ -356,13 +356,13 @@ async function registerNewUser(_user: User): Promise<StatusCodes> {
     // Methode von Github Mongo Seite
     let result: Mongo.UpdateWriteOpResult = await user.updateOne(
 
-        { "Email": _user.Email },
+        { Email: _user.Email },
         {
             $set: {
-                "Name": _user.Name,
-                "Studiengang": _user.Studiengang,
-                "Semesterangabe": _user.Semester,
-                "Passwort": _user.passwort
+                Name: _user.Name,
+                Studiengang: _user.Studiengang,
+                Semesterangabe: _user.Semester,
+                Passwort: _user.passwort
             }
         });
 
@@ -378,6 +378,19 @@ async function registerNewUser(_user: User): Promise<StatusCodes> {
     }
 
 
+}
+
+async function getUserData(_changeUser: string): Promise <User> {
+
+    let profilDocument: User = await user.findOne({Email: _changeUser});
+    
+    
+
+        
+    
+
+
+    return ;
 }
 
 
