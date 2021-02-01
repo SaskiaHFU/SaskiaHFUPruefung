@@ -160,8 +160,12 @@ async function loginUser(_email, _passwort) {
     }
 }
 //User
-async function getUsers() {
+async function getUsers(_params) {
+    let username = _params.get("user");
     let userDocuments = await user.find().toArray();
+    let followedUserDocuments = await follower.find({ User: username }).toArray();
+    let index = userDocuments.indexOf(username);
+    userDocuments.splice(index, 1);
     return userDocuments;
 }
 async function followUser(_params) {

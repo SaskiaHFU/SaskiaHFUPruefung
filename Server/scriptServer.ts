@@ -326,13 +326,19 @@ async function loginUser(_email: string, _passwort: string): Promise<StatusCodes
 
 //User
 
-async function getUsers(): Promise<User[]> {
+async function getUsers(_params: URLSearchParams): Promise<User[]> {
+
+    let username: any = _params.get("user");
 
     let userDocuments: User[] = await user.find().toArray();
+    
+    let followedUserDocuments: UserFollows[] = await follower.find({User: username}).toArray();
 
+    let index = userDocuments.indexOf(username);
+    userDocuments.splice(index, 1);
 
-
-    return userDocuments;
+    return userDocuments; 
+    
 
 }
 
