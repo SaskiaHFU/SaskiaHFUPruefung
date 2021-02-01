@@ -1,5 +1,5 @@
 
-
+//User anzeigen
 
 async function getUsers(): Promise<void> {
 
@@ -9,6 +9,7 @@ async function getUsers(): Promise<void> {
     let usersDiv: HTMLElement = document.getElementById("users");
 
     let userCount: number = 0;
+
     for (let user of users) {
 
         let userDiv: HTMLDivElement = document.createElement("div");
@@ -62,3 +63,31 @@ async function getUsers(): Promise<void> {
     }
 }
 window.addEventListener("load", getUsers);
+
+// Follow || Unfollow
+
+async function follow (user:string): Promise <void> {
+
+    if (!currentUser) {
+        alert("Du musst eingeloggt sein!");
+        window.location.assign("index.html");
+    }
+
+    else {
+
+        let query: URLSearchParams = new URLSearchParams();
+
+        query.append("user", currentUser);
+        query.append("follows", user);
+
+        let queryUrl: string = url + "/follow" + "?" + query.toString();
+        let request: Response = await fetch(queryUrl);
+        let response: string = await request.json();
+
+        
+    }
+
+    
+}
+
+

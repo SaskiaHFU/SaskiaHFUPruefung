@@ -31,6 +31,7 @@ interface UserFollows {
 let databaseUrl: string = "mongodb+srv://Saskia:12345@clustersaskia.vxxmf.mongodb.net/Charlan?retryWrites=true&w=majority";
 let user: Mongo.Collection;
 let comment: Mongo.Collection;
+let follower: Mongo.Collection;
 
 
 connectToDatabase(databaseUrl);
@@ -209,6 +210,28 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
         console.log("Liste Seite");
     }
 
+    else if (q.pathname == "/follow") {
+
+        _response.setHeader("content-type", "text/html; charset=utf-8");
+
+        let result: StatusCodes = await followUser(q.searchParams);
+
+        _response.write(String(result));
+
+
+    }
+
+    else if (q.pathname == "/unfollow") {
+
+        _response.setHeader("content-type", "text/html; charset=utf-8");
+
+        let result: StatusCodes = await unfollowUser(q.searchParams);
+
+        _response.write(String(result));
+
+
+    }
+
     else {
         // if (_request.url) {
 
@@ -238,6 +261,7 @@ async function connectToDatabase(_url: string): Promise<void> {
 
     user = mongoClient.db("Charlan").collection("User");
     comment = mongoClient.db("Charlan").collection("Beitrage");
+    follower = mongoClient.db("Charlan").collection("Follower");
 
     console.log("Database connection", user != undefined);
 }
@@ -300,7 +324,7 @@ async function loginUser(_email: string, _passwort: string): Promise<StatusCodes
 
 }
 
-//Follower
+//User
 
 async function getUsers(): Promise<User[]> {
 
@@ -309,6 +333,37 @@ async function getUsers(): Promise<User[]> {
 
 
     return userDocuments;
+
+}
+
+async function followUser(_params: URLSearchParams): Promise<StatusCodes> {
+
+    let user: string = _params.get("user");
+    let follows: string = _params.get("follows");
+
+    let result: Mongo.InsertOneWriteOpResult<any> = await follower.insertOne({User: user, Follows: follows});
+
+    if (result.insertedCount == 1) {
+
+        return StatusCodes.Good;
+    }
+
+    else {
+
+        return StatusCodes.BadDatabaseProblem;
+    }
+    
+}
+
+
+async function unfollowUser (_params: URLSearchParams): Promise<StatusCodes> {
+    
+    let user: string = _params.get("user");
+    let unfollow: string = _params.get("unfollow");
+
+    await follower.deleteOne({User: user, Follows: unfollow});
+
+    return StatusCodes.Good;
 
 }
 
@@ -332,10 +387,10 @@ async function saveComment(_comment: Comment): Promise<StatusCodes> {
 
         return StatusCodes.EmptyFields;
     } else {
-        
+
         let result: Mongo.InsertOneWriteOpResult<any> = await comment.insertOne(_comment);
         if (result.insertedCount == 1) {
-            
+
             return StatusCodes.Good;
         }
 

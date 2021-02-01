@@ -1,4 +1,5 @@
 "use strict";
+//User anzeigen
 async function getUsers() {
     let response = await fetch(url + "getUsers");
     let users = await response.json();
@@ -36,4 +37,19 @@ async function getUsers() {
     }
 }
 window.addEventListener("load", getUsers);
+// Follow || Unfollow
+async function follow(user) {
+    if (!currentUser) {
+        alert("Du musst eingeloggt sein!");
+        window.location.assign("index.html");
+    }
+    else {
+        let query = new URLSearchParams();
+        query.append("user", currentUser);
+        query.append("follows", user);
+        let queryUrl = url + "/follow" + "?" + query.toString();
+        let request = await fetch(queryUrl);
+        let response = await request.json();
+    }
+}
 //# sourceMappingURL=scriptFollow.js.map
