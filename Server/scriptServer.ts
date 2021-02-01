@@ -134,7 +134,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
     else if (q.pathname == "/getcomments") {
 
         _response.setHeader("content-type", "application/json; charset=utf-8");
-        let queryParameters: Url.URLSearchParams = q.searchParams;
+        // let queryParameters: Url.URLSearchParams = q.searchParams;
 
 
         //Beiträge anzeigen
@@ -198,11 +198,11 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
     }
 
-    else if (q.pathname == "/follower") {
+    else if (q.pathname == "/follow") {
 
-        _response.setHeader("content-type", "application/json; charset=utf-8");
+        _response.setHeader("content-type", "text/html; charset=utf-8");
 
-        let users: User[] = await getUsers();
+        let users: User[] = await follow();
 
         _response.write(JSON.stringify(users));
 
@@ -302,7 +302,7 @@ async function loginUser(_email: string, _passwort: string): Promise<StatusCodes
 
 //Follower
 
-async function getUsers(): Promise<User[]> {
+async function follow(): Promise<User[]> {
 
     let userDocuments: User[] = await user.find().toArray();
 
@@ -399,4 +399,4 @@ async function saveComment(_comment: Comment): Promise<StatusCodes> {
 
 
 
-
+}

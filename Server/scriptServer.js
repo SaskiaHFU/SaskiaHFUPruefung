@@ -53,7 +53,7 @@ async function handleRequest(_request, _response) {
     }
     else if (q.pathname == "/getcomments") {
         _response.setHeader("content-type", "application/json; charset=utf-8");
-        let queryParameters = q.searchParams;
+        // let queryParameters: Url.URLSearchParams = q.searchParams;
         //Beiträge anzeigen
         let comments = await getComments();
         _response.write(JSON.stringify(comments));
@@ -84,9 +84,9 @@ async function handleRequest(_request, _response) {
         let registerResult = await registerNewUser(user);
         _response.write(String(registerResult));
     }
-    else if (q.pathname == "/follower") {
-        _response.setHeader("content-type", "application/json; charset=utf-8");
-        let users = await getUsers();
+    else if (q.pathname == "/follow") {
+        _response.setHeader("content-type", "text/html; charset=utf-8");
+        let users = await follow();
         _response.write(JSON.stringify(users));
         console.log("Liste Seite");
     }
@@ -148,7 +148,7 @@ async function loginUser(_email, _passwort) {
     }
 }
 //Follower
-async function getUsers() {
+async function follow() {
     let userDocuments = await user.find().toArray();
     return userDocuments;
 }

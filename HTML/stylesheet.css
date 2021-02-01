@@ -365,7 +365,9 @@ display: block;
 }
 
 #postButton, #resetButton, textarea {
-    margin: 3px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    height: auto;
 }
 
 
@@ -475,7 +477,7 @@ button {
 
     width: auto;
     float: right;
-    height: 25px;
+    height: auto;
     margin-bottom: 8px;
 }
 
