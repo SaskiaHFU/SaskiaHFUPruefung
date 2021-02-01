@@ -57,8 +57,9 @@ async function sendComment(): Promise<void> {
         }
         else if (statusCode == StatusCodes.Good) {
             textArea.value = ""; //Textarea clearen
+            
             // window.location.href = "https://saskiahfu.github.io/SaskiaHFUPruefung/HTML/hauptseite.html";
-            window.location.href = "file:///C:/Users/User/Documents/Studium/2%20Semester/GIS/SaskiaHFUPruefung/HTML/hauptseite.html";
+            window.location.assign("hauptseite.html");
 
         }
 

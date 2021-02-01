@@ -215,7 +215,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
         };
 
 
-        let registerResult: StatusCodes = await getUserData(user);
+        let registerResult: StatusCodes = await getUsers(user);
 
         _response.write(String(registerResult));
 
@@ -226,8 +226,9 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         _response.setHeader("content-type", "application/json; charset=utf-8");
 
-        let queryParameters: Url.URLSearchParams = q.searchParams;
-        let users: User[] = await getUsers(queryParameters);
+        // let queryParameters: Url.URLSearchParams = q.searchParams;
+
+        let users: User[] = await getUsers();
 
         _response.write(JSON.stringify(users));
 
@@ -350,7 +351,7 @@ async function loginUser(_email: string, _passwort: string): Promise<StatusCodes
 
 //User
 
-async function getUsers(_user: User): Promise<User[]> {
+async function getUsers(): Promise<User[]> {
 
     // let username: any = _params.get("user");
 

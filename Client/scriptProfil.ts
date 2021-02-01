@@ -126,7 +126,7 @@ async function changeProfil(_e: MouseEvent): Promise<void> {
     getUserData();
 }
 
-async function getUserData(): Promise<void> {
+async function getUserData(): Promise<> {
 
     let query: URLSearchParams = new URLSearchParams();
     query.append("user", currentUser);
@@ -161,6 +161,6 @@ function logout(_e: MouseEvent): void {
     alert("Du bist ausgeloggt!");
 
     // window.location.href = "https://saskiahfu.github.io/SaskiaHFUPruefung/HTML/index.html";
-    window.location.href = "file:///C:/Users/User/Documents/Studium/2%20Semester/GIS/SaskiaHFUPruefung/HTML/index.html";
+    window.location.assign("index.html");
 
 }

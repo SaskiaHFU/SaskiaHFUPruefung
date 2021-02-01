@@ -95,13 +95,13 @@ async function handleRequest(_request, _response) {
             Email: queryParameters.get("email"),
             passwort: queryParameters.get("passwort")
         };
-        let registerResult = await getUserData(user);
+        let registerResult = await getUsers(user);
         _response.write(String(registerResult));
     }
     else if (q.pathname == "/getUsers") {
         _response.setHeader("content-type", "application/json; charset=utf-8");
-        let queryParameters = q.searchParams;
-        let users = await getUsers(queryParameters);
+        // let queryParameters: Url.URLSearchParams = q.searchParams;
+        let users = await getUsers();
         _response.write(JSON.stringify(users));
         console.log("Liste Seite");
     }
@@ -174,7 +174,7 @@ async function loginUser(_email, _passwort) {
     }
 }
 //User
-async function getUsers(_user) {
+async function getUsers() {
     // let username: any = _params.get("user");
     let userDocuments = await user.find().toArray();
     // let followedUserDocuments: UserFollows[] = await follower.find({ User: username }).toArray();
