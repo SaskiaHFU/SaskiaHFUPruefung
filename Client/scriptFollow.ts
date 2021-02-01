@@ -10,63 +10,72 @@ async function getUsers(): Promise<void> {
 
     let userCount: number = 0;
 
-    for (let user of users) {
+    if (response.ok) {
 
-        let userDiv: HTMLDivElement = document.createElement("div");
+        for (let user of users) {
+
+            let userDiv: HTMLDivElement = document.createElement("div");
 
 
-        //User erzeugen
-        
-        userDiv.classList.add("userDiv");
-        userDiv.innerText = `Name: ${user.Name}  
+            //User erzeugen
+
+            userDiv.classList.add("userDiv");
+            userDiv.innerText = `Name: ${user.Name}  
                              Studiengang: ${user.Studiengang} 
                              Semester: ${user.Semester} 
                              Email: ${user.Email} 
                              
                              `;
 
-        console.log(user);
+            console.log(user);
 
-        usersDiv.appendChild(userDiv);
+            usersDiv.appendChild(userDiv);
 
-        // Bild erzeugen
-
-
-        let img: HTMLImageElement = <HTMLImageElement>document.createElement("img");
-        img.src = "../usericon.png";
-
-        img.setAttribute("id", "userIcon");
-        userDiv.appendChild(img);
-        
-        //Heart-Button erzeugen
-
-        let buttonElement: HTMLElement = <HTMLElement>document.createElement("button");
-        buttonElement.setAttribute("id", "heart-button");
+            // Bild erzeugen
 
 
-        let iElement: HTMLElement = <HTMLElement>document.createElement("i");
-        let iconText: any = document.createTextNode("&#xf004;");
+            let img: HTMLImageElement = <HTMLImageElement>document.createElement("img");
+            img.src = "../usericon.png";
+
+            img.setAttribute("id", "userIcon");
+            userDiv.appendChild(img);
+
+            //Heart-Button erzeugen
+
+            let buttonElement: HTMLElement = <HTMLElement>document.createElement("button");
+            buttonElement.setAttribute("id", "heart-button");
 
 
-        iElement.setAttribute("id", "heart");
-        iElement.className = ("fas");
+            // let iElement: HTMLElement = <HTMLElement>document.createElement("i");
+            // let iconText: any = document.createTextNode("&#xf004;");
 
 
-        userDiv.appendChild(buttonElement);
-        buttonElement.appendChild(iElement);
-        iElement.appendChild(iconText);
-
-        userDiv.prepend(img);
+            // iElement.setAttribute("id", "heart");
+            // iElement.className = ("fas");
 
 
-        userCount++;
+            buttonElement.innerText = "Follow";
+
+
+            userDiv.appendChild(buttonElement);
+            // buttonElement.appendChild(iElement);
+            // iElement.appendChild(iconText);
+
+            userDiv.prepend(img);
+
+
+            userCount++;
+
+
+
+        }
     }
 }
 window.addEventListener("load", getUsers);
 
 // Follow || Unfollow
 
-async function follow (user:string): Promise <void> {
+async function follow(user: string): Promise<void> {
 
     if (!currentUser) {
         alert("Du musst eingeloggt sein!");
@@ -84,10 +93,30 @@ async function follow (user:string): Promise <void> {
         let request: Response = await fetch(queryUrl);
         let response: string = await request.json();
 
-        
+
+
+
     }
 
-    
+
+}
+
+async function unfollow(user: string) {
+
+    let query: URLSearchParams = new URLSearchParams();
+
+    query.append("user", currentUser);
+    query.append("unfollows", user);
+
+    let queryUrl: string = url + "/unfollow" + "?" + query.toString();
+
+    let request: Response = await fetch(queryUrl);
+    let response: string = await request.json();
+
+
+    getUsers();
+
+
 }
 
 

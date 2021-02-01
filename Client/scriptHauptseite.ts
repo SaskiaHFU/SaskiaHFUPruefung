@@ -34,8 +34,6 @@ async function sendComment(): Promise<void> {
     let response: Response = await fetch(queryUrl);
 
 
-    let responseField: HTMLParagraphElement = document.createElement("p");
-
     console.log(response);
 
     // //Fehler auffangen

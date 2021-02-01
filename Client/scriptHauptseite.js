@@ -16,7 +16,6 @@ async function sendComment() {
     let queryUrl = url + "hauptseite" + "?" + queryUser.toString();
     console.log(queryUrl);
     let response = await fetch(queryUrl);
-    let responseField = document.createElement("p");
     console.log(response);
     // //Fehler auffangen
     if (response.status != 200) {

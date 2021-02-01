@@ -11,7 +11,10 @@ let url: string = "http://localhost:8100/";
 
 let currentUser: string = localStorage.getItem("currentUser");
 let currentPasswort: string = localStorage.getItem("currentPasswort");
+
 let changeLoginResult: HTMLParagraphElement;
+
+let responseField: HTMLParagraphElement = document.createElement("p");
 
 //Interfaces
 
