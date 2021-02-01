@@ -3,7 +3,7 @@
 
 async function getUsers(): Promise<void> {
 
-    let response: Response = await fetch(url + "follower");
+    let response: Response = await fetch(url + "getUsers");
     let users: User[] = await response.json();
 
     let usersDiv: HTMLElement = document.getElementById("users");

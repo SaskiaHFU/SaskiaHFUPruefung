@@ -1,6 +1,6 @@
 "use strict";
 async function getUsers() {
-    let response = await fetch(url + "follower");
+    let response = await fetch(url + "getUsers");
     let users = await response.json();
     let usersDiv = document.getElementById("users");
     let userCount = 0;

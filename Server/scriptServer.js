@@ -84,7 +84,7 @@ async function handleRequest(_request, _response) {
         let registerResult = await registerNewUser(user);
         _response.write(String(registerResult));
     }
-    else if (q.pathname == "/follower") {
+    else if (q.pathname == "/getUsers") {
         _response.setHeader("content-type", "application/json; charset=utf-8");
         let users = await getUsers();
         _response.write(JSON.stringify(users));

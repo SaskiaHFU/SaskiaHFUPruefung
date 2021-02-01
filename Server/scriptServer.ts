@@ -198,7 +198,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
     }
 
-    else if (q.pathname == "/follower") {
+    else if (q.pathname == "/getUsers") {
 
         _response.setHeader("content-type", "application/json; charset=utf-8");
 
