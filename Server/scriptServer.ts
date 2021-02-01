@@ -239,8 +239,18 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         _response.setHeader("content-type", "text/html; charset=utf-8");
 
-        let result: StatusCodes = await followUser(q.searchParams);
+        let queryParameters: Url.URLSearchParams = q.searchParams;
 
+
+
+        let newFollow: UserFollows = {
+
+            User: queryParameters.get("user"),
+            Follows: queryParameters.get("follows")
+
+        };
+
+        let result: StatusCodes = await followUser(newFollow);
         _response.write(String(result));
 
 
@@ -250,8 +260,16 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         _response.setHeader("content-type", "text/html; charset=utf-8");
 
-        let result: StatusCodes = await unfollowUser(q.searchParams);
+        let queryParameters: Url.URLSearchParams = q.searchParams;
 
+        let notFollow: UserFollows = {
+
+            User: queryParameters.get("user"),
+            Follows: queryParameters.get("unfollows")
+
+        };
+
+        let result: StatusCodes = await followUser(notFollow);
         _response.write(String(result));
 
 
@@ -367,10 +385,7 @@ async function getUsers(): Promise<User[]> {
 
 }
 
-async function followUser(_params: URLSearchParams): Promise<StatusCodes> {
-
-    let user: string = _params.get("user");
-    let follows: string = _params.get("follows");
+async function followUser(_newFollow: UserFollows): Promise<StatusCodes> {
 
     let result: Mongo.InsertOneWriteOpResult<any> = await follower.insertOne({ User: user, Follows: follows });
 
@@ -387,10 +402,7 @@ async function followUser(_params: URLSearchParams): Promise<StatusCodes> {
 }
 
 
-async function unfollowUser(_params: URLSearchParams): Promise<StatusCodes> {
-
-    let user: string = _params.get("user");
-    let unfollow: string = _params.get("unfollow");
+async function unfollowUser(_notFollow: UserFollows): Promise<StatusCodes> {
 
     await follower.deleteOne({ User: user, Follows: unfollow });
 
@@ -487,8 +499,8 @@ async function registerNewUser(_params: URLSearchParams): Promise<StatusCodes> {
 
     //Rückmeldung dass es funktioniert hat
 
-    let result: Mongo.UpdateWriteOpResult = await user.updateOne({Email: oldEmail}, {$set: setData});
-    
+    let result: Mongo.UpdateWriteOpResult = await user.updateOne({ Email: oldEmail }, { $set: setData });
+
     if (result.result.ok) {
 
         return StatusCodes.Good;

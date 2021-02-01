@@ -107,12 +107,22 @@ async function handleRequest(_request, _response) {
     }
     else if (q.pathname == "/follow") {
         _response.setHeader("content-type", "text/html; charset=utf-8");
-        let result = await followUser(q.searchParams);
+        let queryParameters = q.searchParams;
+        let newFollow = {
+            User: queryParameters.get("user"),
+            Follows: queryParameters.get("follows")
+        };
+        let result = await followUser(newFollow);
         _response.write(String(result));
     }
     else if (q.pathname == "/unfollow") {
         _response.setHeader("content-type", "text/html; charset=utf-8");
-        let result = await unfollowUser(q.searchParams);
+        let queryParameters = q.searchParams;
+        let notFollow = {
+            User: queryParameters.get("user"),
+            Follows: queryParameters.get("unfollows")
+        };
+        let result = await followUser(notFollow);
         _response.write(String(result));
     }
     else {
@@ -182,9 +192,7 @@ async function getUsers() {
     // userDocuments.splice(index, 1);
     return userDocuments;
 }
-async function followUser(_params) {
-    let user = _params.get("user");
-    let follows = _params.get("follows");
+async function followUser(_newFollow) {
     let result = await follower.insertOne({ User: user, Follows: follows });
     if (result.insertedCount == 1) {
         return 1 /* Good */;
@@ -193,9 +201,7 @@ async function followUser(_params) {
         return 2 /* BadDatabaseProblem */;
     }
 }
-async function unfollowUser(_params) {
-    let user = _params.get("user");
-    let unfollow = _params.get("unfollow");
+async function unfollowUser(_notFollow) {
     await follower.deleteOne({ User: user, Follows: unfollow });
     return 1 /* Good */;
 }
