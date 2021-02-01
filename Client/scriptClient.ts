@@ -10,6 +10,7 @@ let url: string = "http://localhost:8100/";
 //Allgemeine Variablen die überall genutzt werden
 
 let currentUser: string = localStorage.getItem("currentUser");
+let currentPasswort: string = localStorage.getItem("currentPasswort");
 let changeLoginResult: HTMLParagraphElement;
 
 //Interfaces

@@ -175,7 +175,30 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
 
     }
-    else if (q.pathname == "/profil") {
+    else if (q.pathname == "/editProfil") {
+
+        _response.setHeader("content-type", "text/html; charset=utf-8");
+
+        let queryParameters: Url.URLSearchParams = q.searchParams;
+
+        // let user: User = {
+
+        //     Name: queryParameters.get("name"),
+        //     Studiengang: queryParameters.get("studiengang"),
+        //     Semester: queryParameters.get("semester"),
+        //     Email: queryParameters.get("email"),
+        //     passwort: queryParameters.get("passwort")
+
+        // };
+
+
+        let registerResult: StatusCodes = await registerNewUser(queryParameters);
+
+        _response.write(String(registerResult));
+
+
+    }
+    else if (q.pathname == "/getProfil") {
 
         _response.setHeader("content-type", "text/html; charset=utf-8");
 
@@ -192,7 +215,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
         };
 
 
-        let registerResult: StatusCodes = await registerNewUser(user);
+        let registerResult: StatusCodes = await getUserData(user);
 
         _response.write(String(registerResult));
 
@@ -203,7 +226,8 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         _response.setHeader("content-type", "application/json; charset=utf-8");
 
-        let users: User[] = await getUsers();
+        let queryParameters: Url.URLSearchParams = q.searchParams;
+        let users: User[] = await getUsers(queryParameters);
 
         _response.write(JSON.stringify(users));
 
@@ -326,19 +350,19 @@ async function loginUser(_email: string, _passwort: string): Promise<StatusCodes
 
 //User
 
-async function getUsers(_params: URLSearchParams): Promise<User[]> {
+async function getUsers(_user: User): Promise<User[]> {
 
-    let username: any = _params.get("user");
+    // let username: any = _params.get("user");
 
     let userDocuments: User[] = await user.find().toArray();
-    
-    let followedUserDocuments: UserFollows[] = await follower.find({User: username}).toArray();
 
-    let index = userDocuments.indexOf(username);
-    userDocuments.splice(index, 1);
+    // let followedUserDocuments: UserFollows[] = await follower.find({ User: username }).toArray();
 
-    return userDocuments; 
-    
+    // let index = userDocuments.indexOf(username);
+    // userDocuments.splice(index, 1);
+
+    return userDocuments;
+
 
 }
 
@@ -347,7 +371,7 @@ async function followUser(_params: URLSearchParams): Promise<StatusCodes> {
     let user: string = _params.get("user");
     let follows: string = _params.get("follows");
 
-    let result: Mongo.InsertOneWriteOpResult<any> = await follower.insertOne({User: user, Follows: follows});
+    let result: Mongo.InsertOneWriteOpResult<any> = await follower.insertOne({ User: user, Follows: follows });
 
     if (result.insertedCount == 1) {
 
@@ -358,16 +382,16 @@ async function followUser(_params: URLSearchParams): Promise<StatusCodes> {
 
         return StatusCodes.BadDatabaseProblem;
     }
-    
+
 }
 
 
-async function unfollowUser (_params: URLSearchParams): Promise<StatusCodes> {
-    
+async function unfollowUser(_params: URLSearchParams): Promise<StatusCodes> {
+
     let user: string = _params.get("user");
     let unfollow: string = _params.get("unfollow");
 
-    await follower.deleteOne({User: user, Follows: unfollow});
+    await follower.deleteOne({ User: user, Follows: unfollow });
 
     return StatusCodes.Good;
 
@@ -407,57 +431,95 @@ async function saveComment(_comment: Comment): Promise<StatusCodes> {
 
 
     }
+}
 
 
-    //Profil
+//Profil
 
-    async function registerNewUser(_user: User): Promise<StatusCodes> {
+async function registerNewUser(_params: URLSearchParams): Promise<StatusCodes> {
 
+    let name: string = _params.get("username");
+    let semester: string = _params.get("semester");
+    let studiengang: string = _params.get("studiengang");
+    let email: string = _params.get("email");
+    let passwort: string = _params.get("password");
+    let oldEmail: string = _params.get("oldUserEmail");
 
-        // Methode von Github Mongo Seite
-        let result: Mongo.UpdateWriteOpResult = await user.updateOne(
+    //Set new Data
 
-            { Email: _user.Email },
-            {
-                $set: {
-                    Name: _user.Name,
-                    Studiengang: _user.Studiengang,
-                    Semesterangabe: _user.Semester,
-                    Passwort: _user.passwort
-                }
-            });
-
-
-        //Rückmeldung dass es funktioniert hat
-        if (result.result.ok) {
-
-            return StatusCodes.Good;
-        }
-        else {
-
-            return StatusCodes.BadDatabaseProblem;
-        }
-
-
+    if (!oldEmail) {
+        return StatusCodes.BadDatabaseProblem;
     }
 
-    async function getUserData(_changeUser: string): Promise<User> {
+    let setData: User = {};
 
-        let profilDocument: User = await user.findOne({ Email: _changeUser });
-
-
-
-
-
-
-
-        return;
+    if (name) {
+        setData.Name = name;
+    }
+    if (semester) {
+        setData.Semester = semester;
+    }
+    if (studiengang) {
+        setData.Studiengang = studiengang;
+    }
+    if (email) {
+        setData.Email = email;
+    }
+    if (passwort) {
+        setData.passwort = passwort;
     }
 
 
+    // Methode von Github Mongo Seite
+    // let result: Mongo.UpdateWriteOpResult = await user.updateOne(
+
+    //     { Email: name.Email },
+    //     {
+    //         $set: {
+    //             Name: _user.Name,
+    //             Studiengang: _user.Studiengang,
+    //             Semesterangabe: _user.Semester,
+    //             Passwort: _user.passwort
+    //         }
+    //     });
 
 
+    //Rückmeldung dass es funktioniert hat
 
+    let result: Mongo.UpdateWriteOpResult = await user.updateOne({Email: oldEmail}, {$set: setData});
+    
+    if (result.result.ok) {
+
+        return StatusCodes.Good;
+    }
+    else {
+
+        return StatusCodes.BadDatabaseProblem;
+    }
 
 
 }
+
+// async function getUserData(_params: URLSearchParams): Promise<StatusCodes> {
+
+//     let userEmail: string = _params.get("user");
+
+
+//     let profilDocument: User[] = await user.find({ Email: userEmail }).toArray();
+
+//     let newUser: User = profilDocument[0];
+
+//     let newUser: User = {
+
+//         Name: _params
+//     }
+
+//     return profilDocument;
+
+
+// }
+
+
+
+
+

@@ -56,16 +56,37 @@ let passwortInput: HTMLInputElement = <HTMLInputElement>document.getElementById(
 
 async function changeProfil(_e: MouseEvent): Promise<void> {
 
+    let name: string = nameInput.value;
+    let semester: string = semesterInput.value;
+    let studiengang: string = studiengangInput.value;
+    let email: string = emailInput.value;
+    let passwort: string = passwortInput.value;
+
     let query: URLSearchParams = new URLSearchParams();
-    query.append("Name", nameInput.value);
-    query.append("Studiengang", studiengangInput.value);
-    query.append("Semester", semesterInput.value);
-    query.append("Email", emailInput.value);
-    query.append("passwort", passwortInput.value);
 
+    query.append("oldEmail", currentUser);
 
+    if (name) {
+        query.append("Name", name);
+    }
+    if (studiengang) {
+        query.append("Studiengang", studiengang);
+    }
+    if (semester) {
+        query.append("Semester", semester);
+    }
+    if (email) {
+        query.append("Email", email);
+    }
+    if (passwort) {
+        query.append("passwort", passwort);
+    }
 
-    let queryUrl: string = url + "scriptProfil" + "?" + query.toString();
+    // if (passwort !== "" && passwort != currentPasswort) {
+    //     responseField.innerText = "Das Passwort stimmt nicht!";
+    // }
+
+    let queryUrl: string = url + "editProfil" + "?" + query.toString();
 
     let response: Response = await fetch(queryUrl);
 
@@ -109,14 +130,11 @@ async function getUserData(): Promise<void> {
 
     let query: URLSearchParams = new URLSearchParams();
     query.append("user", currentUser);
-    query.append("changeUser", currentUser);
+    
 
-
-    let queryUrl: string = url + "scriptProfil" + "?" + query.toString();
-
+    let queryUrl: string = url + "getProfil" + "?" + query.toString();
 
     let response: Response = await fetch(queryUrl);
-
     let newUser: User = await response.json();
 
     //Data ändern
@@ -126,10 +144,8 @@ async function getUserData(): Promise<void> {
     emailInput.value = newUser.Email;
     passwortInput.value = newUser.passwort;
 
-
-
-
 }
+getUserData();
 
 
 

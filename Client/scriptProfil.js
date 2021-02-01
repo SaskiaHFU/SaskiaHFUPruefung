@@ -27,13 +27,32 @@ let passwortInput = document.getElementById("passwort");
 // }
 // window.addEventListener("load", showOldData);
 async function changeProfil(_e) {
+    let name = nameInput.value;
+    let semester = semesterInput.value;
+    let studiengang = studiengangInput.value;
+    let email = emailInput.value;
+    let passwort = passwortInput.value;
     let query = new URLSearchParams();
-    query.append("Name", nameInput.value);
-    query.append("Studiengang", studiengangInput.value);
-    query.append("Semester", semesterInput.value);
-    query.append("Email", emailInput.value);
-    query.append("passwort", passwortInput.value);
-    let queryUrl = url + "scriptProfil" + "?" + query.toString();
+    query.append("oldEmail", currentUser);
+    if (name) {
+        query.append("Name", name);
+    }
+    if (studiengang) {
+        query.append("Studiengang", studiengang);
+    }
+    if (semester) {
+        query.append("Semester", semester);
+    }
+    if (email) {
+        query.append("Email", email);
+    }
+    if (passwort) {
+        query.append("passwort", passwort);
+    }
+    // if (passwort !== "" && passwort != currentPasswort) {
+    //     responseField.innerText = "Das Passwort stimmt nicht!";
+    // }
+    let queryUrl = url + "editProfil" + "?" + query.toString();
     let response = await fetch(queryUrl);
     let responseField = document.createElement("p");
     //Fehler auffangen
@@ -64,8 +83,7 @@ async function changeProfil(_e) {
 async function getUserData() {
     let query = new URLSearchParams();
     query.append("user", currentUser);
-    query.append("changeUser", currentUser);
-    let queryUrl = url + "scriptProfil" + "?" + query.toString();
+    let queryUrl = url + "getProfil" + "?" + query.toString();
     let response = await fetch(queryUrl);
     let newUser = await response.json();
     //Data ändern
@@ -75,6 +93,7 @@ async function getUserData() {
     emailInput.value = newUser.Email;
     passwortInput.value = newUser.passwort;
 }
+getUserData();
 //Clear Local Storage
 let ausloggenButton = document.getElementById("ausloggenButton");
 ausloggenButton.addEventListener("click", logout);
