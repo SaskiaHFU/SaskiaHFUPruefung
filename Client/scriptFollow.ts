@@ -44,7 +44,7 @@ async function getUsers(): Promise<void> {
 
 
         let iElement: HTMLElement = <HTMLElement>document.createElement("i");
-        let iconText = document.createTextNode("&#xf004;");
+        let iconText: any = document.createTextNode("&#xf004;");
 
 
         iElement.setAttribute("id", "heart");

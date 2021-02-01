@@ -389,21 +389,9 @@ textarea {
     
 }
 
-.add, #topping-choice-juice, #topping-choice-muesli {
-    background-color: #DCDCDC;
-    width: 80%;
-
-}
 
 
-.add-icon, .reduce-icon, .count {
-    font-family: inherit;
-    font-style: normal;
-    vertical-align: bottom;
-    color: rgba(84,84,84,0.55);
-    font-size: 20px;
-    line-height: 1.5em;
-}
+
 
 
 
@@ -494,8 +482,6 @@ p.small {
     width: 60%;
     display: inline-block;
 }
-
-/*---FOLLOWER-BODY---*/
 
 
 /*---Allgemein---*/

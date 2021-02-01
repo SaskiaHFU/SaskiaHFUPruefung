@@ -198,11 +198,11 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
     }
 
-    else if (q.pathname == "/follow") {
+    else if (q.pathname == "/follower") {
 
-        _response.setHeader("content-type", "text/html; charset=utf-8");
+        _response.setHeader("content-type", "application/json; charset=utf-8");
 
-        let users: User[] = await follow();
+        let users: User[] = await getUsers();
 
         _response.write(JSON.stringify(users));
 
@@ -302,7 +302,7 @@ async function loginUser(_email: string, _passwort: string): Promise<StatusCodes
 
 //Follower
 
-async function follow(): Promise<User[]> {
+async function getUsers(): Promise<User[]> {
 
     let userDocuments: User[] = await user.find().toArray();
 

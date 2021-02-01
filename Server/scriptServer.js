@@ -84,9 +84,9 @@ async function handleRequest(_request, _response) {
         let registerResult = await registerNewUser(user);
         _response.write(String(registerResult));
     }
-    else if (q.pathname == "/follow") {
-        _response.setHeader("content-type", "text/html; charset=utf-8");
-        let users = await follow();
+    else if (q.pathname == "/follower") {
+        _response.setHeader("content-type", "application/json; charset=utf-8");
+        let users = await getUsers();
         _response.write(JSON.stringify(users));
         console.log("Liste Seite");
     }
@@ -148,7 +148,7 @@ async function loginUser(_email, _passwort) {
     }
 }
 //Follower
-async function follow() {
+async function getUsers() {
     let userDocuments = await user.find().toArray();
     return userDocuments;
 }
