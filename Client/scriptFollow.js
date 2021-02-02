@@ -30,11 +30,20 @@ async function getUsers() {
             // let iconText: any = document.createTextNode("&#xf004;");
             // iElement.setAttribute("id", "heart");
             // iElement.className = ("fas");
-            buttonElement.innerText = "Follow";
-            userDiv.appendChild(buttonElement);
             // buttonElement.appendChild(iElement);
             // iElement.appendChild(iconText);
+            userDiv.appendChild(buttonElement);
             userDiv.prepend(img);
+            //
+            if (users.indexOf(user) !== -1) {
+                buttonElement.innerText = "Unfollow";
+                buttonElement.addEventListener("click", unfollow(user));
+            }
+            else {
+                buttonElement.innerText = "Follow";
+                buttonElement.addEventListener("click", follow(user));
+            }
+            //
             userCount++;
         }
     }
@@ -42,18 +51,12 @@ async function getUsers() {
 window.addEventListener("load", getUsers);
 // Follow || Unfollow
 async function follow(user) {
-    if (!currentUser) {
-        alert("Du musst eingeloggt sein!");
-        window.location.assign("index.html");
-    }
-    else {
-        let query = new URLSearchParams();
-        query.append("user", currentUser);
-        query.append("follows", user);
-        let queryUrl = url + "/follow" + "?" + query.toString();
-        let request = await fetch(queryUrl);
-        let response = await request.json();
-    }
+    let query = new URLSearchParams();
+    query.append("user", currentUser);
+    query.append("follows", user);
+    let queryUrl = url + "/follow" + "?" + query.toString();
+    let request = await fetch(queryUrl);
+    let response = await request.json();
 }
 async function unfollow(user) {
     let query = new URLSearchParams();

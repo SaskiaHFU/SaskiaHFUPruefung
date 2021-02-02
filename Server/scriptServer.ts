@@ -175,6 +175,18 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
 
     }
+    else if (q.pathname == "/showOldData") {
+
+        _response.setHeader("content-type", "application/json; charset=utf-8");
+
+
+        let users: User[] = await showOldData();
+
+        _response.write(JSON.stringify(users));
+
+
+    }
+
     else if (q.pathname == "/editProfil") {
 
         _response.setHeader("content-type", "text/html; charset=utf-8");
@@ -531,6 +543,16 @@ async function registerNewUser(_params: URLSearchParams): Promise<StatusCodes> {
 
 
 // }
+
+async function showOldData(): Promise < User[] > {
+
+    let userDocument: User[] = await user.find().toArray();
+    
+
+
+    return userDocument;
+
+}
 
 
 

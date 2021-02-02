@@ -72,6 +72,11 @@ async function handleRequest(_request, _response) {
         _response.write(String(messageResult));
         console.log("Hauptseite");
     }
+    else if (q.pathname == "/showOldData") {
+        _response.setHeader("content-type", "application/json; charset=utf-8");
+        let users = await showOldData();
+        _response.write(JSON.stringify(users));
+    }
     else if (q.pathname == "/editProfil") {
         _response.setHeader("content-type", "text/html; charset=utf-8");
         let queryParameters = q.searchParams;
@@ -282,4 +287,8 @@ async function registerNewUser(_params) {
 //     }
 //     return profilDocument;
 // }
+async function showOldData() {
+    let userDocument = await user.find().toArray();
+    return userDocument;
+}
 //# sourceMappingURL=scriptServer.js.map

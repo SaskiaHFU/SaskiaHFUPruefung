@@ -49,24 +49,32 @@ async function getUsers(): Promise<void> {
             // let iElement: HTMLElement = <HTMLElement>document.createElement("i");
             // let iconText: any = document.createTextNode("&#xf004;");
 
-
             // iElement.setAttribute("id", "heart");
             // iElement.className = ("fas");
 
-
-            buttonElement.innerText = "Follow";
-
-
-            userDiv.appendChild(buttonElement);
             // buttonElement.appendChild(iElement);
             // iElement.appendChild(iconText);
 
+            userDiv.appendChild(buttonElement);
             userDiv.prepend(img);
 
+            //
+
+            if (users.indexOf(user) !== -1) {
+
+                buttonElement.innerText = "Unfollow";
+                buttonElement.addEventListener("click", unfollow(user));
+            }
+            else {
+
+                buttonElement.innerText = "Follow";
+                buttonElement.addEventListener("click", follow(user));
+            }
+
+
+            //
 
             userCount++;
-
-
 
         }
     }
@@ -77,31 +85,19 @@ window.addEventListener("load", getUsers);
 
 async function follow(user: string): Promise<void> {
 
-    if (!currentUser) {
-        alert("Du musst eingeloggt sein!");
-        window.location.assign("index.html");
-    }
 
-    else {
+    let query: URLSearchParams = new URLSearchParams();
 
-        let query: URLSearchParams = new URLSearchParams();
+    query.append("user", currentUser);
+    query.append("follows", user);
 
-        query.append("user", currentUser);
-        query.append("follows", user);
-
-        let queryUrl: string = url + "/follow" + "?" + query.toString();
-        let request: Response = await fetch(queryUrl);
-        let response: string = await request.json();
-
-
-
-
-    }
-
+    let queryUrl: string = url + "/follow" + "?" + query.toString();
+    let request: Response = await fetch(queryUrl);
+    let response: string = await request.json();
 
 }
 
-async function unfollow(user: string) {
+async function unfollow(user: string): Promise<void> {
 
     let query: URLSearchParams = new URLSearchParams();
 
