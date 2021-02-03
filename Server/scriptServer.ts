@@ -247,6 +247,18 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
         console.log("Liste Seite");
     }
 
+    else if (q.pathname == "/getFollowes") {
+
+        _response.setHeader("content-type", "application/json; charset=utf-8");
+
+        let queryParameters: Url.URLSearchParams = q.searchParams;
+
+        let userfollows: UserFollows[] = await getUserFollows(queryParameters.get("currentuser"));
+
+        _response.write(JSON.stringify(userfollows));
+
+    }
+
     else if (q.pathname == "/follow") {
 
         _response.setHeader("content-type", "text/html; charset=utf-8");
@@ -281,7 +293,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         };
 
-        let result: StatusCodes = await followUser(notFollow);
+        let result: StatusCodes = await unfollowUser(notFollow);
         _response.write(String(result));
 
 
@@ -298,7 +310,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
         //     _response.write(stringJSON);
         // }
 
-        alert("Fehler");
+        console.log("Fehler");
     }
 
     _response.end();
@@ -397,9 +409,20 @@ async function getUsers(): Promise<User[]> {
 
 }
 
+async function getUserFollows(currentUserMail: String): Promise<UserFollows> {
+
+    let followedUsers: UserFollows[] = await follower.find({ User: currentUserMail }).toArray();
+
+    // let index = userDocuments.indexOf(username);
+    // userDocuments.splice(index, 1);
+
+    return followedUsers;
+
+}
+
 async function followUser(_newFollow: UserFollows): Promise<StatusCodes> {
 
-    let result: Mongo.InsertOneWriteOpResult<any> = await follower.insertOne({ User: user, Follows: follows });
+    let result: Mongo.InsertOneWriteOpResult<any> = await follower.insertOne({ User: _newFollow.User, Follows: _newFollow.Follows });
 
     if (result.insertedCount == 1) {
 
@@ -461,69 +484,69 @@ async function saveComment(_comment: Comment): Promise<StatusCodes> {
 
 //Profil
 
-async function registerNewUser(_params: URLSearchParams): Promise<StatusCodes> {
+// async function registerNewUser(_params: URLSearchParams): Promise<StatusCodes> {
 
-    let name: string = _params.get("username");
-    let semester: string = _params.get("semester");
-    let studiengang: string = _params.get("studiengang");
-    let email: string = _params.get("email");
-    let passwort: string = _params.get("password");
-    let oldEmail: string = _params.get("oldUserEmail");
+// let name: string = _params.get("username");
+// let semester: string = _params.get("semester");
+// let studiengang: string = _params.get("studiengang");
+// let email: string = _params.get("email");
+// let passwort: string = _params.get("password");
+// let oldEmail: string = _params.get("oldUserEmail");
 
-    //Set new Data
+// //Set new Data
 
-    if (!oldEmail) {
-        return StatusCodes.BadDatabaseProblem;
-    }
+// if (!oldEmail) {
+//     return StatusCodes.BadDatabaseProblem;
+// }
 
-    let setData: User = {};
+// let setData: User = {};
 
-    if (name) {
-        setData.Name = name;
-    }
-    if (semester) {
-        setData.Semester = semester;
-    }
-    if (studiengang) {
-        setData.Studiengang = studiengang;
-    }
-    if (email) {
-        setData.Email = email;
-    }
-    if (passwort) {
-        setData.passwort = passwort;
-    }
-
-
-    // Methode von Github Mongo Seite
-    // let result: Mongo.UpdateWriteOpResult = await user.updateOne(
-
-    //     { Email: name.Email },
-    //     {
-    //         $set: {
-    //             Name: _user.Name,
-    //             Studiengang: _user.Studiengang,
-    //             Semesterangabe: _user.Semester,
-    //             Passwort: _user.passwort
-    //         }
-    //     });
+// if (name) {
+//     setData.Name = name;
+// }
+// if (semester) {
+//     setData.Semester = semester;
+// }
+// if (studiengang) {
+//     setData.Studiengang = studiengang;
+// }
+// if (email) {
+//     setData.Email = email;
+// }
+// if (passwort) {
+//     setData.passwort = passwort;
+// }
 
 
-    //Rückmeldung dass es funktioniert hat
+// Methode von Github Mongo Seite
+// let result: Mongo.UpdateWriteOpResult = await user.updateOne(
 
-    let result: Mongo.UpdateWriteOpResult = await user.updateOne({ Email: oldEmail }, { $set: setData });
+//     { Email: name.Email },
+//     {
+//         $set: {
+//             Name: _user.Name,
+//             Studiengang: _user.Studiengang,
+//             Semesterangabe: _user.Semester,
+//             Passwort: _user.passwort
+//         }
+//     });
 
-    if (result.result.ok) {
 
-        return StatusCodes.Good;
-    }
-    else {
+//Rückmeldung dass es funktioniert hat
 
-        return StatusCodes.BadDatabaseProblem;
-    }
+// let result: Mongo.UpdateWriteOpResult = await user.updateOne({ Email: oldEmail }, { $set: setData });
+
+// if (result.result.ok) {
+
+//     return StatusCodes.Good;
+// }
+// else {
+
+//     return StatusCodes.BadDatabaseProblem;
+// }
 
 
-}
+// }
 
 // async function getUserData(_params: URLSearchParams): Promise<StatusCodes> {
 
@@ -544,10 +567,10 @@ async function registerNewUser(_params: URLSearchParams): Promise<StatusCodes> {
 
 // }
 
-async function showOldData(): Promise < User[] > {
+async function showOldData(): Promise<User[]> {
 
     let userDocument: User[] = await user.find().toArray();
-    
+
 
 
     return userDocument;

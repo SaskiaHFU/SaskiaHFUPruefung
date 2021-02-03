@@ -3,6 +3,8 @@
 async function getUsers() {
     let response = await fetch(url + "getUsers");
     let users = await response.json();
+    let response2 = await fetch(url + "getFollowes");
+    let userFollows = await response2.json();
     let usersDiv = document.getElementById("users");
     let userCount = 0;
     if (response.ok) {
@@ -35,13 +37,13 @@ async function getUsers() {
             userDiv.appendChild(buttonElement);
             userDiv.prepend(img);
             //
-            if (users.indexOf(user) !== -1) {
+            if (userFollows.find(x => x.Follows == user.Email)) {
                 buttonElement.innerText = "Unfollow";
-                buttonElement.addEventListener("click", unfollow(user));
+                buttonElement.addEventListener("click", () => unfollow(user.Email));
             }
             else {
                 buttonElement.innerText = "Follow";
-                buttonElement.addEventListener("click", follow(user));
+                buttonElement.addEventListener("click", () => follow(user.Email));
             }
             //
             userCount++;
@@ -50,21 +52,25 @@ async function getUsers() {
 }
 window.addEventListener("load", getUsers);
 // Follow || Unfollow
-async function follow(user) {
+async function follow(usermail) {
+    console.log("follow called");
     let query = new URLSearchParams();
     query.append("user", currentUser);
-    query.append("follows", user);
+    query.append("follows", usermail);
     let queryUrl = url + "/follow" + "?" + query.toString();
     let request = await fetch(queryUrl);
     let response = await request.json();
+    console.log(response);
 }
-async function unfollow(user) {
+async function unfollow(usermail) {
+    console.log("unfollow called");
     let query = new URLSearchParams();
     query.append("user", currentUser);
-    query.append("unfollows", user);
+    query.append("unfollows", usermail);
     let queryUrl = url + "/unfollow" + "?" + query.toString();
     let request = await fetch(queryUrl);
     let response = await request.json();
+    console.log(response);
     getUsers();
 }
 //# sourceMappingURL=scriptFollow.js.map
