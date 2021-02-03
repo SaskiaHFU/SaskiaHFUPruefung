@@ -55,7 +55,7 @@ async function getComments() {
     let response = await fetch(queryUrl);
     let comments = await response.json();
     let commentsDiv = document.getElementById("showComments");
-    let commentCount = 0;
+    // let commentCount: number = 0;
     //
     while (commentsDiv.hasChildNodes()) {
         commentsDiv.removeChild(commentsDiv.firstChild);
@@ -71,7 +71,7 @@ async function getComments() {
                                  `;
         console.log(comment);
         commentsDiv.appendChild(commentDiv);
-        commentCount++;
+        // commentCount++;
     }
 }
 window.addEventListener("load", getComments);

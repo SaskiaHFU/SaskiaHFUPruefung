@@ -4,16 +4,18 @@ let changeButton = document.getElementById("changeButton");
 changeButton.addEventListener("click", changeProfil);
 // Data Input
 let nameInput = document.getElementById("name");
-let studiengangInput = document.getElementById("studiengang");
 let semesterInput = document.getElementById("semesterangabe");
+let studiengangOmb = document.getElementById("studiengang_omb");
+let studiengangMkb = document.getElementById("studiengang_mkb");
+let studiengangMib = document.getElementById("studiengang_mib");
 let emailInput = document.getElementById("email");
 let passwortInput = document.getElementById("passwort");
 //Funktionen
 async function showOldData() {
     let oldData = document.getElementById("oldData");
-    let response = await fetch(url + "showOldData");
-    let users = await response.json();
-    let userCount = 0;
+    // let response: Response = await fetch(url + "showOldData");
+    // let users: User[] = await response.json();
+    // let userCount: number = 0;
     let userDiv = document.createElement("div");
     //User erzeugen
     userDiv.classList.add("userDiv");
@@ -28,25 +30,36 @@ window.addEventListener("load", showOldData);
 async function changeProfil(_e) {
     let name = nameInput.value;
     let semester = semesterInput.value;
-    let studiengang = studiengangInput.value;
     let email = emailInput.value;
     let passwort = passwortInput.value;
+    let studiengangmib = studiengangMib.checked;
+    let studiengangmkb = studiengangMkb.checked;
+    let studiengangomb = studiengangOmb.checked;
     let query = new URLSearchParams();
-    query.append("oldEmail", currentUser);
-    if (name) {
-        query.append("Name", name);
+    // query.append("oldEmail", currentUser);
+    if (!studiengangmib && !studiengangmkb && !studiengangomb) {
+        console.log("fehler!!!");
     }
-    if (studiengang) {
-        query.append("Studiengang", studiengang);
+    if (studiengangomb) {
+        query.append("studiengang", "omb");
+    }
+    if (studiengangmkb) {
+        query.append("studiengang", "mkb");
+    }
+    if (studiengangmib) {
+        query.append("studiengang", "mib");
+    }
+    if (name) {
+        query.append("username", name);
     }
     if (semester) {
-        query.append("Semester", semester);
+        query.append("semester", semester);
     }
     if (email) {
-        query.append("Email", email);
+        query.append("email", email);
     }
     if (passwort) {
-        query.append("passwort", passwort);
+        query.append("password", passwort);
     }
     // if (passwort !== "" && passwort != currentPasswort) {
     //     responseField.innerText = "Das Passwort stimmt nicht!";
@@ -87,10 +100,17 @@ async function getUserData() {
     let newUser = await response.json();
     //Data ändern
     nameInput.value = newUser.Name;
-    studiengangInput.value = newUser.Studiengang;
+    if (newUser.Studiengang == "omb") {
+        studiengangOmb.checked = true;
+    }
+    else if (newUser.Studiengang == "mkb") {
+        studiengangMkb.checked = true;
+    }
+    else if (newUser.Studiengang == "mib") {
+        studiengangMib.checked = true;
+    }
     semesterInput.value = newUser.Semester;
     emailInput.value = newUser.Email;
-    passwortInput.value = newUser.passwort;
 }
 getUserData();
 //Clear Local Storage

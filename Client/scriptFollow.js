@@ -2,12 +2,19 @@
 //User anzeigen
 async function getUsers() {
     let response = await fetch(url + "getUsers");
+    console.log(response);
     let users = await response.json();
-    let response2 = await fetch(url + "getFollowes");
+    let query = new URLSearchParams();
+    query.append("currentuser", currentUser);
+    let response2 = await fetch(url + "getFollowes" + "?" + query.toString());
     let userFollows = await response2.json();
     let usersDiv = document.getElementById("users");
-    let userCount = 0;
+    usersDiv.innerHTML = "";
+    // let userCount: number = 0;
     if (response.ok) {
+        for (let userfollow of userFollows) {
+            console.log(userfollow);
+        }
         for (let user of users) {
             let userDiv = document.createElement("div");
             //User erzeugen
@@ -16,7 +23,6 @@ async function getUsers() {
                              Studiengang: ${user.Studiengang} 
                              Semester: ${user.Semester} 
                              Email: ${user.Email} 
-                             
                              `;
             console.log(user);
             usersDiv.appendChild(userDiv);
@@ -46,7 +52,7 @@ async function getUsers() {
                 buttonElement.addEventListener("click", () => follow(user.Email));
             }
             //
-            userCount++;
+            // userCount++;
         }
     }
 }
@@ -57,20 +63,35 @@ async function follow(usermail) {
     let query = new URLSearchParams();
     query.append("user", currentUser);
     query.append("follows", usermail);
-    let queryUrl = url + "/follow" + "?" + query.toString();
+    let queryUrl = url + "follow" + "?" + query.toString();
     let request = await fetch(queryUrl);
-    let response = await request.json();
-    console.log(response);
+    let response = await request.text();
+    let statusCode = Number.parseInt(response);
+    if (statusCode != 1 /* Good */) {
+        console.log(statusCode);
+        console.log("fehler");
+    }
+    else {
+        console.log("kein fehler");
+    }
+    getUsers();
 }
 async function unfollow(usermail) {
     console.log("unfollow called");
     let query = new URLSearchParams();
     query.append("user", currentUser);
     query.append("unfollows", usermail);
-    let queryUrl = url + "/unfollow" + "?" + query.toString();
+    let queryUrl = url + "unfollow" + "?" + query.toString();
     let request = await fetch(queryUrl);
-    let response = await request.json();
-    console.log(response);
+    let response = await request.text();
+    let statusCode = Number.parseInt(response);
+    if (statusCode != 1 /* Good */) {
+        console.log(statusCode);
+        console.log("fehler");
+    }
+    else {
+        console.log("kein fehler");
+    }
     getUsers();
 }
 //# sourceMappingURL=scriptFollow.js.map

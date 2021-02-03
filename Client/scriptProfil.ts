@@ -9,8 +9,10 @@ changeButton.addEventListener("click", changeProfil);
 // Data Input
 
 let nameInput: HTMLInputElement = <HTMLInputElement>document.getElementById("name");
-let studiengangInput: HTMLInputElement = <HTMLInputElement>document.getElementById("studiengang");
 let semesterInput: HTMLInputElement = <HTMLInputElement>document.getElementById("semesterangabe");
+let studiengangOmb: HTMLInputElement = <HTMLInputElement>document.getElementById("studiengang_omb");
+let studiengangMkb: HTMLInputElement = <HTMLInputElement>document.getElementById("studiengang_mkb");
+let studiengangMib: HTMLInputElement = <HTMLInputElement>document.getElementById("studiengang_mib");
 let emailInput: HTMLInputElement = <HTMLInputElement>document.getElementById("email");
 let passwortInput: HTMLInputElement = <HTMLInputElement>document.getElementById("passwort");
 
@@ -21,10 +23,10 @@ async function showOldData(): Promise<void> {
 
     let oldData: HTMLDivElement = <HTMLDivElement>document.getElementById("oldData");
 
-    let response: Response = await fetch(url + "showOldData");
-    let users: User[] = await response.json();
+    // let response: Response = await fetch(url + "showOldData");
+    // let users: User[] = await response.json();
 
-    let userCount: number = 0;
+    // let userCount: number = 0;
 
     let userDiv: HTMLDivElement = document.createElement("div");
 
@@ -51,28 +53,42 @@ async function changeProfil(_e: MouseEvent): Promise<void> {
 
     let name: string = nameInput.value;
     let semester: string = semesterInput.value;
-    let studiengang: string = studiengangInput.value;
     let email: string = emailInput.value;
     let passwort: string = passwortInput.value;
+    let studiengangmib: boolean = studiengangMib.checked;
+    let studiengangmkb: boolean = studiengangMkb.checked;
+    let studiengangomb: boolean = studiengangOmb.checked;
 
     let query: URLSearchParams = new URLSearchParams();
 
-    query.append("oldEmail", currentUser);
+    // query.append("oldEmail", currentUser);
 
-    if (name) {
-        query.append("Name", name);
+    if (!studiengangmib && !studiengangmkb && !studiengangomb) {
+    console.log("fehler!!!");
     }
-    if (studiengang) {
-        query.append("Studiengang", studiengang);
+    if (studiengangomb)
+    {
+        query.append("studiengang", "omb");
+    }
+    if (studiengangmkb)
+    {
+        query.append("studiengang", "mkb");
+    }
+    if (studiengangmib)
+    {
+        query.append("studiengang", "mib");
+    }
+    if (name) {
+        query.append("username", name);
     }
     if (semester) {
-        query.append("Semester", semester);
+        query.append("semester", semester);
     }
     if (email) {
-        query.append("Email", email);
+        query.append("email", email);
     }
     if (passwort) {
-        query.append("passwort", passwort);
+        query.append("password", passwort);
     }
 
     // if (passwort !== "" && passwort != currentPasswort) {
@@ -132,10 +148,25 @@ async function getUserData(): Promise<void> {
 
     //Data ändern
     nameInput.value = newUser.Name;
-    studiengangInput.value = newUser.Studiengang;
+    
+    if (newUser.Studiengang == "omb")
+    {
+        studiengangOmb.checked = true;
+    }
+    else if (newUser.Studiengang == "mkb")
+    {
+        studiengangMkb.checked = true;
+        
+    }   
+    else if (newUser.Studiengang == "mib")
+    {
+        studiengangMib.checked = true;
+
+    }
+
+
     semesterInput.value = newUser.Semester;
     emailInput.value = newUser.Email;
-    passwortInput.value = newUser.passwort;
 
 }
 getUserData();

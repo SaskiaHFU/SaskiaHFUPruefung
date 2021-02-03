@@ -93,7 +93,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
     let q: Url.URL = new Url.URL(_request.url, "http://localhost:8100"); //Zweite Parameter weil Base gefordert
 
 
-
+    console.log(q);
 
     console.log(q.pathname);
 
@@ -193,18 +193,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         let queryParameters: Url.URLSearchParams = q.searchParams;
 
-        // let user: User = {
-
-        //     Name: queryParameters.get("name"),
-        //     Studiengang: queryParameters.get("studiengang"),
-        //     Semester: queryParameters.get("semester"),
-        //     Email: queryParameters.get("email"),
-        //     passwort: queryParameters.get("passwort")
-
-        // };
-
-
-        let registerResult: StatusCodes = await registerNewUser(queryParameters);
+        let registerResult: StatusCodes = await updateUser(queryParameters);
 
         _response.write(String(registerResult));
 
@@ -216,21 +205,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         let queryParameters: Url.URLSearchParams = q.searchParams;
 
-        let user: User = {
-
-            Name: queryParameters.get("name"),
-            Studiengang: queryParameters.get("studiengang"),
-            Semester: queryParameters.get("semester"),
-            Email: queryParameters.get("email"),
-            passwort: queryParameters.get("passwort")
-
-        };
-
-
-        let registerResult: StatusCodes = await getUsers(user);
-
-        _response.write(String(registerResult));
-
+        _response.write(JSON.stringify(await getUserData(queryParameters)));
 
     }
 
@@ -253,7 +228,11 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         let queryParameters: Url.URLSearchParams = q.searchParams;
 
-        let userfollows: UserFollows[] = await getUserFollows(queryParameters.get("currentuser"));
+        console.log(queryParameters.get("currentuser"));
+
+        // let userfollows: UserFollows[] = await getUserFollows(queryParameters.get("currentuser"));
+
+        let userfollows: UserFollows[] = await follower.find({ User: queryParameters.get("currentuser") }).toArray();
 
         _response.write(JSON.stringify(userfollows));
 
@@ -265,17 +244,22 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         let queryParameters: Url.URLSearchParams = q.searchParams;
 
+        if (queryParameters.get("user") == undefined || queryParameters.get("follows") == undefined)
+        {
+            _response.write(String(StatusCodes.EmptyFields));
+        }
+        else{
+            let newFollow: UserFollows = {
 
-
-        let newFollow: UserFollows = {
-
-            User: queryParameters.get("user"),
-            Follows: queryParameters.get("follows")
-
-        };
-
-        let result: StatusCodes = await followUser(newFollow);
-        _response.write(String(result));
+                User: queryParameters.get("user"),
+                Follows: queryParameters.get("follows")
+    
+            };
+    
+            let result: StatusCodes = await followUser(newFollow);
+            _response.write(String(result));
+        }
+        
 
 
     }
@@ -409,16 +393,17 @@ async function getUsers(): Promise<User[]> {
 
 }
 
-async function getUserFollows(currentUserMail: String): Promise<UserFollows> {
 
-    let followedUsers: UserFollows[] = await follower.find({ User: currentUserMail }).toArray();
+// async function getUserFollows(currentUserMail: String): Promise<UserFollows> {
 
-    // let index = userDocuments.indexOf(username);
-    // userDocuments.splice(index, 1);
+//     let followedUsers: UserFollows[] = await follower.find({ User: currentUserMail }).toArray();
 
-    return followedUsers;
+//     // let index = userDocuments.indexOf(username);
+//     // userDocuments.splice(index, 1);
 
-}
+//     return followedUsers;
+
+// }
 
 async function followUser(_newFollow: UserFollows): Promise<StatusCodes> {
 
@@ -439,7 +424,7 @@ async function followUser(_newFollow: UserFollows): Promise<StatusCodes> {
 
 async function unfollowUser(_notFollow: UserFollows): Promise<StatusCodes> {
 
-    await follower.deleteOne({ User: user, Follows: unfollow });
+    await follower.deleteOne({ User: _notFollow.User, Follows: _notFollow.Follows });
 
     return StatusCodes.Good;
 
@@ -484,20 +469,15 @@ async function saveComment(_comment: Comment): Promise<StatusCodes> {
 
 //Profil
 
-// async function registerNewUser(_params: URLSearchParams): Promise<StatusCodes> {
+async function updateUser(_params: URLSearchParams): Promise<StatusCodes> {
 
-// let name: string = _params.get("username");
-// let semester: string = _params.get("semester");
-// let studiengang: string = _params.get("studiengang");
-// let email: string = _params.get("email");
-// let passwort: string = _params.get("password");
-// let oldEmail: string = _params.get("oldUserEmail");
+let name: string = _params.get("username");
+let semester: string = _params.get("semester");
+let studiengang: string = _params.get("studiengang");
+let passwort: string = _params.get("password");
+let email: string = _params.get("email");
 
-// //Set new Data
-
-// if (!oldEmail) {
-//     return StatusCodes.BadDatabaseProblem;
-// }
+//Set new Data
 
 // let setData: User = {};
 
@@ -510,62 +490,53 @@ async function saveComment(_comment: Comment): Promise<StatusCodes> {
 // if (studiengang) {
 //     setData.Studiengang = studiengang;
 // }
-// if (email) {
-//     setData.Email = email;
-// }
 // if (passwort) {
 //     setData.passwort = passwort;
 // }
 
 
 // Methode von Github Mongo Seite
-// let result: Mongo.UpdateWriteOpResult = await user.updateOne(
-
-//     { Email: name.Email },
-//     {
-//         $set: {
-//             Name: _user.Name,
-//             Studiengang: _user.Studiengang,
-//             Semesterangabe: _user.Semester,
-//             Passwort: _user.passwort
-//         }
-//     });
-
-
-//Rückmeldung dass es funktioniert hat
-
-// let result: Mongo.UpdateWriteOpResult = await user.updateOne({ Email: oldEmail }, { $set: setData });
-
-// if (result.result.ok) {
-
-//     return StatusCodes.Good;
-// }
-// else {
-
-//     return StatusCodes.BadDatabaseProblem;
-// }
+let result: Mongo.UpdateWriteOpResult = await user.updateOne(
+    { Email: email },
+    {
+        $set: {
+            Name: name,
+            Studiengang: studiengang,
+            Semester: semester,
+            passwort: passwort
+        }
+    });
 
 
-// }
+// Rückmeldung dass es funktioniert hat
 
-// async function getUserData(_params: URLSearchParams): Promise<StatusCodes> {
+// let result2: Mongo.UpdateWriteOpResult = await user.updateOne({ Email: oldEmail }, { $set: setData });
 
-//     let userEmail: string = _params.get("user");
+if (result.result.ok) {
 
+    return StatusCodes.Good;
+}
+else {
 
-//     let profilDocument: User[] = await user.find({ Email: userEmail }).toArray();
-
-//     let newUser: User = profilDocument[0];
-
-//     let newUser: User = {
-
-//         Name: _params
-//     }
-
-//     return profilDocument;
+    return StatusCodes.BadDatabaseProblem;
+}
 
 
-// }
+}
+
+async function getUserData(_params: URLSearchParams): Promise<User> {
+
+    let userEmail: string = _params.get("user");
+
+
+    let profilDocument: User[] = await user.find({ Email: userEmail }).toArray();
+
+    let newUser: User = profilDocument[0];
+
+
+    return newUser;
+
+}
 
 async function showOldData(): Promise<User[]> {
 

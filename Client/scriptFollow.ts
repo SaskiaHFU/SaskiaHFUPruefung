@@ -1,19 +1,30 @@
 
 //User anzeigen
 
+
+
 async function getUsers(): Promise<void> {
 
     let response: Response = await fetch(url + "getUsers");
-    let users: User[] = await response.json();   
-    
-    let response2: Response = await fetch(url + "getFollowes");
+    console.log(response);
+    let users: User[] = await response.json();
+
+
+    let query: URLSearchParams = new URLSearchParams();
+    query.append("currentuser", currentUser);
+    let response2: Response = await fetch(url + "getFollowes"+ "?" + query.toString());
     let userFollows: UserFollows[] = await response2.json();
 
     let usersDiv: HTMLElement = document.getElementById("users");
+    usersDiv.innerHTML="";
 
-    let userCount: number = 0;
+    // let userCount: number = 0;
 
     if (response.ok) {
+
+        for (let userfollow of userFollows) {
+            console.log(userfollow);
+        }
 
         for (let user of users) {
 
@@ -27,10 +38,10 @@ async function getUsers(): Promise<void> {
                              Studiengang: ${user.Studiengang} 
                              Semester: ${user.Semester} 
                              Email: ${user.Email} 
-                             
                              `;
 
             console.log(user);
+
 
             usersDiv.appendChild(userDiv);
 
@@ -78,7 +89,7 @@ async function getUsers(): Promise<void> {
 
             //
 
-            userCount++;
+            // userCount++;
 
         }
     }
@@ -87,22 +98,33 @@ window.addEventListener("load", getUsers);
 
 // Follow || Unfollow
 
-async function follow(usermail: String): Promise<void> {
+async function follow(usermail: string): Promise<void> {
 
     console.log("follow called");
     let query: URLSearchParams = new URLSearchParams();
 
     query.append("user", currentUser);
-    query.append("follows",usermail);
+    query.append("follows", usermail);
 
-    let queryUrl: string = url + "/follow" + "?" + query.toString();
+    let queryUrl: string = url + "follow" + "?" + query.toString();
     let request: Response = await fetch(queryUrl);
-    let response: string = await request.json();
-    console.log(response);
+    let response: string = await request.text();
+
+    let statusCode: StatusCodes = Number.parseInt(response) as StatusCodes;
+
+    if (statusCode != StatusCodes.Good) {
+        console.log(statusCode);
+        console.log("fehler");
+    }
+    else {
+        console.log("kein fehler");
+    }
+
+    getUsers();
 
 }
 
-async function unfollow(usermail: String): Promise<void> {
+async function unfollow(usermail: string): Promise<void> {
 
     console.log("unfollow called");
 
@@ -111,12 +133,20 @@ async function unfollow(usermail: String): Promise<void> {
     query.append("user", currentUser);
     query.append("unfollows", usermail);
 
-    let queryUrl: string = url + "/unfollow" + "?" + query.toString();
+    let queryUrl: string = url + "unfollow" + "?" + query.toString();
 
     let request: Response = await fetch(queryUrl);
-    let response: string = await request.json();
+    let response: string = await request.text();
+    let statusCode: StatusCodes = Number.parseInt(response) as StatusCodes;
 
-    console.log(response);
+
+    if (statusCode != StatusCodes.Good) {
+        console.log(statusCode);
+        console.log("fehler");
+    }   
+    else {
+        console.log("kein fehler");
+    }
 
     getUsers();
 

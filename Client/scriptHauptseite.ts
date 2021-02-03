@@ -93,7 +93,7 @@ async function getComments(): Promise<void> {
 
     let commentsDiv: HTMLElement = document.getElementById("showComments");
 
-    let commentCount: number = 0;
+    // let commentCount: number = 0;
   
 
     //
@@ -119,7 +119,7 @@ async function getComments(): Promise<void> {
 
         commentsDiv.appendChild(commentDiv);
 
-        commentCount++;
+        // commentCount++;
     }
 
 }

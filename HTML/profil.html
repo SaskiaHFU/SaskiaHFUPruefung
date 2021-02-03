@@ -81,11 +81,17 @@
             <div class="col-4">
                 <h3>Fülle das Formular aus falls du deine Daten ändern möchtest</h3>
                 <form id="message-form">
-                    <input class="input-form" placeholder="NAME"> 
-                    <input class="input-form" placeholder="STUDIENGANG">
-                    <input class="input-form" placeholder="SEMESTERANGABE">
-                    <input class="input-form" placeholder="EMAIL">
-                    <input class="input-form" placeholder="NEUES PASSWORT">
+                    <input class="input-form" placeholder="NAME" id="name"> 
+                    <!-- <input class="input-form" placeholder="STUDIENGANG" id="studiengang"> -->
+                    <label for="studiengang_omb"> OMB </label>
+                    <input class="input-form" id="studiengang_omb" type="radio" name="studiengang" value="omb">
+                    <label for="studiengang_mkb"> MKB </label>
+                    <input class="input-form" id="studiengang_mkb" type="radio" name="studiengang" value="mkb">
+                    <label for="studiengang_mib"> MIB </label>
+                    <input class="input-form" id="studiengang_mib" type="radio" name="studiengang" value="mib">
+                    <input class="input-form" placeholder="SEMESTERANGABE" id="semesterangabe">
+                    <input class="input-form" placeholder="EMAIL" id="email" readonly>
+                    <input class="input-form" placeholder="NEUES PASSWORT" id="passwort">
                     <br>
                     <button name="Absenden" id="changeButton" type="button">Absenden</button>
                 </form>
