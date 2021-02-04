@@ -310,6 +310,10 @@ a:active {
     font-size: 2rem;
 }
 
+.fas-f {
+    color:red;
+}
+
 .userDiv {
 
     text-align: center;

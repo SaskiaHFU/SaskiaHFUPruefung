@@ -114,7 +114,8 @@ async function changeProfil(_e: MouseEvent): Promise<void> {
 
         if (statusCode == StatusCodes.BadDatabaseProblem) {
             responseField.innerText = "Fehler!";
-        }
+        }        
+
 
         else if (statusCode == StatusCodes.Good) {
             responseField.innerText = "Deine Daten wurden geändert!";

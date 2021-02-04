@@ -4,14 +4,14 @@
 
 
 async function getUsers(): Promise<void> {
+    let query: URLSearchParams = new URLSearchParams();
+    query.append("currentuser", currentUser);
 
-    let response: Response = await fetch(url + "getUsers");
+
+    let response: Response = await fetch(url + "getUsers" + "?" + query.toString());
     console.log(response);
     let users: User[] = await response.json();
 
-
-    let query: URLSearchParams = new URLSearchParams();
-    query.append("currentuser", currentUser);
     let response2: Response = await fetch(url + "getFollowes" + "?" + query.toString());
     let userFollows: UserFollows[] = await response2.json();
 
@@ -60,14 +60,13 @@ async function getUsers(): Promise<void> {
             buttonElement.setAttribute("id", "heart-button");
 
 
-            // let iElement: HTMLElement = <HTMLElement>document.createElement("i");
-            // let iconText: any = document.createTextNode("&#xf004;");
+            let iElement: HTMLElement = <HTMLElement>document.createElement("i");
+            
+            iElement.setAttribute("id", "heart");
+            iElement.className = ("fas");
+            iElement.innerHTML ="&#xf004;";
 
-            // iElement.setAttribute("id", "heart");
-            // iElement.className = ("fas");
-
-            // buttonElement.appendChild(iElement);
-            // iElement.appendChild(iconText);
+            buttonElement.appendChild(iElement);
 
             userDiv.appendChild(buttonElement);
             userDiv.prepend(img);
@@ -76,12 +75,16 @@ async function getUsers(): Promise<void> {
 
             if (userFollows.find(x => x.Follows == user.Email)) {
 
-                buttonElement.innerText = "Unfollow";
+                // buttonElement.innerText = "Unfollow";
+                iElement.removeAttribute("class");
+                iElement.setAttribute("class", "fas fas-f");
                 buttonElement.addEventListener("click", () => unfollow(user.Email));
             }
             else {
 
-                buttonElement.innerText = "Follow";
+                // buttonElement.innerText = "Follow";
+                iElement.removeAttribute("class");
+                iElement.setAttribute("class", "fas");
                 buttonElement.addEventListener("click", () => follow(user.Email));
             }
 

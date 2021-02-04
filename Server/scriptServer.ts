@@ -136,12 +136,12 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
     else if (q.pathname == "/getcomments") {
 
         _response.setHeader("content-type", "application/json; charset=utf-8");
-        // let queryParameters: Url.URLSearchParams = q.searchParams;
+         let queryParameters: Url.URLSearchParams = q.searchParams;
 
 
         //Beiträge anzeigen
 
-        let comments: Comment[] = await getComments();
+    let comments: Comment[] = await getComments(queryParameters);
 
         _response.write(JSON.stringify(comments));
 
@@ -214,8 +214,8 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         _response.setHeader("content-type", "application/json; charset=utf-8");
 
-        queryParameters
-        let users: User[] = await getUsers();
+        
+        let users: User[] = await getUsers(queryParameters);
 
         _response.write(JSON.stringify(users));
 
@@ -376,11 +376,16 @@ async function loginUser(_email: string, _passwort: string): Promise<StatusCodes
 
 //User
 
-async function getUsers(): Promise<User[]> {
+async function getUsers(_params: URLSearchParams): Promise<User[]> {
     // _params: URLSearchParams
     // let user: any = _params.get("currentuser");
 
+    let userEmail: string = _params.get("currentuser");
+
+
     let userDocuments: User[] = await user.find().toArray();
+
+    userDocuments = userDocuments.filter(o => o.Email != userEmail);
 
     // let followedUserDocuments: UserFollows[] = await follower.find({ User: username }).toArray();
 
@@ -431,11 +436,32 @@ async function unfollowUser(_notFollow: UserFollows): Promise<StatusCodes> {
 
 
 //Hauptseite
-async function getComments(): Promise<Comment[]> {
+async function getComments(_params: URLSearchParams): Promise<Comment[]> {
+
+    let userfollows: UserFollows[] = await follower.find({ User: _params.get("email") }).toArray();
+
+    console.log(userfollows);
+
+    let commentDocuments: Comment[] = [];
+
+    for (let key in userfollows) {
+      
+        let username: string = userfollows[key].Follows;
+        console.log(username);
+        let tempdocs: Comment[] = await comment.find({ userEmail: username }).toArray();
+        console.log(tempdocs);
+        commentDocuments = commentDocuments.concat(tempdocs);
+     }
+
+     let tempdocs2: Comment[] = await comment.find({ userEmail:  _params.get("email") }).toArray();
+     commentDocuments = commentDocuments.concat(tempdocs2);
 
 
-    let commentDocuments: Comment[] = await comment.find().toArray();
-    commentDocuments.reverse();
+
+    commentDocuments.sort((a, b) => {
+        if (Date.parse(a.Date) > Date.parse(b.Date)) return -1
+        return Date.parse(a.Date) < Date.parse(b.Date) ? 1 : 0
+      })
 
 
     return commentDocuments;
@@ -477,29 +503,58 @@ async function updateUser(_params: URLSearchParams): Promise<StatusCodes> {
     let email: string = _params.get("email");
 
 
+    if (passwort == "" || passwort == undefined || passwort == null)
+    {
+        let result: Mongo.UpdateWriteOpResult = await user.updateOne(
+            { Email: email },
+            {
+                $set: {
+                    Name: name,
+                    Studiengang: studiengang,
+                    Semester: semester
+                }
+            });
+
+        if (result.result.ok) {
+
+            return StatusCodes.Good;
+        }
+        else {
+    
+            return StatusCodes.BadDatabaseProblem;
+        }
+    
+    }
+    else
+    {
+        let result: Mongo.UpdateWriteOpResult = await user.updateOne(
+            { Email: email },
+            {
+                $set: {
+                    Name: name,
+                    Studiengang: studiengang,
+                    Semester: semester,
+                    passwort: passwort  
+                }
+            });
+
+        if (result.result.ok) {
+
+            return StatusCodes.Good;
+        }
+        else {
+    
+            return StatusCodes.BadDatabaseProblem;
+        }
+    
+    }
+
     // Methode von Github Mongo Seite
-    let result: Mongo.UpdateWriteOpResult = await user.updateOne(
-        { Email: email },
-        {
-            $set: {
-                Name: name,
-                Studiengang: studiengang,
-                Semester: semester,
-                passwort: passwort
-            }
-        });
 
 
     // Rückmeldung dass es funktioniert hat
 
-    if (result.result.ok) {
 
-        return StatusCodes.Good;
-    }
-    else {
-
-        return StatusCodes.BadDatabaseProblem;
-    }
 
 
 }

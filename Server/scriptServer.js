@@ -55,9 +55,9 @@ async function handleRequest(_request, _response) {
     }
     else if (q.pathname == "/getcomments") {
         _response.setHeader("content-type", "application/json; charset=utf-8");
-        // let queryParameters: Url.URLSearchParams = q.searchParams;
+        let queryParameters = q.searchParams;
         //Beiträge anzeigen
-        let comments = await getComments();
+        let comments = await getComments(queryParameters);
         _response.write(JSON.stringify(comments));
     }
     else if (q.pathname == "/hauptseite") {
@@ -88,8 +88,7 @@ async function handleRequest(_request, _response) {
     }
     else if (q.pathname == "/getUsers") {
         _response.setHeader("content-type", "application/json; charset=utf-8");
-        queryParameters;
-        let users = await getUsers();
+        let users = await getUsers(queryParameters);
         _response.write(JSON.stringify(users));
         console.log("Liste Seite");
     }
@@ -182,10 +181,12 @@ async function loginUser(_email, _passwort) {
     }
 }
 //User
-async function getUsers() {
+async function getUsers(_params) {
     // _params: URLSearchParams
     // let user: any = _params.get("currentuser");
+    let userEmail = _params.get("currentuser");
     let userDocuments = await user.find().toArray();
+    userDocuments = userDocuments.filter(o => o.Email != userEmail);
     // let followedUserDocuments: UserFollows[] = await follower.find({ User: username }).toArray();
     // let index = userDocuments.indexOf(user);
     // userDocuments.splice(index, 1);
@@ -211,9 +212,24 @@ async function unfollowUser(_notFollow) {
     return 1 /* Good */;
 }
 //Hauptseite
-async function getComments() {
-    let commentDocuments = await comment.find().toArray();
-    commentDocuments.reverse();
+async function getComments(_params) {
+    let userfollows = await follower.find({ User: _params.get("email") }).toArray();
+    console.log(userfollows);
+    let commentDocuments = [];
+    for (let key in userfollows) {
+        let username = userfollows[key].Follows;
+        console.log(username);
+        let tempdocs = await comment.find({ userEmail: username }).toArray();
+        console.log(tempdocs);
+        commentDocuments = commentDocuments.concat(tempdocs);
+    }
+    let tempdocs2 = await comment.find({ userEmail: _params.get("email") }).toArray();
+    commentDocuments = commentDocuments.concat(tempdocs2);
+    commentDocuments.sort((a, b) => {
+        if (Date.parse(a.Date) > Date.parse(b.Date))
+            return -1;
+        return Date.parse(a.Date) < Date.parse(b.Date) ? 1 : 0;
+    });
     return commentDocuments;
 }
 async function saveComment(_comment) {
@@ -237,22 +253,39 @@ async function updateUser(_params) {
     let studiengang = _params.get("studiengang");
     let passwort = _params.get("password");
     let email = _params.get("email");
-    // Methode von Github Mongo Seite
-    let result = await user.updateOne({ Email: email }, {
-        $set: {
-            Name: name,
-            Studiengang: studiengang,
-            Semester: semester,
-            passwort: passwort
+    if (passwort == "" || passwort == undefined || passwort == null) {
+        let result = await user.updateOne({ Email: email }, {
+            $set: {
+                Name: name,
+                Studiengang: studiengang,
+                Semester: semester
+            }
+        });
+        if (result.result.ok) {
+            return 1 /* Good */;
         }
-    });
-    // Rückmeldung dass es funktioniert hat
-    if (result.result.ok) {
-        return 1 /* Good */;
+        else {
+            return 2 /* BadDatabaseProblem */;
+        }
     }
     else {
-        return 2 /* BadDatabaseProblem */;
+        let result = await user.updateOne({ Email: email }, {
+            $set: {
+                Name: name,
+                Studiengang: studiengang,
+                Semester: semester,
+                passwort: passwort
+            }
+        });
+        if (result.result.ok) {
+            return 1 /* Good */;
+        }
+        else {
+            return 2 /* BadDatabaseProblem */;
+        }
     }
+    // Methode von Github Mongo Seite
+    // Rückmeldung dass es funktioniert hat
 }
 async function getUserData(_params) {
     let userEmail = _params.get("user");

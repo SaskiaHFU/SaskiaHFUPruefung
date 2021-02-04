@@ -1,11 +1,11 @@
 "use strict";
 //User anzeigen
 async function getUsers() {
-    let response = await fetch(url + "getUsers");
-    console.log(response);
-    let users = await response.json();
     let query = new URLSearchParams();
     query.append("currentuser", currentUser);
+    let response = await fetch(url + "getUsers" + "?" + query.toString());
+    console.log(response);
+    let users = await response.json();
     let response2 = await fetch(url + "getFollowes" + "?" + query.toString());
     let userFollows = await response2.json();
     let usersDiv = document.getElementById("users");
@@ -34,20 +34,23 @@ async function getUsers() {
             //Heart-Button erzeugen
             let buttonElement = document.createElement("button");
             buttonElement.setAttribute("id", "heart-button");
-            // let iElement: HTMLElement = <HTMLElement>document.createElement("i");
-            // let iconText: any = document.createTextNode("&#xf004;");
-            // iElement.setAttribute("id", "heart");
-            // iElement.className = ("fas");
-            // buttonElement.appendChild(iElement);
-            // iElement.appendChild(iconText);
+            let iElement = document.createElement("i");
+            iElement.setAttribute("id", "heart");
+            iElement.className = ("fas");
+            iElement.innerHTML = "&#xf004;";
+            buttonElement.appendChild(iElement);
             userDiv.appendChild(buttonElement);
             userDiv.prepend(img);
             if (userFollows.find(x => x.Follows == user.Email)) {
-                buttonElement.innerText = "Unfollow";
+                // buttonElement.innerText = "Unfollow";
+                iElement.removeAttribute("class");
+                iElement.setAttribute("class", "fas fas-f");
                 buttonElement.addEventListener("click", () => unfollow(user.Email));
             }
             else {
-                buttonElement.innerText = "Follow";
+                // buttonElement.innerText = "Follow";
+                iElement.removeAttribute("class");
+                iElement.setAttribute("class", "fas");
                 buttonElement.addEventListener("click", () => follow(user.Email));
             }
             // userCount++;
