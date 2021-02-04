@@ -92,6 +92,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
     let q: Url.URL = new Url.URL(_request.url, "http://localhost:8100"); //Zweite Parameter weil Base gefordert
 
+    let queryParameters: Url.URLSearchParams = q.searchParams;
 
     console.log(q);
 
@@ -112,7 +113,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         _response.setHeader("content-type", "text/html; charset=utf-8");
 
-        let queryParameters: Url.URLSearchParams = q.searchParams;
+
 
         let user: User = {
 
@@ -152,7 +153,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         _response.setHeader("content-type", "text/html; charset=utf-8");
 
-        let queryParameters: Url.URLSearchParams = q.searchParams;
+
 
         let date: Date = new Date();
 
@@ -191,7 +192,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         _response.setHeader("content-type", "text/html; charset=utf-8");
 
-        let queryParameters: Url.URLSearchParams = q.searchParams;
+
 
         let registerResult: StatusCodes = await updateUser(queryParameters);
 
@@ -203,7 +204,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         _response.setHeader("content-type", "text/html; charset=utf-8");
 
-        let queryParameters: Url.URLSearchParams = q.searchParams;
+
 
         _response.write(JSON.stringify(await getUserData(queryParameters)));
 
@@ -213,8 +214,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         _response.setHeader("content-type", "application/json; charset=utf-8");
 
-        // let queryParameters: Url.URLSearchParams = q.searchParams;
-
+        queryParameters
         let users: User[] = await getUsers();
 
         _response.write(JSON.stringify(users));
@@ -226,7 +226,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         _response.setHeader("content-type", "application/json; charset=utf-8");
 
-        let queryParameters: Url.URLSearchParams = q.searchParams;
+
 
         console.log(queryParameters.get("currentuser"));
 
@@ -242,24 +242,23 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         _response.setHeader("content-type", "text/html; charset=utf-8");
 
-        let queryParameters: Url.URLSearchParams = q.searchParams;
 
-        if (queryParameters.get("user") == undefined || queryParameters.get("follows") == undefined)
-        {
+
+        if (queryParameters.get("user") == undefined || queryParameters.get("follows") == undefined) {
             _response.write(String(StatusCodes.EmptyFields));
         }
-        else{
+        else {
             let newFollow: UserFollows = {
 
                 User: queryParameters.get("user"),
                 Follows: queryParameters.get("follows")
-    
+
             };
-    
+
             let result: StatusCodes = await followUser(newFollow);
             _response.write(String(result));
         }
-        
+
 
 
     }
@@ -268,7 +267,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         _response.setHeader("content-type", "text/html; charset=utf-8");
 
-        let queryParameters: Url.URLSearchParams = q.searchParams;
+
 
         let notFollow: UserFollows = {
 
@@ -378,14 +377,14 @@ async function loginUser(_email: string, _passwort: string): Promise<StatusCodes
 //User
 
 async function getUsers(): Promise<User[]> {
-
-    // let username: any = _params.get("user");
+    // _params: URLSearchParams
+    // let user: any = _params.get("currentuser");
 
     let userDocuments: User[] = await user.find().toArray();
 
     // let followedUserDocuments: UserFollows[] = await follower.find({ User: username }).toArray();
 
-    // let index = userDocuments.indexOf(username);
+    // let index = userDocuments.indexOf(user);
     // userDocuments.splice(index, 1);
 
     return userDocuments;
@@ -471,55 +470,36 @@ async function saveComment(_comment: Comment): Promise<StatusCodes> {
 
 async function updateUser(_params: URLSearchParams): Promise<StatusCodes> {
 
-let name: string = _params.get("username");
-let semester: string = _params.get("semester");
-let studiengang: string = _params.get("studiengang");
-let passwort: string = _params.get("password");
-let email: string = _params.get("email");
-
-//Set new Data
-
-// let setData: User = {};
-
-// if (name) {
-//     setData.Name = name;
-// }
-// if (semester) {
-//     setData.Semester = semester;
-// }
-// if (studiengang) {
-//     setData.Studiengang = studiengang;
-// }
-// if (passwort) {
-//     setData.passwort = passwort;
-// }
+    let name: string = _params.get("username");
+    let semester: string = _params.get("semester");
+    let studiengang: string = _params.get("studiengang");
+    let passwort: string = _params.get("password");
+    let email: string = _params.get("email");
 
 
-// Methode von Github Mongo Seite
-let result: Mongo.UpdateWriteOpResult = await user.updateOne(
-    { Email: email },
-    {
-        $set: {
-            Name: name,
-            Studiengang: studiengang,
-            Semester: semester,
-            passwort: passwort
-        }
-    });
+    // Methode von Github Mongo Seite
+    let result: Mongo.UpdateWriteOpResult = await user.updateOne(
+        { Email: email },
+        {
+            $set: {
+                Name: name,
+                Studiengang: studiengang,
+                Semester: semester,
+                passwort: passwort
+            }
+        });
 
 
-// Rückmeldung dass es funktioniert hat
+    // Rückmeldung dass es funktioniert hat
 
-// let result2: Mongo.UpdateWriteOpResult = await user.updateOne({ Email: oldEmail }, { $set: setData });
+    if (result.result.ok) {
 
-if (result.result.ok) {
+        return StatusCodes.Good;
+    }
+    else {
 
-    return StatusCodes.Good;
-}
-else {
-
-    return StatusCodes.BadDatabaseProblem;
-}
+        return StatusCodes.BadDatabaseProblem;
+    }
 
 
 }

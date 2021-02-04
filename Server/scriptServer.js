@@ -31,6 +31,7 @@ async function handleRequest(_request, _response) {
     console.log("I hear voices!");
     _response.setHeader("Access-Control-Allow-Origin", "*");
     let q = new Url.URL(_request.url, "http://localhost:8100"); //Zweite Parameter weil Base gefordert
+    let queryParameters = q.searchParams;
     console.log(q);
     console.log(q.pathname);
     if (q.pathname == "/index") {
@@ -41,7 +42,6 @@ async function handleRequest(_request, _response) {
     }
     else if (q.pathname == "/create_profil") {
         _response.setHeader("content-type", "text/html; charset=utf-8");
-        let queryParameters = q.searchParams;
         let user = {
             Name: queryParameters.get("name"),
             Studiengang: queryParameters.get("studiengang"),
@@ -62,7 +62,6 @@ async function handleRequest(_request, _response) {
     }
     else if (q.pathname == "/hauptseite") {
         _response.setHeader("content-type", "text/html; charset=utf-8");
-        let queryParameters = q.searchParams;
         let date = new Date();
         let newComment = {
             userEmail: queryParameters.get("email"),
@@ -80,25 +79,22 @@ async function handleRequest(_request, _response) {
     }
     else if (q.pathname == "/editProfil") {
         _response.setHeader("content-type", "text/html; charset=utf-8");
-        let queryParameters = q.searchParams;
         let registerResult = await updateUser(queryParameters);
         _response.write(String(registerResult));
     }
     else if (q.pathname == "/getProfil") {
         _response.setHeader("content-type", "text/html; charset=utf-8");
-        let queryParameters = q.searchParams;
         _response.write(JSON.stringify(await getUserData(queryParameters)));
     }
     else if (q.pathname == "/getUsers") {
         _response.setHeader("content-type", "application/json; charset=utf-8");
-        // let queryParameters: Url.URLSearchParams = q.searchParams;
+        queryParameters;
         let users = await getUsers();
         _response.write(JSON.stringify(users));
         console.log("Liste Seite");
     }
     else if (q.pathname == "/getFollowes") {
         _response.setHeader("content-type", "application/json; charset=utf-8");
-        let queryParameters = q.searchParams;
         console.log(queryParameters.get("currentuser"));
         // let userfollows: UserFollows[] = await getUserFollows(queryParameters.get("currentuser"));
         let userfollows = await follower.find({ User: queryParameters.get("currentuser") }).toArray();
@@ -106,7 +102,6 @@ async function handleRequest(_request, _response) {
     }
     else if (q.pathname == "/follow") {
         _response.setHeader("content-type", "text/html; charset=utf-8");
-        let queryParameters = q.searchParams;
         if (queryParameters.get("user") == undefined || queryParameters.get("follows") == undefined) {
             _response.write(String(7 /* EmptyFields */));
         }
@@ -121,7 +116,6 @@ async function handleRequest(_request, _response) {
     }
     else if (q.pathname == "/unfollow") {
         _response.setHeader("content-type", "text/html; charset=utf-8");
-        let queryParameters = q.searchParams;
         let notFollow = {
             User: queryParameters.get("user"),
             Follows: queryParameters.get("unfollows")
@@ -189,10 +183,11 @@ async function loginUser(_email, _passwort) {
 }
 //User
 async function getUsers() {
-    // let username: any = _params.get("user");
+    // _params: URLSearchParams
+    // let user: any = _params.get("currentuser");
     let userDocuments = await user.find().toArray();
     // let followedUserDocuments: UserFollows[] = await follower.find({ User: username }).toArray();
-    // let index = userDocuments.indexOf(username);
+    // let index = userDocuments.indexOf(user);
     // userDocuments.splice(index, 1);
     return userDocuments;
 }
@@ -242,20 +237,6 @@ async function updateUser(_params) {
     let studiengang = _params.get("studiengang");
     let passwort = _params.get("password");
     let email = _params.get("email");
-    //Set new Data
-    // let setData: User = {};
-    // if (name) {
-    //     setData.Name = name;
-    // }
-    // if (semester) {
-    //     setData.Semester = semester;
-    // }
-    // if (studiengang) {
-    //     setData.Studiengang = studiengang;
-    // }
-    // if (passwort) {
-    //     setData.passwort = passwort;
-    // }
     // Methode von Github Mongo Seite
     let result = await user.updateOne({ Email: email }, {
         $set: {
@@ -266,7 +247,6 @@ async function updateUser(_params) {
         }
     });
     // Rückmeldung dass es funktioniert hat
-    // let result2: Mongo.UpdateWriteOpResult = await user.updateOne({ Email: oldEmail }, { $set: setData });
     if (result.result.ok) {
         return 1 /* Good */;
     }

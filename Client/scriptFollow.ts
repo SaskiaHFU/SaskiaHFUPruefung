@@ -12,11 +12,11 @@ async function getUsers(): Promise<void> {
 
     let query: URLSearchParams = new URLSearchParams();
     query.append("currentuser", currentUser);
-    let response2: Response = await fetch(url + "getFollowes"+ "?" + query.toString());
+    let response2: Response = await fetch(url + "getFollowes" + "?" + query.toString());
     let userFollows: UserFollows[] = await response2.json();
 
     let usersDiv: HTMLElement = document.getElementById("users");
-    usersDiv.innerHTML="";
+    usersDiv.innerHTML = ""; //Leerer String, damit Liste nicht zweimal angezeigt wird beim followen
 
     // let userCount: number = 0;
 
@@ -72,7 +72,6 @@ async function getUsers(): Promise<void> {
             userDiv.appendChild(buttonElement);
             userDiv.prepend(img);
 
-            //
 
 
             if (userFollows.find(x => x.Follows == user.Email)) {
@@ -87,7 +86,6 @@ async function getUsers(): Promise<void> {
             }
 
 
-            //
 
             // userCount++;
 
@@ -140,12 +138,22 @@ async function unfollow(usermail: string): Promise<void> {
     let statusCode: StatusCodes = Number.parseInt(response) as StatusCodes;
 
 
-    if (statusCode != StatusCodes.Good) {
-        console.log(statusCode);
-        console.log("fehler");
-    }   
+    
+
+    if (statusCode != 200) {
+        responseField.innerText = "Fehler!";
+
+    }
+
     else {
-        console.log("kein fehler");
+
+        if (statusCode == StatusCodes.BadDatabaseProblem) {
+            responseField.innerText = "Fehler!";
+        }
+
+        else if (statusCode == StatusCodes.Good) {
+            responseField.innerText = "Du hast den User abonniert!";
+        }
     }
 
     getUsers();
