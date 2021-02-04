@@ -1,8 +1,8 @@
 //Shared TS
 
 
-let url: string = "http://localhost:8100/";
-// let url: string = "https://saskiagis2020-pruefung.herokuapp.com/";
+// let url: string = "http://localhost:8100/";
+let url: string = "https://saskiagis2020-pruefung.herokuapp.com/";
 
 
 
@@ -10,7 +10,7 @@ let url: string = "http://localhost:8100/";
 //Allgemeine Variablen die überall genutzt werden
 
 let currentUser: string = localStorage.getItem("currentUser");
-let currentPasswort: string = localStorage.getItem("currentPasswort");
+let currentPassword: string = localStorage.getItem("currentPasswort");
 
 let changeLoginResult: HTMLParagraphElement;
 
@@ -56,7 +56,7 @@ const enum StatusCodes {
 
 
 
-//Funktionen
+
 
 
 

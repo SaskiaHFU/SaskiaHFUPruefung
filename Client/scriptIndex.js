@@ -29,7 +29,6 @@ async function submitLogin() {
             responseField.innerText = "Du wirst eingeloggt!";
             localStorage.setItem("currentUser", currentUser);
             localStorage.setItem("currentPassword", currentPassword);
-            // window.location.href = "https://saskiahfu.github.io/SaskiaHFUPruefung/HTML/hauptseite.html";
             window.location.assign("hauptseite.html");
         }
     }

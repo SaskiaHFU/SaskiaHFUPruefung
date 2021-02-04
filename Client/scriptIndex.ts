@@ -46,7 +46,7 @@ async function submitLogin(): Promise<void> {
             localStorage.setItem("currentPassword", currentPassword);
 
 
-            // window.location.href = "https://saskiahfu.github.io/SaskiaHFUPruefung/HTML/hauptseite.html";
+            
             window.location.assign("hauptseite.html");
         }
     }

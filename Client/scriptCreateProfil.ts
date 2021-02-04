@@ -17,6 +17,9 @@ async function submitRegister(_event: Event): Promise<void> {
     let formData: FormData = new FormData(document.forms[0]);
     let query: URLSearchParams = new URLSearchParams(<any>formData);
 
+    let currentUser: string = query.get("email");
+    let currentPassword: string = query.get("passwort");
+
 
     let queryUrl: string = url + "create_profil" + "?" + query.toString();
     console.log(queryUrl);
@@ -56,7 +59,14 @@ async function submitRegister(_event: Event): Promise<void> {
         }
 
         else if (statusCode == StatusCodes.Good) {
+
+            localStorage.setItem("currentUser", currentUser);
+            localStorage.setItem("currentPassword", currentPassword);
+
             responseField.innerText = "Du bist Registiert!";
+
+            
+            window.location.assign("hauptseite.html");
 
         }
 
