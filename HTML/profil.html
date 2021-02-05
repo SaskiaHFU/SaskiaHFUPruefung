@@ -14,83 +14,86 @@
 
 <body>
 
-<!--Navigation-->
+    <!--Navigation-->
 
-<nav class="header-nav">
+    <nav class="header-nav">
 
-    <div class="container desktop-nav">
-        <div class="row">
-            <div class="col-4">
-               
-            <a href="hauptseite.html">
-                <img src="../charlan_logo.jpg" alt="Logo" />
-            </a>
-            <ul>
-                <li ><a href="hauptseite.html" >Startseite</a><i>|</i></li>
-                <li ><a href="follower.html">Follow</a><i>|</i></li>
-                <li><a href="profil.html" class="visited">Profil</a><i>|</i></li>
-            </ul> 
-            </div>
-        </div>
-    </div>    
+        <div class="container desktop-nav">
+            <div class="row">
+                <div class="col-4">
 
-
-<!---DROPDOWN-MENU-->
-<div class="container mobile-nav">
-    <div class="row">
-        <div class="col-4">
-           
-            <a href="hauptseite.html">
-                <img src="../charlan_logo.jpg" alt="Logo" />
-            </a>
-            <div class="mobile-nav-dropdown clearfix">
-
-                <div class="mobile-nav-button">
-                    <span> &equiv; </span>
-                </div>
-
-                <div class="mobile-nav-content clearfix">
+                    <a href="hauptseite.html">
+                        <img src="../charlan_logo.jpg" alt="Logo" />
+                    </a>
                     <ul>
-                        <li><a href="hauptseite.html" >Startseite</a><i>|</i></li>
-                        <li><a href="follower.html" >Follow</a><i>|</i></li>
+                        <li><a href="hauptseite.html">Startseite</a><i>|</i></li>
+                        <li><a href="follower.html">Follow</a><i>|</i></li>
                         <li><a href="profil.html" class="visited">Profil</a><i>|</i></li>
-                        
-                    </ul>  
-                </div>  
+                    </ul>
+                </div>
             </div>
-
-
         </div>
-    </div>
-</div>    
-</nav> 
 
-<!---BODY-->
+
+        <!---DROPDOWN-MENU-->
+        <div class="container mobile-nav">
+            <div class="row">
+                <div class="col-4">
+
+                    <a href="hauptseite.html">
+                        <img src="../charlan_logo.jpg" alt="Logo" />
+                    </a>
+                    <div class="mobile-nav-dropdown clearfix">
+
+                        <div class="mobile-nav-button">
+                            <span> &equiv; </span>
+                        </div>
+
+                        <div class="mobile-nav-content clearfix">
+                            <ul>
+                                <li><a href="hauptseite.html">Startseite</a><i>|</i></li>
+                                <li><a href="follower.html">Follow</a><i>|</i></li>
+                                <li><a href="profil.html" class="visited">Profil</a><i>|</i></li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!---BODY-->
 
     <div class="container">
         <h1>Das ist dein Account</h1>
         <div class="row">
 
             <div class="col-4">
-                <h2>Das sind deine angegebenen Daten:</h2>
-                <div id="oldData">
-                    
-                </div>
-            </div>
-
-            <div class="col-4">
-                <h3>Fülle das Formular aus falls du deine Daten ändern möchtest</h3>
+                <h3>Fülle das Formular aus dür die Daten die du ändern möchtest</h3>
                 <form id="message-form">
-                    <input class="input-form" placeholder="NAME" id="name"> 
-                    <!-- <input class="input-form" placeholder="STUDIENGANG" id="studiengang"> -->
-                    <label for="studiengang_omb"> OMB </label>
+                    <label for="name">Name</label>
+                    <input class="input-form" placeholder="NAME" id="name">
+                    
+                    <label for="studiengang">Studiengang</label>
+                    <label id="left" for="studiengang_omb"> OMB </label>
                     <input class="input-form" id="studiengang_omb" type="radio" name="studiengang" value="omb">
-                    <label for="studiengang_mkb"> MKB </label>
+                    <label id="left" for="studiengang_mkb"> MKB </label>
                     <input class="input-form" id="studiengang_mkb" type="radio" name="studiengang" value="mkb">
-                    <label for="studiengang_mib"> MIB </label>
+                    <label id="left" for="studiengang_mib"> MIB </label>
+
+                    <label for="studiengang_mib"></label>
                     <input class="input-form" id="studiengang_mib" type="radio" name="studiengang" value="mib">
+                    
+                    <label for="semesterangabe">Semesterangabe</label>
                     <input class="input-form" placeholder="SEMESTERANGABE" id="semesterangabe">
+                    
+                    <label for="email">Email kann nicht geändert werden!</label>
                     <input class="input-form" placeholder="EMAIL" id="email" readonly>
+                    
+                    <label for="passwort">Neues Passwort</label>
                     <input class="input-form" placeholder="NEUES PASSWORT" id="passwort">
                     <br>
                     <button name="Absenden" id="changeButton" type="button">Absenden</button>
@@ -106,29 +109,32 @@
             </div>
         </div>
     </div>
-<!--Footer-->
+    <!--Footer-->
 
-<div class="row" id="footer">
-    <div class="col-4">
-        <ul>
-            <li><a href=""> Impressum | </a></li>
-            <li><a href=""> AGB | </a></li>
-            <li><a href=""> Kontakt </a></li>
-        </ul>
+    <div class="row" id="footer">
+        <div class="col-4">
+            <ul>
+                <li><a href="hauptseite.html">Startseite</a><i>|</i></li>
+                <li><a href="follower.html">Follow</a><i>|</i></li>
+                <li><a href="profil.html" class="visited">Profil</a><i>|</i></li>
+                <li><a href=""> Impressum | </a></li>
+                <li><a href=""> AGB | </a></li>
+                <li><a href=""> Kontakt </a></li>
+            </ul>
 
-    </div>
-    <div class="col-3">
-        <a href="mailto:saskia.naomi.schellhammer@hs-furtwangen.de" target="_blank">
-            <span alt="Mail Logo" class="icon-bottom far">&#xf2b6;</span>
-        </a>
-    </div>
-    <div class="col-3">
-        <a href="https://www.instagram.com/_abelaviagem/" target="_blank">
-            <span alt="Instagram Logo" class="icon-bottom fab">&#xf16d;</span>
-        </a>
+        </div>
+        <div class="col-3">
+            <a href="mailto:saskia.naomi.schellhammer@hs-furtwangen.de" target="_blank">
+                <span alt="Mail Logo" class="icon-bottom far">&#xf2b6;</span>
+            </a>
+        </div>
+        <div class="col-3">
+            <a href="https://www.instagram.com/_abelaviagem/" target="_blank">
+                <span alt="Instagram Logo" class="icon-bottom fab">&#xf16d;</span>
+            </a>
 
+        </div>
     </div>
-</div>
 </body>
 
 </html>

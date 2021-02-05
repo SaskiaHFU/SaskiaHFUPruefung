@@ -200,6 +200,8 @@ h1, h2, h3 {
 
 
 
+
+
 /*---LINKS---*/
 
 .visited {
@@ -299,6 +301,10 @@ a:active {
     
 }
 
+.fas-f {
+    color: #581A29;
+}
+
 #userIcon {
     
     width: 5rem;
@@ -310,9 +316,7 @@ a:active {
     font-size: 2rem;
 }
 
-.fas-f {
-    color:red;
-}
+
 
 .userDiv {
 
@@ -384,7 +388,7 @@ a:active {
 
 textarea {
     
-    width: 266px; 
+    width: auto; 
     height: 116px;
     resize: none;
 }
@@ -419,6 +423,9 @@ label {
     margin-bottom: 5px;
 }
 
+#left {
+    text-align: center;
+}
 
 #login-bereich, #register-bereich {
         display: block;
