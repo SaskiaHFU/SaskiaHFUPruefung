@@ -186,18 +186,9 @@ async function getUsers(_params) {
     // let user: any = _params.get("currentuser");
     let userEmail = _params.get("currentuser");
     let userDocuments = await user.find().toArray();
-    userDocuments = userDocuments.filter(o => o.Email != userEmail);
-    // let followedUserDocuments: UserFollows[] = await follower.find({ User: username }).toArray();
-    // let index = userDocuments.indexOf(user);
-    // userDocuments.splice(index, 1);
+    userDocuments = userDocuments.filter(o => o.Email != userEmail); //Eigenen Acoount aus Follow-Liste nehmen
     return userDocuments;
 }
-// async function getUserFollows(currentUserMail: String): Promise<UserFollows> {
-//     let followedUsers: UserFollows[] = await follower.find({ User: currentUserMail }).toArray();
-//     // let index = userDocuments.indexOf(username);
-//     // userDocuments.splice(index, 1);
-//     return followedUsers;
-// }
 async function followUser(_newFollow) {
     let result = await follower.insertOne({ User: _newFollow.User, Follows: _newFollow.Follows });
     if (result.insertedCount == 1) {

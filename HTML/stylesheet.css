@@ -103,6 +103,7 @@ h1, h2, h3 {
     border-bottom: 1px solid #797979;
     position: relative;
     font-size: 1.1rem;
+    letter-spacing: 0.3em;
     
 }
 
@@ -110,7 +111,9 @@ h1, h2, h3 {
     height: 80%;
     width: auto;
     float: left;
-    margin: 0.6rem; 
+    margin: 0.4rem; 
+    margin-left: 1rem;
+    margin-bottom: 0.6rem;
 }
 
 .active {
@@ -397,13 +400,11 @@ textarea {
 }
 
 
-
-
-
-
-
 /*---PROFIL-BODY / LOGIN-BODY / CREATE-BODY---*/
 
+#message-form {
+    margin-top: 2rem;
+}
 
 #checkbox {
     text-align: center;
@@ -435,14 +436,6 @@ label {
         margin-top: 5rem;
  }
 
- #kontakt-bereich2 {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: #F8F8F7;
-    text-align: center;
-    margin-top: 5rem;
-}
 
 .input-form{
         box-sizing: border-box;
