@@ -117,7 +117,7 @@ h1, h2, h3 {
 }
 
 .active {
-    color: #e8cabc;
+    color: #DCBEAD;
 }
 
 .header-nav  ul {
@@ -150,10 +150,10 @@ h1, h2, h3 {
 /*---DROPDOWN-MENU*/
 
 .mobile-nav-button {
-    color:  #e8cabc;
+    color:  #DCBEAD;
     float: right;
     font-size: 2rem;
-    border: 2px solid  #e8cabc;
+    border: 2px solid  #DCBEAD;
     width: 35px;
     height: 35px;
     position: relative;
@@ -208,7 +208,7 @@ h1, h2, h3 {
 /*---LINKS---*/
 
 .visited {
-    color: #e8cabc;
+    color: #DCBEAD;
 }
 
  a:link {
@@ -226,13 +226,13 @@ h1, h2, h3 {
 
 a:hover {
 
-    color: #e8cabc;
+    color: #DCBEAD;
     
 }
 
 a:active {
 
-    color: #e8cabc;
+    color: #DCBEAD;
     text-decoration: none;
 }
 
@@ -330,7 +330,7 @@ a:active {
 .beitrag {
     letter-spacing: 0.7rem;
     font-size: 18px;
-    border-bottom: 1px solid #e8cabc;
+    border-bottom: 1px solid #DCBEAD;
 
 }
 
@@ -340,7 +340,7 @@ a:active {
 }
 
 .new-comment {
-    color: #e8cabc;
+    color: #DCBEAD;
     border-right: 2px solid #e9e9e9;
     text-transform: uppercase;
     padding: 3px;
@@ -354,7 +354,7 @@ a:active {
 
 .new-comment > input {
     color: #797979;
-    border-color: #e8cabc;
+    border-color: #DCBEAD;
     width: 70%;
     height: 70px;
     margin: 16px;
@@ -453,7 +453,7 @@ label {
 button {
     border: 0 none;
     color: white;
-    background-color: #e8cabc;
+    background-color: #DCBEAD;
     font-size: .875rem;
     height: 50px;
     letter-spacing: 1.5px;
@@ -536,7 +536,7 @@ p {
     font-size: 1.2rem;
     margin: 0 auto 0px;
     padding: 1em 0 1.7em 0em;
-    border-top: 4px solid #e8cec4;
+    border-top: 4px solid #DCBEAD;
     
 }
 
