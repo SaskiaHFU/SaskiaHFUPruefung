@@ -136,12 +136,12 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
     else if (q.pathname == "/getcomments") {
 
         _response.setHeader("content-type", "application/json; charset=utf-8");
-         let queryParameters: Url.URLSearchParams = q.searchParams;
+        let queryParameters: Url.URLSearchParams = q.searchParams;
 
 
         //Beiträge anzeigen
 
-    let comments: Comment[] = await getComments(queryParameters);
+        let comments: Comment[] = await getComments(queryParameters);
 
         _response.write(JSON.stringify(comments));
 
@@ -214,7 +214,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
 
         _response.setHeader("content-type", "application/json; charset=utf-8");
 
-        
+
         let users: User[] = await getUsers(queryParameters);
 
         _response.write(JSON.stringify(users));
@@ -445,23 +445,23 @@ async function getComments(_params: URLSearchParams): Promise<Comment[]> {
     let commentDocuments: Comment[] = [];
 
     for (let key in userfollows) {
-      
+
         let username: string = userfollows[key].Follows;
         console.log(username);
         let tempdocs: Comment[] = await comment.find({ userEmail: username }).toArray();
         console.log(tempdocs);
         commentDocuments = commentDocuments.concat(tempdocs);
-     }
+    }
 
-     let tempdocs2: Comment[] = await comment.find({ userEmail:  _params.get("email") }).toArray();
-     commentDocuments = commentDocuments.concat(tempdocs2);
+    let tempdocs2: Comment[] = await comment.find({ userEmail: _params.get("email") }).toArray();
+    commentDocuments = commentDocuments.concat(tempdocs2);
 
 
 
     commentDocuments.sort((a, b) => {
-        if (Date.parse(a.Date) > Date.parse(b.Date)) return -1
-        return Date.parse(a.Date) < Date.parse(b.Date) ? 1 : 0
-      })
+        if (Date.parse(a.Date) > Date.parse(b.Date)) return -1;
+        return Date.parse(a.Date) < Date.parse(b.Date) ? 1 : 0;
+    });
 
 
     return commentDocuments;
@@ -503,8 +503,7 @@ async function updateUser(_params: URLSearchParams): Promise<StatusCodes> {
     let email: string = _params.get("email");
 
 
-    if (passwort == "" || passwort == undefined || passwort == null)
-    {
+    if (passwort == "" || passwort == undefined || passwort == null) {
         let result: Mongo.UpdateWriteOpResult = await user.updateOne(
             { Email: email },
             {
@@ -520,13 +519,12 @@ async function updateUser(_params: URLSearchParams): Promise<StatusCodes> {
             return StatusCodes.Good;
         }
         else {
-    
+
             return StatusCodes.BadDatabaseProblem;
         }
-    
+
     }
-    else
-    {
+    else {
         let result: Mongo.UpdateWriteOpResult = await user.updateOne(
             { Email: email },
             {
@@ -534,7 +532,7 @@ async function updateUser(_params: URLSearchParams): Promise<StatusCodes> {
                     Name: name,
                     Studiengang: studiengang,
                     Semester: semester,
-                    passwort: passwort  
+                    passwort: passwort
                 }
             });
 
@@ -543,10 +541,10 @@ async function updateUser(_params: URLSearchParams): Promise<StatusCodes> {
             return StatusCodes.Good;
         }
         else {
-    
+
             return StatusCodes.BadDatabaseProblem;
         }
-    
+
     }
 
     // Methode von Github Mongo Seite
