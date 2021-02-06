@@ -37,7 +37,7 @@ async function getUsers() {
             let iElement = document.createElement("i");
             iElement.setAttribute("id", "heart");
             iElement.className = ("fas");
-            iElement.innerHTML = "&#xf004;";
+            iElement.innerHTML = "&#xf004";
             buttonElement.appendChild(iElement);
             userDiv.appendChild(buttonElement);
             userDiv.prepend(img);

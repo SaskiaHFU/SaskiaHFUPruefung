@@ -64,7 +64,7 @@ async function getUsers(): Promise<void> {
             
             iElement.setAttribute("id", "heart");
             iElement.className = ("fas");
-            iElement.innerHTML = "&#xf004;";
+            iElement.innerHTML = "&#xf004";
 
             buttonElement.appendChild(iElement);
 

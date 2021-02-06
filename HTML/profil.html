@@ -70,28 +70,25 @@
     <div class="container">
         <h1>Das ist dein Account</h1>
         <div class="row">
-            <div id="serverresult">
 
-            </div>
-
-            <div class="col-4">
+            <div class="col-4" id="edit-bereich">
                 <h3>Welche Daten möchtest du ändern?</h3>
                 <form id="message-form">
                     <label for="name">Name</label>
                     <input class="input-form" placeholder="NAME" id="name">
                     
-                    <label for="studiengang">Studiengang</label>
-                    <label id="left" for="studiengang_omb"> OMB </label>
+                    <label>Studiengang</label>
+                    <label class="left" for="studiengang_omb"> OMB </label>
                     <input class="input-form" id="studiengang_omb" type="radio" name="studiengang" value="OMB">
-                    <label id="left" for="studiengang_mkb"> MKB </label>
+                    <label class="left" for="studiengang_mkb"> MKB </label>
                     <input class="input-form" id="studiengang_mkb" type="radio" name="studiengang" value="MKB">
-                    <label id="left" for="studiengang_mib"> MIB </label>
+                    <label class="left" for="studiengang_mib"> MIB </label>
 
                     <label for="studiengang_mib"></label>
                     <input class="input-form" id="studiengang_mib" type="radio" name="studiengang" value="MIB">
                     
                     <label for="semesterangabe">Semesterangabe</label>
-                    <input class="input-form" placeholder="SEMESTERANGABE" id="semesterangabe">
+                    <input class="input-form" placeholder="SEMESTERANGABE" id="semesterangabe" type="number" min="1" max="7" value="1">
                     
                     <label for="email">Email kann nicht geändert werden!</label>
                     <input class="input-form" placeholder="EMAIL" id="email" readonly>
@@ -106,7 +103,9 @@
                 <br>
                 <button id="ausloggenButton" name="Ausloggen" type="button">Ausloggen</button>
 
-                
+                <div id="serverresult">
+
+                </div>
             </div>
         </div>
     </div>
@@ -126,12 +125,12 @@
         </div>
         <div class="col-3">
             <a href="mailto:saskia.naomi.schellhammer@hs-furtwangen.de" target="_blank">
-                <span alt="Mail Logo" class="icon-bottom far">&#xf2b6;</span>
+                <span class="icon-bottom far">&#xf2b6;</span>
             </a>
         </div>
         <div class="col-3">
             <a href="https://www.instagram.com/_abelaviagem/" target="_blank">
-                <span alt="Instagram Logo" class="icon-bottom fab">&#xf16d;</span>
+                <span class="icon-bottom fab">&#xf16d;</span>
             </a>
 
         </div>

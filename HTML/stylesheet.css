@@ -37,7 +37,7 @@ html, body {
 
 body {
     margin: 0;
-    background-color: #FFFAFA;
+    background-color: white;
     font-family: "Century Gothic", sans-serif;
     line-height: 1.5;
     color: #797979;
@@ -90,9 +90,8 @@ h3 {
     
 }
 
-h1, h2, h3 {
-    background-color: #FFFAFA;
-    
+#serverresult {
+    color: #DCBEAD;
 }
 /*---Navigation---*/
 
@@ -336,7 +335,7 @@ a:active {
 
 .beitrag2 {
     letter-spacing: 0.35rem;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .new-comment {
@@ -395,15 +394,14 @@ textarea {
     resize: none;
 }
 
-#writeComment {
-    
-}
-
 
 /*---PROFIL-BODY / LOGIN-BODY / CREATE-BODY---*/
 
 #message-form {
     margin-top: 2rem;
+    width: 70%;
+    display: inline-block;
+    
 }
 
 #checkbox {
@@ -423,15 +421,14 @@ label {
     margin-bottom: 5px;
 }
 
-#left {
+.left {
     text-align: center;
 }
 
-#login-bereich, #register-bereich {
+#login-bereich, #register-bereich, #edit-bereich {
         display: block;
         margin-left: auto;
         margin-right: auto;
-        background-color: #F8F8F7;
         text-align: center;
         margin-top: 5rem;
  }
@@ -440,6 +437,7 @@ label {
 .input-form{
         box-sizing: border-box;
         border: none;
+        background: #F5F5F5;
         width: 100%; 
         letter-spacing: 1.5px;
         height: 45;
@@ -448,6 +446,7 @@ label {
         padding: 8px 20px;
         margin: 0 0 9px;
         text-align: center;
+        
 }
 
 button {
@@ -530,7 +529,7 @@ p {
 
 #footer {
     color: #868686;
-    background-color: #f4e7e2;
+    background-color: #F5F5F5;
     width: 100%;
     height: auto;
     font-size: 1.2rem;
