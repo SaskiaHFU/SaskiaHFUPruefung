@@ -227,10 +227,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
         _response.setHeader("content-type", "application/json; charset=utf-8");
 
 
-
         console.log(queryParameters.get("currentuser"));
-
-        // let userfollows: UserFollows[] = await getUserFollows(queryParameters.get("currentuser"));
 
         let userfollows: UserFollows[] = await follower.find({ User: queryParameters.get("currentuser") }).toArray();
 
@@ -283,16 +280,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
     }
 
     else {
-        // if (_request.url) {
-
-        //     for (let key in q.searchParams) {
-        //         _response.write(key + ":" + q.searchParams.get(key) + "<br/>");
-        //     }
-
-        //     let stringJSON: string = JSON.stringify(q.searchParams);
-        //     _response.write(stringJSON);
-        // }
-
+       alert("Die Seite ist nicht vorhanden");
         console.log("Fehler");
     }
 
@@ -377,8 +365,6 @@ async function loginUser(_email: string, _passwort: string): Promise<StatusCodes
 //User
 
 async function getUsers(_params: URLSearchParams): Promise<User[]> {
-    // _params: URLSearchParams
-    // let user: any = _params.get("currentuser");
 
     let userEmail: string = _params.get("currentuser");
 
@@ -486,7 +472,7 @@ async function updateUser(_params: URLSearchParams): Promise<StatusCodes> {
     let passwort: string = _params.get("password");
     let email: string = _params.get("email");
 
-
+ // Methode von Github Mongo Seite
     if (passwort == "" || passwort == undefined || passwort == null) {
         let result: Mongo.UpdateWriteOpResult = await user.updateOne(
             { Email: email },
@@ -530,14 +516,6 @@ async function updateUser(_params: URLSearchParams): Promise<StatusCodes> {
         }
 
     }
-
-    // Methode von Github Mongo Seite
-
-
-    // Rückmeldung dass es funktioniert hat
-
-
-
 
 }
 

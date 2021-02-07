@@ -18,8 +18,6 @@ async function getUsers(): Promise<void> {
     let usersDiv: HTMLElement = document.getElementById("users");
     usersDiv.innerHTML = ""; //Leerer String, damit Liste nicht zweimal angezeigt wird beim followen
 
-    // let userCount: number = 0;
-
     if (response.ok) {
 
         for (let userfollow of userFollows) {
@@ -90,7 +88,7 @@ async function getUsers(): Promise<void> {
 
 
 
-            // userCount++;
+           
 
         }
     }

@@ -61,9 +61,6 @@ async function changeProfil(_e: MouseEvent): Promise<void> {
         query.append("password", passwort);
     }
 
-    // if (passwort !== "" && passwort != currentPasswort) {
-    //     responseField.innerText = "Das Passwort stimmt nicht!";
-    // }
 
     let queryUrl: string = url + "editProfil" + "?" + query.toString();
 
@@ -155,7 +152,6 @@ function logout(_e: MouseEvent): void {
 
     alert("Du bist ausgeloggt!");
 
-    // window.location.href = "https://saskiahfu.github.io/SaskiaHFUPruefung/HTML/index.html";
     window.location.assign("index.html");
 
 }

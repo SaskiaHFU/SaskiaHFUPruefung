@@ -95,7 +95,6 @@ async function handleRequest(_request, _response) {
     else if (q.pathname == "/getFollowes") {
         _response.setHeader("content-type", "application/json; charset=utf-8");
         console.log(queryParameters.get("currentuser"));
-        // let userfollows: UserFollows[] = await getUserFollows(queryParameters.get("currentuser"));
         let userfollows = await follower.find({ User: queryParameters.get("currentuser") }).toArray();
         _response.write(JSON.stringify(userfollows));
     }
@@ -123,13 +122,7 @@ async function handleRequest(_request, _response) {
         _response.write(String(result));
     }
     else {
-        // if (_request.url) {
-        //     for (let key in q.searchParams) {
-        //         _response.write(key + ":" + q.searchParams.get(key) + "<br/>");
-        //     }
-        //     let stringJSON: string = JSON.stringify(q.searchParams);
-        //     _response.write(stringJSON);
-        // }
+        alert("Die Seite ist nicht vorhanden");
         console.log("Fehler");
     }
     _response.end();
@@ -182,8 +175,6 @@ async function loginUser(_email, _passwort) {
 }
 //User
 async function getUsers(_params) {
-    // _params: URLSearchParams
-    // let user: any = _params.get("currentuser");
     let userEmail = _params.get("currentuser");
     let userDocuments = await user.find().toArray();
     userDocuments = userDocuments.filter(o => o.Email != userEmail); //Eigenen Acoount aus Follow-Liste nehmen
@@ -244,6 +235,7 @@ async function updateUser(_params) {
     let studiengang = _params.get("studiengang");
     let passwort = _params.get("password");
     let email = _params.get("email");
+    // Methode von Github Mongo Seite
     if (passwort == "" || passwort == undefined || passwort == null) {
         let result = await user.updateOne({ Email: email }, {
             $set: {
@@ -275,8 +267,6 @@ async function updateUser(_params) {
             return 2 /* BadDatabaseProblem */;
         }
     }
-    // Methode von Github Mongo Seite
-    // Rückmeldung dass es funktioniert hat
 }
 async function getUserData(_params) {
     let userEmail = _params.get("user");

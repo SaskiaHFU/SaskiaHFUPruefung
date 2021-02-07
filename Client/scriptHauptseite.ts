@@ -58,7 +58,7 @@ async function sendComment(): Promise<void> {
         else if (statusCode == StatusCodes.Good) {
             textArea.value = ""; //Textarea clearen
             
-            // window.location.href = "https://saskiahfu.github.io/SaskiaHFUPruefung/HTML/hauptseite.html";
+            
             window.location.assign("hauptseite.html");
 
         }
@@ -93,14 +93,6 @@ async function getComments(): Promise<void> {
 
     let commentsDiv: HTMLElement = document.getElementById("showComments");
 
-    // let commentCount: number = 0;
-  
-
-    //
-    while (commentsDiv.hasChildNodes()) {
-        commentsDiv.removeChild(commentsDiv.firstChild);
-    }
-    //
 
     for (let comment of comments) {
 
@@ -119,7 +111,7 @@ async function getComments(): Promise<void> {
 
         commentsDiv.appendChild(commentDiv);
 
-        // commentCount++;
+      
     }
 
 }

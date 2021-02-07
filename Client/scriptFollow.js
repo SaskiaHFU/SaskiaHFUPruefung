@@ -10,7 +10,6 @@ async function getUsers() {
     let userFollows = await response2.json();
     let usersDiv = document.getElementById("users");
     usersDiv.innerHTML = ""; //Leerer String, damit Liste nicht zweimal angezeigt wird beim followen
-    // let userCount: number = 0;
     if (response.ok) {
         for (let userfollow of userFollows) {
             console.log(userfollow);
@@ -53,7 +52,6 @@ async function getUsers() {
                 iElement.setAttribute("class", "fas");
                 buttonElement.addEventListener("click", () => follow(user.Email));
             }
-            // userCount++;
         }
     }
 }

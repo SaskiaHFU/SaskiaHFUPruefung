@@ -33,7 +33,6 @@ async function sendComment() {
         }
         else if (statusCode == 1 /* Good */) {
             textArea.value = ""; //Textarea clearen
-            // window.location.href = "https://saskiahfu.github.io/SaskiaHFUPruefung/HTML/hauptseite.html";
             window.location.assign("hauptseite.html");
         }
     }
@@ -55,12 +54,6 @@ async function getComments() {
     let response = await fetch(queryUrl);
     let comments = await response.json();
     let commentsDiv = document.getElementById("showComments");
-    // let commentCount: number = 0;
-    //
-    while (commentsDiv.hasChildNodes()) {
-        commentsDiv.removeChild(commentsDiv.firstChild);
-    }
-    //
     for (let comment of comments) {
         let commentDiv = document.createElement("div");
         commentDiv.classList.add("commentDiv");
@@ -71,7 +64,6 @@ async function getComments() {
                                  `;
         console.log(comment);
         commentsDiv.appendChild(commentDiv);
-        // commentCount++;
     }
 }
 window.addEventListener("load", getComments);

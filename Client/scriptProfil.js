@@ -45,9 +45,6 @@ async function changeProfil(_e) {
     if (passwort) {
         query.append("password", passwort);
     }
-    // if (passwort !== "" && passwort != currentPasswort) {
-    //     responseField.innerText = "Das Passwort stimmt nicht!";
-    // }
     let queryUrl = url + "editProfil" + "?" + query.toString();
     let response = await fetch(queryUrl);
     let responseField = document.createElement("p");
@@ -103,7 +100,6 @@ ausloggenButton.addEventListener("click", logout);
 function logout(_e) {
     window.localStorage.clear();
     alert("Du bist ausgeloggt!");
-    // window.location.href = "https://saskiahfu.github.io/SaskiaHFUPruefung/HTML/index.html";
     window.location.assign("index.html");
 }
 //# sourceMappingURL=scriptProfil.js.map

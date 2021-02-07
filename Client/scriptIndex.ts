@@ -36,9 +36,7 @@ async function submitLogin(): Promise<void> {
         if (statusCode == StatusCodes.BadWrongPassword) {
             responseField.innerText = "Das Passwort ist falsch!";
         }
-        // else if (statusCode == StatusCodes.BadWrongName) {
-        //     responseField.innerText = "Der Name ist falsch!";
-        // }
+        
         else if (statusCode == StatusCodes.Good) {
             responseField.innerText = "Du wirst eingeloggt!";
 

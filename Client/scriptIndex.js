@@ -22,9 +22,6 @@ async function submitLogin() {
         if (statusCode == 4 /* BadWrongPassword */) {
             responseField.innerText = "Das Passwort ist falsch!";
         }
-        // else if (statusCode == StatusCodes.BadWrongName) {
-        //     responseField.innerText = "Der Name ist falsch!";
-        // }
         else if (statusCode == 1 /* Good */) {
             responseField.innerText = "Du wirst eingeloggt!";
             localStorage.setItem("currentUser", currentUser);
