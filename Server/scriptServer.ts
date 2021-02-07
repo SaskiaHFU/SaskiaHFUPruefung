@@ -280,7 +280,7 @@ async function handleRequest(_request: Http.IncomingMessage, _response: Http.Ser
     }
 
     else {
-       alert("Die Seite ist nicht vorhanden");
+        alert("Die Seite ist nicht vorhanden");
         console.log("Fehler");
     }
 
@@ -472,7 +472,7 @@ async function updateUser(_params: URLSearchParams): Promise<StatusCodes> {
     let passwort: string = _params.get("password");
     let email: string = _params.get("email");
 
- // Methode von Github Mongo Seite
+    // Methode von Github Mongo Seite
     if (passwort == "" || passwort == undefined || passwort == null) {
         let result: Mongo.UpdateWriteOpResult = await user.updateOne(
             { Email: email },
